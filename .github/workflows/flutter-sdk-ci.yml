@@ -1,0 +1,40 @@
+name: Flutter SDK CI
+
+on:
+  pull_request:
+    paths:
+      - "sdks/flutter/**"
+      - ".github/workflows/flutter-sdk-ci.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "sdks/flutter/**"
+      - ".github/workflows/flutter-sdk-ci.yml"
+  workflow_dispatch:
+
+jobs:
+  release-gates:
+    name: Release Gates
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: sdks/flutter
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Dart
+        uses: dart-lang/setup-dart@v1
+
+      - name: Install dependencies
+        run: dart pub get
+
+      - name: Analyze
+        run: dart analyze
+
+      - name: Test
+        run: dart test
+
+      - name: Publish dry-run gate
+        run: dart pub publish --dry-run

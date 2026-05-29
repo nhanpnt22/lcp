@@ -1,6 +1,13 @@
 # Node
 **/node_modules/
 
+# Dart/Flutter generated
+**/.dart_tool/
+**/.packages
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/build/
+
 # Build artifacts
 **/dist/
 **/coverage/
