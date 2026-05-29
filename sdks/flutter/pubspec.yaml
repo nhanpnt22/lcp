@@ -1,6 +1,6 @@
 name: lcp_flutter_sdk
 description: LCP Flutter SDK (deterministic read-through local cache layer).
-version: 0.1.1
+version: 1.0.0
 publish_to: 'none'
 homepage: https://github.com/nhanpnt22/lcp
 repository: https://github.com/nhanpnt22/lcp/tree/main/sdks/flutter

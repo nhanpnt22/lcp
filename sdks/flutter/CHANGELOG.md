@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.1
+## 1.0.0
 
 - Added `SqlitePersistentCacheStore` for durable local cache persistence.
 - Added SQLite-backed unit tests for round-trip, expiry pruning, and hydrate limits.
