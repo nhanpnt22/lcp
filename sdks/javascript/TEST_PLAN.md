@@ -93,6 +93,11 @@ Distribution correctness across runtimes.
   - `swr/`
   - `singleflight/`
 
+Current repository baseline:
+
+- CI currently enforces transitional global thresholds in `vitest.config.ts`.
+- Raise thresholds incrementally as additional tests are added until reaching the target gates above.
+
 ## Flake Policy
 
 - 0 known flaky tests at release cut.

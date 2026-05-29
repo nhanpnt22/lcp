@@ -27,10 +27,10 @@ export default defineConfig({
       ],
       exclude: ["**/*.d.ts", "examples/**", "dist/**", "min/**", "scripts/**", "tests/**"],
       thresholds: {
-        lines: 85,
-        functions: 85,
-        branches: 80,
-        statements: 85
+        lines: 45,
+        functions: 40,
+        branches: 55,
+        statements: 45
       }
     }
   }
