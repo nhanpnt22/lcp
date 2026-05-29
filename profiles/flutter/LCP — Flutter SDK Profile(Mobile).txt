@@ -1,0 +1,301 @@
+============================================================
+Title:
+LCP — Flutter SDK Profile
+============================================================
+
+Parent Protocol:
+LCP — Local Cache Protocol (Deterministic Client Cache Layer)
+
+Version:
+v1.0.0
+
+Status:
+PROPOSED • PROFILE-DRAFT • SDK-NORMATIVE
+DETERMINISTIC • NON-AUTHORITATIVE • READ-THROUGH
+CANONICAL-HASH • SINGLE-FLIGHT-OPTIONAL
+SWR-HOOKED • DUAL-LAYER • TRACE-SAFE
+PARITY-ENFORCED • NO-BACKFLOW • STATE-AWARE
+
+Type:
+Language/Runtime Child Profile (Flutter / Dart)
+
+Position:
+Mobile Client Runtime -> LCP Flutter SDK Profile -> LCP Core Protocol
+
+Normative Language:
+
+The key words MUST, MUST NOT, SHOULD, SHOULD NOT, and MAY in this profile
+are to be interpreted as requirement levels for Flutter SDK conformance.
+
+Precedence Rule:
+
+If any statement in this profile conflicts with the parent protocol,
+LCP — Local Cache Protocol v1.0.0 takes precedence.
+
+============================================================
+0. PURPOSE
+============================================================
+
+- Propose a production-ready Flutter SDK that implements LCP deterministically
+- Define normative integration rules for Android/iOS Flutter clients
+- Preserve all parent protocol invariants without execution drift
+
+This profile is subordinate to LCP core protocol.
+
+============================================================
+1. SCOPE
+============================================================
+
+IN SCOPE:
+
+- Read-through cache engine behavior in Flutter/Dart
+- Deterministic keying and metadata parity enforcement
+- In-memory + persistent local storage integration
+- Optional single-flight and callback-driven SWR behavior
+- Advisory resume/state alignment hooks for UI state safety
+
+OUT OF SCOPE:
+
+- Server-side authority or protocol mutation
+- Cache-led business or authorization decisions
+- Backend schema/version management policy
+
+============================================================
+1.A CONFORMANCE TARGET
+============================================================
+
+Conformant implementations MUST:
+
+- satisfy all MUST/MUST NOT requirements in this profile
+- preserve all parent protocol invariants
+- remain behavior-preserving relative to API authority
+
+============================================================
+2. PROPOSED SDK PACKAGE SHAPE
+============================================================
+
+PACKAGE NAME (PROPOSED):
+
+- lcp_flutter_sdk
+
+MODULES (PROPOSED):
+
+- lib/src/execution/
+- lib/src/key/
+- lib/src/validation/
+- lib/src/storage/
+- lib/src/singleflight/
+- lib/src/resume/
+- lib/src/ttl/
+- lib/src/trace/
+- lib/src/failure/
+- lib/lcp_flutter_sdk.dart
+
+RUNTIME API SURFACE (PROPOSED):
+
+- ReadThroughCacheEngine
+- buildCacheKeyMaterial
+- computeCacheKey
+- assertCacheEntryInvariants
+- MemoryCacheStore
+- PersistentCacheStore
+- CacheSingleFlight
+- InMemoryResumeStateStore
+- buildResumeHint
+
+============================================================
+3. LCP SECTION MAPPING (FLUTTER PROFILE)
+============================================================
+
+I. CORE INVARIANTS
+
+- MUST execute read-through only
+- MUST keep API as source of truth
+- MUST preserve parity fields and deterministic identity
+
+II. NO-BACKFLOW
+
+- Cache results MUST NOT alter business/protocol decisions
+- Background refresh callback MUST remain advisory-only
+
+III. CACHE KEY
+
+- MUST build key from namespace + operationId + canonical payload + schemaVersion + specChecksum + userScope
+- MUST exclude trace_id/request_id/action_id from key payload material
+- MUST use deterministic hash via injected hash function (H57-compatible recommended)
+
+IV. CACHE ENTRY
+
+- Metadata fields REQUIRED:
+  source, created_at, expires_at, ttl_ms, schema_version, data_version,
+  spec_checksum, cache_namespace, compressed
+- Metadata parity MUST match configured contract
+
+V. EXECUTION MODEL
+
+- Ordered path MUST be: memory -> optional persistent store -> API
+- Missing ttlMs MUST bypass cache write and return API response
+- Stale fallback MUST be gated by allowStaleOnExpired
+- Foreground path MUST keep one request -> one API fetch execution path
+
+VI. STORAGE MODEL
+
+- Memory store REQUIRED
+- Persistent store OPTIONAL
+- Supported modes: auto | memory-only | dual
+
+VII. TTL MODEL
+
+- TTL MUST come from upstream response only (ttlMs/compatible metadata)
+- Local TTL synthesis for writes MUST NOT be introduced
+
+VIII. SWR MODEL
+
+- Stale return MAY be enabled
+- Refresh MUST be caller-managed via onBackgroundRefresh
+- Engine MUST NOT emit implicit refresh RPC
+
+IX. SINGLE-FLIGHT
+
+- Single-flight is OPTIONAL
+- It is enabled only when CacheSingleFlight is supplied
+- Scope MUST be cache_key
+
+X. STATE ALIGNMENT
+
+- When state context exists, stale entries violating state_version ordering MUST be bypassed
+- Resume/state tracking MUST remain advisory
+
+XI. TRACE RULES
+
+- Trace context MAY be carried for request context
+- Trace fields MUST NOT be persisted in cache payload data
+- Trace fields MUST NOT be included in key material
+
+XII. VALIDATION
+
+- Deterministic serialization and parity checks MUST be enforced
+- Sensitive-field and trace-field rejection policy MUST be enforced
+- Default validation failure handling MUST be BYPASS_TO_API
+- HARD_FAIL MUST be limited to fail-closed or invariant-critical policy
+
+XIII. FAILURE MODEL
+
+- Decision classes:
+  BYPASS_TO_API, RETURN_STALE_AND_REFRESH, HARD_FAIL
+- storage/lookup/serialization issues SHOULD resolve as BYPASS_TO_API or RETURN_STALE_AND_REFRESH
+- invariant-critical/fail-closed policy MUST resolve as HARD_FAIL
+
+XIV. INVALID CONDITIONS
+
+- Any semantic mutation or non-deterministic identity behavior is invalid
+
+XV. GUARANTEES
+
+- Deterministic read-through behavior
+- Replay-safe keying and parity-safe caching
+- Optional single-flight and optional SWR stale fallback
+- No-backflow behavior for execution/state/observability pathways
+
+============================================================
+4. FLUTTER INTEGRATION CONTRACT (PROPOSED)
+============================================================
+
+REQUEST (execute):
+
+- keyInput:
+  namespace, operationId, payload, schemaVersion, specChecksum, userScope
+- hashFn
+- fetchFromApi -> Future<ApiResult<T>>
+- allowStaleOnExpired?
+- resumeState?
+- trace?
+- onBackgroundRefresh?
+
+RESPONSE:
+
+- cacheKey
+- source: API | CACHE
+- data
+- stale: bool
+
+Behavioral constraints:
+
+- fetchFromApi is the authoritative upstream fetcher
+- cache writes MUST occur only after successful parity/invariant validation
+- missing TTL responses MUST return source=API, stale=false
+
+============================================================
+5. FLUTTER PERSISTENCE OPTIONS (PROPOSED)
+============================================================
+
+PREFERRED ADAPTER ORDER:
+
+- sqlite-backed adapter (recommended for size/query stability)
+- hive-backed adapter (acceptable if deterministic serialization is guaranteed)
+- shared_preferences is NOT recommended for general cache entry storage
+
+RULES:
+
+- Persistent adapter MUST preserve exact cache entry envelope structure
+- Serialization MUST be deterministic and replay-safe
+- Adapter MUST support delete, clear, pruneExpired, and bounded hydration
+
+============================================================
+6. FLUTTER CONFORMANCE CHECKLIST
+============================================================
+
+A Flutter integration is conformant when all are true:
+
+- Uses ReadThroughCacheEngine read-through path
+- Uses deterministic key material and deterministic hash
+- Preserves configured parity fields
+- Does not persist sensitive or trace fields in cache payload data
+- Bypasses cache write when TTL is missing
+- Treats SWR refresh callback as caller-managed
+- Does not assume single-flight unless configured
+- Preserves no-backflow invariants under all cache outcomes
+
+============================================================
+7. ADOPTION PLAN (PROPOSED)
+============================================================
+
+PHASE 1:
+
+- Minimal SDK with memory store + deterministic keying + parity checks
+
+PHASE 2:
+
+- Add persistent adapter (sqlite preferred), pruneExpired, and hydration controls
+
+PHASE 3:
+
+- Add single-flight, SWR callback contract, resume/state alignment hooks
+
+PHASE 4:
+
+- Publish profile conformance suite and release gates
+
+============================================================
+8. VERIFICATION COMMANDS (PROPOSED)
+============================================================
+
+From repository root (once Flutter SDK package is added):
+
+- flutter test <flutter_sdk_path>
+- flutter analyze <flutter_sdk_path>
+- dart format --set-exit-if-changed <flutter_sdk_path>
+- flutter test --coverage <flutter_sdk_path>
+
+============================================================
+FINAL STATUS
+============================================================
+
+PROPOSED
+PROFILE-DRAFT
+SDK-NORMATIVE
+DETERMINISTIC
+NON-AUTHORITATIVE
+READ-THROUGH ONLY
+CANONICAL-HASH
+SINGLE-FLIGHT OPTIONAL

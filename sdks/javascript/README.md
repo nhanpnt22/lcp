@@ -11,6 +11,8 @@ This package is standalone and consumable as a module package.
 
 This SDK must preserve protocol invariants: deterministic keying, non-authoritative read-through behavior, no-backflow, and parity-safe metadata handling.
 
+Parity tracking across JavaScript and Flutter SDKs is maintained in `../PARITY_MATRIX.md`.
+
 ## Package Purpose
 
 This package produces:
@@ -100,6 +102,7 @@ npm pack --dry-run
 ```
 
 Detailed release gates and test portfolio are documented in `TEST_PLAN.md`.
+Cross-SDK parity checks are documented in `../PARITY_MATRIX.md`.
 
 Publish from this folder:
 
