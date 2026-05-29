@@ -77,8 +77,8 @@ github.com/mattn/go-isatty v0.0.20 h1:xfD0iDuEKnDkl03q4limB+vH+GxLEtL/jb4xVJSWWE
 github.com/mattn/go-isatty v0.0.20/go.mod h1:W+V8PltTTMOvKvAeJH7IuucS94S2C6jfK/D7dTCTo3Y=
 github.com/ncruces/go-strftime v1.0.0 h1:HMFp8mLCTPp341M/ZnA4qaf7ZlsbTc+miZjCLOFAw7w=
 github.com/ncruces/go-strftime v1.0.0/go.mod h1:Fwc5htZGVVkseilnfgOVb9mKy6w1naJmn9CehxcKcls=
-github.com/nhanpnt22/f57/implementations/go v0.0.0-20260523153034-d11b93382e45 h1:r2GjGbqAE6Xs9bDMK7S8KBewy+2hgBP6236x68iAAK0=
-github.com/nhanpnt22/f57/implementations/go v0.0.0-20260523153034-d11b93382e45/go.mod h1:D+mqEkmRYWPQ2TuNfZbKpHPH4zUvPT7wptKZ6NYMNsU=
+github.com/nhanpnt22/f57/implementations/go v0.0.0-20260529181200-6202f5a48379 h1:zi9ak0AhDDpGyahy18Dwv0UXgsuPQotnYK7Rc8tGvfU=
+github.com/nhanpnt22/f57/implementations/go v0.0.0-20260529181200-6202f5a48379/go.mod h1:U69x3w/VBRi0TGxEybvYCxHxjUpGZyZFyAzm/RpqmXk=
 github.com/planetscale/vtprotobuf v0.6.1-0.20240319094008-0393e58bdf10 h1:GFCKgmp0tecUJ0sJuv4pzYCqS9+RGSn52M3FUwPs+uo=
 github.com/planetscale/vtprotobuf v0.6.1-0.20240319094008-0393e58bdf10/go.mod h1:t/avpk3KcrXxUnYOhZhMXJlSEyie6gQbtLq5NM3loB8=
 github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 h1:Jamvg5psRIccs7FGNTlIRMkT8wgtp5eCXdBlqhYGL6U=

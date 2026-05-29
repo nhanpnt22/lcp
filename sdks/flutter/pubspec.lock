@@ -33,15 +33,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.13.1"
-  b57:
-    dependency: "direct main"
-    description:
-      path: "implementations/dart"
-      ref: HEAD
-      resolved-ref: d11b93382e45c2ab89e6b8c0f386afa6922e8af9
-      url: "https://github.com/nhanpnt22/f57.git"
-    source: git
-    version: "0.1.0"
   blake3_dart:
     dependency: transitive
     description:
@@ -114,6 +105,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.9.0"
+  f57:
+    dependency: "direct main"
+    description:
+      path: "implementations/dart"
+      ref: "v0.1.4-dart"
+      resolved-ref: "6202f5a48379ba866147af45e70943833d4bff84"
+      url: "https://github.com/nhanpnt22/f57.git"
+    source: git
+    version: "0.1.0"
   ffi:
     dependency: transitive
     description:

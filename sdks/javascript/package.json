@@ -80,6 +80,6 @@
     "vitest": "^3.2.4"
   },
   "dependencies": {
-    "f57-js": "github:nhanpnt22/f57#javascript"
+    "f57-js": "github:nhanpnt22/f57#v0.1.4-javascript"
   }
 }

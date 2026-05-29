@@ -20,9 +20,10 @@ dependencies:
   meta: ^1.12.0
   path: ^1.9.1
   sqflite_common: ^2.5.5
-  b57:
+  f57:
     git:
       url: https://github.com/nhanpnt22/f57.git
+      ref: v0.1.4-dart
       path: implementations/dart
 
 dev_dependencies:

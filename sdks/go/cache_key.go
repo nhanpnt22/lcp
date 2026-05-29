@@ -4,7 +4,7 @@ import (
 	"errors"
 	"strings"
 
-	b57 "github.com/aco/b57"
+	b57 "github.com/aco/f57"
 )
 
 type HashFn func([]byte) string
@@ -84,7 +84,7 @@ func DefaultHashFn(bytes []byte) string {
 }
 
 // H57HashFn is the canonical H57 hash hook: BLAKE3 → B57 encoding.
-// Uses github.com/aco/b57 mapped to F57 reference implementation.
+// Uses github.com/aco/f57 mapped to the F57 reference implementation.
 func H57HashFn(bytes []byte) string {
 	return DefaultHashFn(bytes)
 }

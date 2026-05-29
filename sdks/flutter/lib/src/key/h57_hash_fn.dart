@@ -1,4 +1,4 @@
-import 'package:b57/b57.dart';
+import 'package:f57/b57.dart';
 
 /// H57 hash function: BLAKE3 → B57 encoding.
 /// Uses the F57 reference implementation (github.com/nhanpnt22/f57).

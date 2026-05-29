@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	b57 "github.com/aco/b57"
+	b57 "github.com/aco/f57"
 )
 
 func validateH57CacheKey(cacheKey string, operation string) (string, error) {
