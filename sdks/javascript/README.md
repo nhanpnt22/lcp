@@ -71,8 +71,27 @@ npm run test:integration
 npm run test:contract
 npm run test:runtime
 npm run test:browser
+npm run test:parity:cross-sdk
 npm run test:coverage
 ```
+
+## Cross-SDK Parity Gate
+
+Run JavaScript vs Go vs Flutter sqlite/indexeddb parity evidence locally:
+
+```bash
+npm run test:parity:cross-sdk
+```
+
+Or run the cross-SDK orchestrator directly from repository root:
+
+```bash
+./scripts/run_cross_go_flutter_javascript_sqlite_parity.sh
+```
+
+CI parity workflow:
+
+- .github/workflows/javascript-cross-sdk-parity.yml
 
 ## HTML Browser UAT
 
@@ -118,6 +137,7 @@ Cross-SDK parity checks are documented in `../PARITY_MATRIX.md`.
 - [x] Browser bundle builds cleanly with ES2020 target
 - [x] Source maps generated for release artifacts
 - [x] Cross-SDK parity passes for seven-case matrix
+- [x] Cross-SDK sqlite/indexeddb parity gate automated in CI
 - [ ] Broad browser support matrix validated
 - [ ] Production deployment/ops validation completed
 - [ ] Load and performance validation completed

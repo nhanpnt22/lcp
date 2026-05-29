@@ -30,6 +30,43 @@ type Evidence = {
   row_count: number;
 };
 
+type DatasetSchema = {
+  items?: {
+    required?: string[];
+    additionalProperties?: boolean;
+    properties?: Record<string, { type?: string }>;
+  };
+};
+
+function assertRequiredKeys(row: Record<string, unknown>, required: Set<string>): void {
+  for (const key of required) {
+    expect(row[key]).not.toBeUndefined();
+  }
+}
+
+function assertNoUnknownKeys(row: Record<string, unknown>, props: Record<string, { type?: string }>): void {
+  for (const key of Object.keys(row)) {
+    expect(Object.hasOwn(props, key)).toBe(true);
+  }
+}
+
+function assertPropertyTypes(row: Record<string, unknown>, props: Record<string, { type?: string }>): void {
+  for (const [key, descriptor] of Object.entries(props)) {
+    const value = row[key];
+    if (value === undefined) {
+      continue;
+    }
+    if (descriptor.type === "string") {
+      expect(typeof value).toBe("string");
+      continue;
+    }
+    if (descriptor.type === "object") {
+      expect(typeof value).toBe("object");
+      expect(value).not.toBeNull();
+    }
+  }
+}
+
 function generateDatasets(count: number): Dataset[] {
   const out: Dataset[] = [];
   for (let i = 0; i < count; i++) {
@@ -69,6 +106,22 @@ function loadEvidence(path: string): Evidence {
   return JSON.parse(readFileSync(path, "utf8")) as Evidence;
 }
 
+function assertDatasetsMatchSchema(datasets: Dataset[], schemaPath: string): void {
+  const schema = JSON.parse(readFileSync(schemaPath, "utf8")) as DatasetSchema;
+  const required = new Set(schema.items?.required ?? []);
+  const props = schema.items?.properties ?? {};
+  const strictProps = schema.items?.additionalProperties === false;
+
+  for (const dataset of datasets) {
+    const row = dataset as Record<string, unknown>;
+    assertRequiredKeys(row, required);
+    if (strictProps) {
+      assertNoUnknownKeys(row, props);
+    }
+    assertPropertyTypes(row, props);
+  }
+}
+
 function assertEvidenceShape(evidence: Evidence, sdk: string, datasetCount: number): void {
   expect(evidence.sdk).toBe(sdk);
   expect(evidence.row_count).toBe(datasetCount);
@@ -100,6 +153,7 @@ test.describe("cross-sdk parity", () => {
     const repoRoot = resolve(javascriptRoot, "../..");
     const goRoot = resolve(repoRoot, "sdks/go");
     const flutterRoot = resolve(repoRoot, "sdks/flutter");
+    const schemaPath = resolve(repoRoot, "specs/cross_sdk_dataset.schema.json");
 
     const runId = `${Date.now()}`;
     const artifactDir = resolve(javascriptRoot, "test-results", `cross-sdk-${runId}`);
@@ -109,6 +163,7 @@ test.describe("cross-sdk parity", () => {
     const datasetCountRaw = Number.parseInt(process.env.LCP_CROSS_DATASET_COUNT ?? "100", 10);
     const datasetCount = Number.isFinite(datasetCountRaw) && datasetCountRaw > 0 ? datasetCountRaw : 100;
     const datasets = generateDatasets(datasetCount);
+    assertDatasetsMatchSchema(datasets, schemaPath);
     const datasetsPath = resolve(artifactDir, "datasets.json");
     const goDbPath = resolve(artifactDir, "go-cross.db");
     const flutterDbPath = resolve(artifactDir, "flutter-cross.db");
