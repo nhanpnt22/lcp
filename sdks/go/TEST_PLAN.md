@@ -4,6 +4,8 @@
 
 1. `go test ./...`
 2. `go test -race ./...`
+3. `go vet ./...`
+4. `go test -coverprofile=coverage.out ./...` with total coverage `>= 65%`
 
 ## Coverage Areas
 

@@ -153,3 +153,5 @@ General path model:
 
 - `go test ./...`
 - `go test -race ./...`
+- `go vet ./...`
+- `go test -coverprofile=coverage.out ./...` (minimum total coverage: `65%`)

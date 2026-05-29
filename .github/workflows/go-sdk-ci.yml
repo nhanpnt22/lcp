@@ -59,3 +59,18 @@ jobs:
 
       - name: Run race tests
         run: go test -race ./...
+
+      - name: Run vet
+        run: go vet ./...
+
+      - name: Enforce minimum coverage
+        shell: bash
+        run: |
+          go test -coverprofile=coverage.out ./...
+          total_cov="$(go tool cover -func=coverage.out | awk '/^total:/ {gsub("%", "", $3); print $3}')"
+          min_cov="65"
+          if ! awk -v cov="$total_cov" -v min="$min_cov" 'BEGIN {exit !(cov >= min)}'; then
+            echo "coverage gate failed: got ${total_cov}%, require at least ${min_cov}%"
+            exit 1
+          fi
+          echo "coverage gate passed: ${total_cov}% >= ${min_cov}%"
