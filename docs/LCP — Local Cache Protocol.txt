@@ -1,0 +1,330 @@
+============================================================
+Title:
+LCP — Local Cache Protocol
+(Deterministic Client Cache Layer)
+============================================================
+
+Version:
+v1.0.0
+
+Status:
+FINAL • ZERO-GAP • RFC-GRADE
+DETERMINISTIC • NON-AUTHORITATIVE
+READ-THROUGH • CEP/SDP/COP-ALIGNED
+CANONICAL-HASH • SINGLE-FLIGHT-OPTIONAL
+SWR-HOOKED • DUAL-LAYER
+TRACE-INTEGRATED • PARITY-ENFORCED
+NO-BACKFLOW • STATE-AWARE
+PRODUCTION-SEALED
+
+Type:
+Client-Side Cache Protocol (Derived Optimization Layer)
+
+Position:
+Client Runtime → LCP → CEP Client → APIaaF
+
+Normative Language:
+
+The key words MUST, MUST NOT, SHOULD, SHOULD NOT, and MAY in this protocol
+are requirement levels for conformant implementations.
+
+Child Profile Precedence:
+
+Any language/runtime child profile MUST conform to this protocol.
+If a child profile conflicts with this document, this document prevails.
+
+============================================================
+0. DESIGN GOAL
+============================================================
+
+- Deterministic read-through cache ONLY
+- Zero impact on execution semantics
+- Preserve state correctness
+- Maintain observability neutrality
+- Enable replay-safe optimization
+
+LCP = NON-AUTHORITATIVE DERIVED CACHE
+
+============================================================
+I. CORE INVARIANTS
+============================================================
+
+MUST:
+
+- deterministic behavior ONLY
+- read-through ONLY
+- EXACTLY-ONCE execution preserved
+- API-equivalent responses
+- canonical cache_key (H57-compatible recommended)
+- strict metadata parity
+- trace invariants preserved
+
+MUST NOT:
+
+- alter execution semantics
+- alter state semantics
+- emit observability signals by default
+- introduce additional RPCs
+- act as source of truth
+- store identity or sensitive data in cache payloads
+
+VIOLATION → BYPASS OR HARD FAIL
+
+============================================================
+II. NO-BACKFLOW RULE
+============================================================
+
+- MUST NOT influence execution, state delivery, or observability
+- MUST NOT change system decisions or timing semantics
+
+VIOLATION → SYSTEM INVALID
+
+============================================================
+III. CACHE KEY (CANONICAL HASH)
+============================================================
+
+cache_key = HASH(
+ cache_namespace +
+ operationId +
+ canonical_json(payload) +
+ schema_version +
+ spec_checksum +
+ user_scope
+)
+
+DEFAULT/RECOMMENDED:
+
+- H57-compatible hash
+- deterministic hash function injection allowed
+
+EXCLUDES:
+
+- trace_id
+- request_id
+- action_id
+- credentials
+
+RULES:
+
+- deterministic
+- stable across retries
+- parity-aligned
+
+============================================================
+IV. CACHE ENTRY
+============================================================
+
+ENTRY:
+
+{
+ cache_key,
+ data,
+ metadata: {
+  source,
+  created_at,
+  expires_at,
+  ttl_ms,
+  schema_version,
+  data_version,
+  spec_checksum,
+  cache_namespace,
+  compressed
+ }
+}
+
+RULES:
+
+- metadata immutable
+- API-equivalent
+- parity with upstream metadata
+
+============================================================
+V. EXECUTION MODEL
+============================================================
+
+FLOW:
+
+1. compute cache_key
+2. memory lookup
+3. optional persistence lookup
+4. TTL evaluation
+
+IF VALID HIT:
+ → return CACHE
+
+IF EXPIRED HIT:
+ → optional stale return
+ → optional background refresh callback
+
+IF MISS:
+ → forward request (ONE RPC)
+ → store result
+ → return API response
+
+RULES:
+
+- EXACTLY ONE foreground RPC per request path
+- no branching logic
+- preserve request_id when provided
+
+============================================================
+VI. STORAGE MODEL
+============================================================
+
+- in-memory (REQUIRED)
+- persistent (OPTIONAL)
+
+PERSISTENCE MODES:
+
+- auto
+- memory-only
+- dual
+
+RULES:
+
+- memory-first
+- identical structure
+- deterministic serialization
+- in auto mode, short TTL entries may stay memory-only
+
+============================================================
+VII. TTL MODEL
+============================================================
+
+SOURCE:
+
+- upstream metadata (ttl_ms)
+
+RULES:
+
+- no client computation
+- missing TTL → BYPASS
+
+============================================================
+VIII. SWR MODEL
+============================================================
+
+- stale return MAY be enabled
+- caller-driven background refresh hook
+- cache engine MUST NOT emit implicit refresh RPC
+- single-flight is optional (if configured)
+- non-blocking
+- any refresh write/persist path is caller-managed and MUST enforce validation parity
+
+============================================================
+IX. SINGLE-FLIGHT
+============================================================
+
+- scope: cache_key
+
+RULES:
+
+- when configured: concurrent identical requests → ONE RPC
+- when configured: shared result
+
+============================================================
+X. STATE ALIGNMENT
+============================================================
+
+- enforce state_version ordering when widget state context is available
+- MUST NOT override newer state with stale cache when state alignment is active
+
+============================================================
+XI. TRACE RULES
+============================================================
+
+- propagate unchanged
+- NOT part of cache_key
+- NOT persisted
+- trace_id/request_id/action_id stripped from key payload material
+
+============================================================
+XII. VALIDATION
+============================================================
+
+- key determinism
+- schema/version match
+- metadata parity
+- no sensitive data
+
+SENSITIVE FIELD ENFORCEMENT (KEY-BASED):
+
+- deterministic policy list (expandable by implementation policy)
+
+- jwt
+- access_token
+- refresh_token
+- authorization
+- credentials
+- user_id
+
+VALIDATION FAILURE HANDLING:
+
+- default: BYPASS_TO_API
+- HARD_FAIL only for fail-closed mode or invariant-critical violations
+
+============================================================
+XIII. FAILURE MODEL
+============================================================
+
+- fallback to API
+- optional stale return
+- safe degradation
+
+DECISION CLASSES:
+
+- BYPASS_TO_API
+- RETURN_STALE_AND_REFRESH
+- HARD_FAIL (fail-closed or invariant failure)
+
+FAILURE CLASSIFICATION RULE:
+
+- storage/lookup/serialization issues SHOULD resolve as BYPASS_TO_API or RETURN_STALE_AND_REFRESH
+- invariant-critical or fail-closed policy MUST resolve as HARD_FAIL
+
+============================================================
+XIV. INVALID CONDITIONS
+============================================================
+
+INVALID IF:
+
+- multiple RPCs per request
+- semantic mutation
+- metadata mismatch
+- non-determinism
+- identity leakage
+- cache influences upstream
+
+============================================================
+XV. GUARANTEES
+============================================================
+
+- execution-safe
+- state-safe
+- observability-neutral
+- deterministic
+- idempotent
+- replay-safe
+- single-flight when configured
+- transport-agnostic
+- audit-ready
+
+============================================================
+FINAL STATUS
+============================================================
+
+FINAL
+ZERO-GAP
+RFC-GRADE
+DETERMINISTIC
+NON-AUTHORITATIVE
+READ-THROUGH ONLY
+CANONICAL-HASH
+SINGLE-FLIGHT OPTIONAL
+SWR-HOOKED
+TRACE-INTEGRATED
+NO-BACKFLOW ENFORCED
+PRODUCTION-SEALED
+
+LCP — Local Cache Protocol v1.0.0 COMPLETE
+============================================================
