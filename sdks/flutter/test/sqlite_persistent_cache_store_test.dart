@@ -10,18 +10,19 @@ void main() {
   group('SqlitePersistentCacheStore', () {
     test('round-trips a valid cache entry', () async {
       final harness = await _createHarness(nowMs: 2000);
+      final key = _h57Key('k1');
 
       final entry = _entry(
-        cacheKey: 'k1',
+        cacheKey: key,
         data: {'name': 'Alice'},
         createdAt: 1000,
         ttlMs: 5000,
       );
       await harness.store.set(entry);
 
-      final loaded = await harness.store.get('k1');
+      final loaded = await harness.store.get(key);
       expect(loaded, isNotNull);
-      expect(loaded!.cacheKey, equals('k1'));
+      expect(loaded!.cacheKey, equals(key));
       expect(loaded.data['name'], equals('Alice'));
       expect(loaded.metadata.expiresAt, equals(6000));
 
@@ -30,16 +31,17 @@ void main() {
 
     test('returns null and removes entry when expired', () async {
       final harness = await _createHarness(nowMs: 7000);
+      final expiredKey = _h57Key('expired');
 
       final expired = _entry(
-        cacheKey: 'expired',
+        cacheKey: expiredKey,
         data: {'v': 1},
         createdAt: 1000,
         ttlMs: 5000,
       );
       await harness.store.set(expired);
 
-      final loaded = await harness.store.get('expired');
+      final loaded = await harness.store.get(expiredKey);
       expect(loaded, isNull);
 
       final hydrated = await harness.store.hydrateAllValid(now: 7000);
@@ -50,10 +52,12 @@ void main() {
 
     test('pruneExpired removes only expired entries', () async {
       final harness = await _createHarness(nowMs: 6500);
+      final expiredKey = _h57Key('expired');
+      final validKey = _h57Key('valid');
 
       await harness.store.set(
         _entry(
-          cacheKey: 'expired',
+          cacheKey: expiredKey,
           data: {'v': 1},
           createdAt: 1000,
           ttlMs: 5000,
@@ -61,7 +65,7 @@ void main() {
       );
       await harness.store.set(
         _entry(
-          cacheKey: 'valid',
+          cacheKey: validKey,
           data: {'v': 2},
           createdAt: 2000,
           ttlMs: 10000,
@@ -71,8 +75,8 @@ void main() {
       final removed = await harness.store.pruneExpired(now: 6500);
       expect(removed, equals(1));
 
-      final valid = await harness.store.get('valid');
-      final expired = await harness.store.get('expired');
+      final valid = await harness.store.get(validKey);
+      final expired = await harness.store.get(expiredKey);
       expect(valid, isNotNull);
       expect(expired, isNull);
 
@@ -81,10 +85,12 @@ void main() {
 
     test('hydrateAllValid honors ordering and limit', () async {
       final harness = await _createHarness(nowMs: 3000);
+      final olderKey = _h57Key('older');
+      final newerKey = _h57Key('newer');
 
       await harness.store.set(
         _entry(
-          cacheKey: 'older',
+          cacheKey: olderKey,
           data: {'rank': 1},
           createdAt: 1000,
           ttlMs: 10000,
@@ -92,7 +98,7 @@ void main() {
       );
       await harness.store.set(
         _entry(
-          cacheKey: 'newer',
+          cacheKey: newerKey,
           data: {'rank': 2},
           createdAt: 2000,
           ttlMs: 10000,
@@ -101,11 +107,25 @@ void main() {
 
       final hydrated = await harness.store.hydrateAllValid(now: 3000, limit: 1);
       expect(hydrated, hasLength(1));
-      expect(hydrated.first.cacheKey, equals('newer'));
+      expect(hydrated.first.cacheKey, equals(newerKey));
 
       await harness.dispose();
     });
   });
+}
+
+String _h57Key(String label) {
+  return computeCacheKey(
+    CacheKeyInput(
+      namespace: 'test',
+      operationId: label,
+      payload: {'label': label},
+      schemaVersion: 'v1',
+      specChecksum: 'spec-v1',
+      userScope: 'test-user',
+    ),
+    h57HashFn,
+  );
 }
 
 CacheEntry<Map<String, Object?>> _entry({

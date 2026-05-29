@@ -1,0 +1,15 @@
+
+> @sdp/lcp-nodejs-sdk@1.0.0 test
+> vitest run tests/persistent.store.cloud.contract.test.ts -t delete removes entry
+
+
+ RUN  v3.2.4 /Users/brian/dev/aco/aip/sdp/lcp/sdks/nodejs
+
+ ✓ tests/persistent.store.cloud.contract.test.ts (12 tests | 10 skipped) 2997ms
+   ✓ node persistent store cloud contract > cloud-storage delete removes entry  2995ms
+
+ Test Files  1 passed (1)
+      Tests  2 passed | 10 skipped (12)
+   Start at  17:07:19
+   Duration  3.29s (transform 59ms, setup 0ms, collect 58ms, tests 3.00s, environment 0ms, prepare 49ms)
+

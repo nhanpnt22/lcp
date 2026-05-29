@@ -1,0 +1,3002 @@
+[
+  {
+    "namespace": "ns:0",
+    "operation_id": "op:0",
+    "payload": {
+      "id": 0,
+      "tags": [
+        "tag-0",
+        "group-0"
+      ],
+      "metrics": {
+        "score": 0,
+        "ratio": 0.5
+      },
+      "trace_id": "trace-0",
+      "request_id": "request-0",
+      "action_id": "action-0",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-0",
+        "map": {
+          "k": "v-0",
+          "n": 0
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:0",
+    "value": "value-000"
+  },
+  {
+    "namespace": "ns:1",
+    "operation_id": "op:1",
+    "payload": {
+      "id": 1,
+      "tags": [
+        "tag-1",
+        "group-1"
+      ],
+      "metrics": {
+        "score": 13,
+        "ratio": 0.666667
+      },
+      "trace_id": "trace-1",
+      "request_id": "request-1",
+      "action_id": "action-1",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-1",
+        "map": {
+          "k": "v-1",
+          "n": 1
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:1",
+    "value": "value-001"
+  },
+  {
+    "namespace": "ns:2",
+    "operation_id": "op:2",
+    "payload": {
+      "id": 2,
+      "tags": [
+        "tag-2",
+        "group-2"
+      ],
+      "metrics": {
+        "score": 26,
+        "ratio": 0.75
+      },
+      "trace_id": "trace-2",
+      "request_id": "request-2",
+      "action_id": "action-2",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-2",
+        "map": {
+          "k": "v-2",
+          "n": 2
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:2",
+    "value": "value-002"
+  },
+  {
+    "namespace": "ns:3",
+    "operation_id": "op:3",
+    "payload": {
+      "id": 3,
+      "tags": [
+        "tag-0",
+        "group-3"
+      ],
+      "metrics": {
+        "score": 39,
+        "ratio": 0.8
+      },
+      "trace_id": "trace-3",
+      "request_id": "request-3",
+      "action_id": "action-3",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-3",
+        "map": {
+          "k": "v-3",
+          "n": 3
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:3",
+    "value": "value-003"
+  },
+  {
+    "namespace": "ns:4",
+    "operation_id": "op:4",
+    "payload": {
+      "id": 4,
+      "tags": [
+        "tag-1",
+        "group-4"
+      ],
+      "metrics": {
+        "score": 52,
+        "ratio": 0.833333
+      },
+      "trace_id": "trace-4",
+      "request_id": "request-4",
+      "action_id": "action-4",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-4",
+        "map": {
+          "k": "v-4",
+          "n": 4
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:4",
+    "value": "value-004"
+  },
+  {
+    "namespace": "ns:5",
+    "operation_id": "op:5",
+    "payload": {
+      "id": 5,
+      "tags": [
+        "tag-2",
+        "group-0"
+      ],
+      "metrics": {
+        "score": 65,
+        "ratio": 0.857143
+      },
+      "trace_id": "trace-5",
+      "request_id": "request-5",
+      "action_id": "action-5",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-5",
+        "map": {
+          "k": "v-5",
+          "n": 5
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:5",
+    "value": "value-005"
+  },
+  {
+    "namespace": "ns:6",
+    "operation_id": "op:6",
+    "payload": {
+      "id": 6,
+      "tags": [
+        "tag-0",
+        "group-1"
+      ],
+      "metrics": {
+        "score": 78,
+        "ratio": 0.875
+      },
+      "trace_id": "trace-6",
+      "request_id": "request-6",
+      "action_id": "action-6",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-6",
+        "map": {
+          "k": "v-6",
+          "n": 6
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:6",
+    "value": "value-006"
+  },
+  {
+    "namespace": "ns:0",
+    "operation_id": "op:7",
+    "payload": {
+      "id": 7,
+      "tags": [
+        "tag-1",
+        "group-2"
+      ],
+      "metrics": {
+        "score": 91,
+        "ratio": 0.888889
+      },
+      "trace_id": "trace-7",
+      "request_id": "request-7",
+      "action_id": "action-7",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-7",
+        "map": {
+          "k": "v-7",
+          "n": 7
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:7",
+    "value": "value-007"
+  },
+  {
+    "namespace": "ns:1",
+    "operation_id": "op:8",
+    "payload": {
+      "id": 8,
+      "tags": [
+        "tag-2",
+        "group-3"
+      ],
+      "metrics": {
+        "score": 104,
+        "ratio": 0.9
+      },
+      "trace_id": "trace-8",
+      "request_id": "request-8",
+      "action_id": "action-8",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-8",
+        "map": {
+          "k": "v-8",
+          "n": 8
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:8",
+    "value": "value-008"
+  },
+  {
+    "namespace": "ns:2",
+    "operation_id": "op:9",
+    "payload": {
+      "id": 9,
+      "tags": [
+        "tag-0",
+        "group-4"
+      ],
+      "metrics": {
+        "score": 117,
+        "ratio": 0.909091
+      },
+      "trace_id": "trace-9",
+      "request_id": "request-9",
+      "action_id": "action-9",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-9",
+        "map": {
+          "k": "v-9",
+          "n": 9
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:0",
+    "value": "value-009"
+  },
+  {
+    "namespace": "ns:3",
+    "operation_id": "op:10",
+    "payload": {
+      "id": 10,
+      "tags": [
+        "tag-1",
+        "group-0"
+      ],
+      "metrics": {
+        "score": 130,
+        "ratio": 0.916667
+      },
+      "trace_id": "trace-10",
+      "request_id": "request-10",
+      "action_id": "action-10",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-10",
+        "map": {
+          "k": "v-10",
+          "n": 10
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:1",
+    "value": "value-010"
+  },
+  {
+    "namespace": "ns:4",
+    "operation_id": "op:0",
+    "payload": {
+      "id": 11,
+      "tags": [
+        "tag-2",
+        "group-1"
+      ],
+      "metrics": {
+        "score": 143,
+        "ratio": 0.923077
+      },
+      "trace_id": "trace-11",
+      "request_id": "request-11",
+      "action_id": "action-11",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-11",
+        "map": {
+          "k": "v-11",
+          "n": 11
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:2",
+    "value": "value-011"
+  },
+  {
+    "namespace": "ns:5",
+    "operation_id": "op:1",
+    "payload": {
+      "id": 12,
+      "tags": [
+        "tag-0",
+        "group-2"
+      ],
+      "metrics": {
+        "score": 156,
+        "ratio": 0.928571
+      },
+      "trace_id": "trace-12",
+      "request_id": "request-12",
+      "action_id": "action-12",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-12",
+        "map": {
+          "k": "v-12",
+          "n": 12
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:3",
+    "value": "value-012"
+  },
+  {
+    "namespace": "ns:6",
+    "operation_id": "op:2",
+    "payload": {
+      "id": 13,
+      "tags": [
+        "tag-1",
+        "group-3"
+      ],
+      "metrics": {
+        "score": 169,
+        "ratio": 0.933333
+      },
+      "trace_id": "trace-13",
+      "request_id": "request-13",
+      "action_id": "action-13",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-13",
+        "map": {
+          "k": "v-13",
+          "n": 13
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:4",
+    "value": "value-013"
+  },
+  {
+    "namespace": "ns:0",
+    "operation_id": "op:3",
+    "payload": {
+      "id": 14,
+      "tags": [
+        "tag-2",
+        "group-4"
+      ],
+      "metrics": {
+        "score": 182,
+        "ratio": 0.9375
+      },
+      "trace_id": "trace-14",
+      "request_id": "request-14",
+      "action_id": "action-14",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-14",
+        "map": {
+          "k": "v-14",
+          "n": 14
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:5",
+    "value": "value-014"
+  },
+  {
+    "namespace": "ns:1",
+    "operation_id": "op:4",
+    "payload": {
+      "id": 15,
+      "tags": [
+        "tag-0",
+        "group-0"
+      ],
+      "metrics": {
+        "score": 195,
+        "ratio": 0.941176
+      },
+      "trace_id": "trace-15",
+      "request_id": "request-15",
+      "action_id": "action-15",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-15",
+        "map": {
+          "k": "v-15",
+          "n": 15
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:6",
+    "value": "value-015"
+  },
+  {
+    "namespace": "ns:2",
+    "operation_id": "op:5",
+    "payload": {
+      "id": 16,
+      "tags": [
+        "tag-1",
+        "group-1"
+      ],
+      "metrics": {
+        "score": 208,
+        "ratio": 0.944444
+      },
+      "trace_id": "trace-16",
+      "request_id": "request-16",
+      "action_id": "action-16",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-16",
+        "map": {
+          "k": "v-16",
+          "n": 16
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:7",
+    "value": "value-016"
+  },
+  {
+    "namespace": "ns:3",
+    "operation_id": "op:6",
+    "payload": {
+      "id": 17,
+      "tags": [
+        "tag-2",
+        "group-2"
+      ],
+      "metrics": {
+        "score": 221,
+        "ratio": 0.947368
+      },
+      "trace_id": "trace-17",
+      "request_id": "request-17",
+      "action_id": "action-17",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-17",
+        "map": {
+          "k": "v-17",
+          "n": 17
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:8",
+    "value": "value-017"
+  },
+  {
+    "namespace": "ns:4",
+    "operation_id": "op:7",
+    "payload": {
+      "id": 18,
+      "tags": [
+        "tag-0",
+        "group-3"
+      ],
+      "metrics": {
+        "score": 234,
+        "ratio": 0.95
+      },
+      "trace_id": "trace-18",
+      "request_id": "request-18",
+      "action_id": "action-18",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-18",
+        "map": {
+          "k": "v-18",
+          "n": 18
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:0",
+    "value": "value-018"
+  },
+  {
+    "namespace": "ns:5",
+    "operation_id": "op:8",
+    "payload": {
+      "id": 19,
+      "tags": [
+        "tag-1",
+        "group-4"
+      ],
+      "metrics": {
+        "score": 247,
+        "ratio": 0.952381
+      },
+      "trace_id": "trace-19",
+      "request_id": "request-19",
+      "action_id": "action-19",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-19",
+        "map": {
+          "k": "v-19",
+          "n": 19
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:1",
+    "value": "value-019"
+  },
+  {
+    "namespace": "ns:6",
+    "operation_id": "op:9",
+    "payload": {
+      "id": 20,
+      "tags": [
+        "tag-2",
+        "group-0"
+      ],
+      "metrics": {
+        "score": 260,
+        "ratio": 0.954545
+      },
+      "trace_id": "trace-20",
+      "request_id": "request-20",
+      "action_id": "action-20",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-20",
+        "map": {
+          "k": "v-20",
+          "n": 20
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:2",
+    "value": "value-020"
+  },
+  {
+    "namespace": "ns:0",
+    "operation_id": "op:10",
+    "payload": {
+      "id": 21,
+      "tags": [
+        "tag-0",
+        "group-1"
+      ],
+      "metrics": {
+        "score": 273,
+        "ratio": 0.956522
+      },
+      "trace_id": "trace-21",
+      "request_id": "request-21",
+      "action_id": "action-21",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-21",
+        "map": {
+          "k": "v-21",
+          "n": 21
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:3",
+    "value": "value-021"
+  },
+  {
+    "namespace": "ns:1",
+    "operation_id": "op:0",
+    "payload": {
+      "id": 22,
+      "tags": [
+        "tag-1",
+        "group-2"
+      ],
+      "metrics": {
+        "score": 286,
+        "ratio": 0.958333
+      },
+      "trace_id": "trace-22",
+      "request_id": "request-22",
+      "action_id": "action-22",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-22",
+        "map": {
+          "k": "v-22",
+          "n": 22
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:4",
+    "value": "value-022"
+  },
+  {
+    "namespace": "ns:2",
+    "operation_id": "op:1",
+    "payload": {
+      "id": 23,
+      "tags": [
+        "tag-2",
+        "group-3"
+      ],
+      "metrics": {
+        "score": 299,
+        "ratio": 0.96
+      },
+      "trace_id": "trace-23",
+      "request_id": "request-23",
+      "action_id": "action-23",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-23",
+        "map": {
+          "k": "v-23",
+          "n": 23
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:5",
+    "value": "value-023"
+  },
+  {
+    "namespace": "ns:3",
+    "operation_id": "op:2",
+    "payload": {
+      "id": 24,
+      "tags": [
+        "tag-0",
+        "group-4"
+      ],
+      "metrics": {
+        "score": 312,
+        "ratio": 0.961538
+      },
+      "trace_id": "trace-24",
+      "request_id": "request-24",
+      "action_id": "action-24",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-24",
+        "map": {
+          "k": "v-24",
+          "n": 24
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:6",
+    "value": "value-024"
+  },
+  {
+    "namespace": "ns:4",
+    "operation_id": "op:3",
+    "payload": {
+      "id": 25,
+      "tags": [
+        "tag-1",
+        "group-0"
+      ],
+      "metrics": {
+        "score": 325,
+        "ratio": 0.962963
+      },
+      "trace_id": "trace-25",
+      "request_id": "request-25",
+      "action_id": "action-25",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-25",
+        "map": {
+          "k": "v-25",
+          "n": 25
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:7",
+    "value": "value-025"
+  },
+  {
+    "namespace": "ns:5",
+    "operation_id": "op:4",
+    "payload": {
+      "id": 26,
+      "tags": [
+        "tag-2",
+        "group-1"
+      ],
+      "metrics": {
+        "score": 338,
+        "ratio": 0.964286
+      },
+      "trace_id": "trace-26",
+      "request_id": "request-26",
+      "action_id": "action-26",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-26",
+        "map": {
+          "k": "v-26",
+          "n": 26
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:8",
+    "value": "value-026"
+  },
+  {
+    "namespace": "ns:6",
+    "operation_id": "op:5",
+    "payload": {
+      "id": 27,
+      "tags": [
+        "tag-0",
+        "group-2"
+      ],
+      "metrics": {
+        "score": 351,
+        "ratio": 0.965517
+      },
+      "trace_id": "trace-27",
+      "request_id": "request-27",
+      "action_id": "action-27",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-27",
+        "map": {
+          "k": "v-27",
+          "n": 27
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:0",
+    "value": "value-027"
+  },
+  {
+    "namespace": "ns:0",
+    "operation_id": "op:6",
+    "payload": {
+      "id": 28,
+      "tags": [
+        "tag-1",
+        "group-3"
+      ],
+      "metrics": {
+        "score": 364,
+        "ratio": 0.966667
+      },
+      "trace_id": "trace-28",
+      "request_id": "request-28",
+      "action_id": "action-28",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-28",
+        "map": {
+          "k": "v-28",
+          "n": 28
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:1",
+    "value": "value-028"
+  },
+  {
+    "namespace": "ns:1",
+    "operation_id": "op:7",
+    "payload": {
+      "id": 29,
+      "tags": [
+        "tag-2",
+        "group-4"
+      ],
+      "metrics": {
+        "score": 377,
+        "ratio": 0.967742
+      },
+      "trace_id": "trace-29",
+      "request_id": "request-29",
+      "action_id": "action-29",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-29",
+        "map": {
+          "k": "v-29",
+          "n": 29
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:2",
+    "value": "value-029"
+  },
+  {
+    "namespace": "ns:2",
+    "operation_id": "op:8",
+    "payload": {
+      "id": 30,
+      "tags": [
+        "tag-0",
+        "group-0"
+      ],
+      "metrics": {
+        "score": 390,
+        "ratio": 0.96875
+      },
+      "trace_id": "trace-30",
+      "request_id": "request-30",
+      "action_id": "action-30",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-30",
+        "map": {
+          "k": "v-30",
+          "n": 30
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:3",
+    "value": "value-030"
+  },
+  {
+    "namespace": "ns:3",
+    "operation_id": "op:9",
+    "payload": {
+      "id": 31,
+      "tags": [
+        "tag-1",
+        "group-1"
+      ],
+      "metrics": {
+        "score": 403,
+        "ratio": 0.969697
+      },
+      "trace_id": "trace-31",
+      "request_id": "request-31",
+      "action_id": "action-31",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-31",
+        "map": {
+          "k": "v-31",
+          "n": 31
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:4",
+    "value": "value-031"
+  },
+  {
+    "namespace": "ns:4",
+    "operation_id": "op:10",
+    "payload": {
+      "id": 32,
+      "tags": [
+        "tag-2",
+        "group-2"
+      ],
+      "metrics": {
+        "score": 416,
+        "ratio": 0.970588
+      },
+      "trace_id": "trace-32",
+      "request_id": "request-32",
+      "action_id": "action-32",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-32",
+        "map": {
+          "k": "v-32",
+          "n": 32
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:5",
+    "value": "value-032"
+  },
+  {
+    "namespace": "ns:5",
+    "operation_id": "op:0",
+    "payload": {
+      "id": 33,
+      "tags": [
+        "tag-0",
+        "group-3"
+      ],
+      "metrics": {
+        "score": 429,
+        "ratio": 0.971429
+      },
+      "trace_id": "trace-33",
+      "request_id": "request-33",
+      "action_id": "action-33",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-33",
+        "map": {
+          "k": "v-33",
+          "n": 33
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:6",
+    "value": "value-033"
+  },
+  {
+    "namespace": "ns:6",
+    "operation_id": "op:1",
+    "payload": {
+      "id": 34,
+      "tags": [
+        "tag-1",
+        "group-4"
+      ],
+      "metrics": {
+        "score": 442,
+        "ratio": 0.972222
+      },
+      "trace_id": "trace-34",
+      "request_id": "request-34",
+      "action_id": "action-34",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-34",
+        "map": {
+          "k": "v-34",
+          "n": 34
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:7",
+    "value": "value-034"
+  },
+  {
+    "namespace": "ns:0",
+    "operation_id": "op:2",
+    "payload": {
+      "id": 35,
+      "tags": [
+        "tag-2",
+        "group-0"
+      ],
+      "metrics": {
+        "score": 455,
+        "ratio": 0.972973
+      },
+      "trace_id": "trace-35",
+      "request_id": "request-35",
+      "action_id": "action-35",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-35",
+        "map": {
+          "k": "v-35",
+          "n": 35
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:8",
+    "value": "value-035"
+  },
+  {
+    "namespace": "ns:1",
+    "operation_id": "op:3",
+    "payload": {
+      "id": 36,
+      "tags": [
+        "tag-0",
+        "group-1"
+      ],
+      "metrics": {
+        "score": 468,
+        "ratio": 0.973684
+      },
+      "trace_id": "trace-36",
+      "request_id": "request-36",
+      "action_id": "action-36",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-36",
+        "map": {
+          "k": "v-36",
+          "n": 36
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:0",
+    "value": "value-036"
+  },
+  {
+    "namespace": "ns:2",
+    "operation_id": "op:4",
+    "payload": {
+      "id": 37,
+      "tags": [
+        "tag-1",
+        "group-2"
+      ],
+      "metrics": {
+        "score": 481,
+        "ratio": 0.974359
+      },
+      "trace_id": "trace-37",
+      "request_id": "request-37",
+      "action_id": "action-37",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-37",
+        "map": {
+          "k": "v-37",
+          "n": 37
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:1",
+    "value": "value-037"
+  },
+  {
+    "namespace": "ns:3",
+    "operation_id": "op:5",
+    "payload": {
+      "id": 38,
+      "tags": [
+        "tag-2",
+        "group-3"
+      ],
+      "metrics": {
+        "score": 494,
+        "ratio": 0.975
+      },
+      "trace_id": "trace-38",
+      "request_id": "request-38",
+      "action_id": "action-38",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-38",
+        "map": {
+          "k": "v-38",
+          "n": 38
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:2",
+    "value": "value-038"
+  },
+  {
+    "namespace": "ns:4",
+    "operation_id": "op:6",
+    "payload": {
+      "id": 39,
+      "tags": [
+        "tag-0",
+        "group-4"
+      ],
+      "metrics": {
+        "score": 507,
+        "ratio": 0.97561
+      },
+      "trace_id": "trace-39",
+      "request_id": "request-39",
+      "action_id": "action-39",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-39",
+        "map": {
+          "k": "v-39",
+          "n": 39
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:3",
+    "value": "value-039"
+  },
+  {
+    "namespace": "ns:5",
+    "operation_id": "op:7",
+    "payload": {
+      "id": 40,
+      "tags": [
+        "tag-1",
+        "group-0"
+      ],
+      "metrics": {
+        "score": 520,
+        "ratio": 0.97619
+      },
+      "trace_id": "trace-40",
+      "request_id": "request-40",
+      "action_id": "action-40",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-40",
+        "map": {
+          "k": "v-40",
+          "n": 40
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:4",
+    "value": "value-040"
+  },
+  {
+    "namespace": "ns:6",
+    "operation_id": "op:8",
+    "payload": {
+      "id": 41,
+      "tags": [
+        "tag-2",
+        "group-1"
+      ],
+      "metrics": {
+        "score": 533,
+        "ratio": 0.976744
+      },
+      "trace_id": "trace-41",
+      "request_id": "request-41",
+      "action_id": "action-41",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-41",
+        "map": {
+          "k": "v-41",
+          "n": 41
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:5",
+    "value": "value-041"
+  },
+  {
+    "namespace": "ns:0",
+    "operation_id": "op:9",
+    "payload": {
+      "id": 42,
+      "tags": [
+        "tag-0",
+        "group-2"
+      ],
+      "metrics": {
+        "score": 546,
+        "ratio": 0.977273
+      },
+      "trace_id": "trace-42",
+      "request_id": "request-42",
+      "action_id": "action-42",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-42",
+        "map": {
+          "k": "v-42",
+          "n": 42
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:6",
+    "value": "value-042"
+  },
+  {
+    "namespace": "ns:1",
+    "operation_id": "op:10",
+    "payload": {
+      "id": 43,
+      "tags": [
+        "tag-1",
+        "group-3"
+      ],
+      "metrics": {
+        "score": 559,
+        "ratio": 0.977778
+      },
+      "trace_id": "trace-43",
+      "request_id": "request-43",
+      "action_id": "action-43",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-43",
+        "map": {
+          "k": "v-43",
+          "n": 43
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:7",
+    "value": "value-043"
+  },
+  {
+    "namespace": "ns:2",
+    "operation_id": "op:0",
+    "payload": {
+      "id": 44,
+      "tags": [
+        "tag-2",
+        "group-4"
+      ],
+      "metrics": {
+        "score": 572,
+        "ratio": 0.978261
+      },
+      "trace_id": "trace-44",
+      "request_id": "request-44",
+      "action_id": "action-44",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-44",
+        "map": {
+          "k": "v-44",
+          "n": 44
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:8",
+    "value": "value-044"
+  },
+  {
+    "namespace": "ns:3",
+    "operation_id": "op:1",
+    "payload": {
+      "id": 45,
+      "tags": [
+        "tag-0",
+        "group-0"
+      ],
+      "metrics": {
+        "score": 585,
+        "ratio": 0.978723
+      },
+      "trace_id": "trace-45",
+      "request_id": "request-45",
+      "action_id": "action-45",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-45",
+        "map": {
+          "k": "v-45",
+          "n": 45
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:0",
+    "value": "value-045"
+  },
+  {
+    "namespace": "ns:4",
+    "operation_id": "op:2",
+    "payload": {
+      "id": 46,
+      "tags": [
+        "tag-1",
+        "group-1"
+      ],
+      "metrics": {
+        "score": 598,
+        "ratio": 0.979167
+      },
+      "trace_id": "trace-46",
+      "request_id": "request-46",
+      "action_id": "action-46",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-46",
+        "map": {
+          "k": "v-46",
+          "n": 46
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:1",
+    "value": "value-046"
+  },
+  {
+    "namespace": "ns:5",
+    "operation_id": "op:3",
+    "payload": {
+      "id": 47,
+      "tags": [
+        "tag-2",
+        "group-2"
+      ],
+      "metrics": {
+        "score": 611,
+        "ratio": 0.979592
+      },
+      "trace_id": "trace-47",
+      "request_id": "request-47",
+      "action_id": "action-47",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-47",
+        "map": {
+          "k": "v-47",
+          "n": 47
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:2",
+    "value": "value-047"
+  },
+  {
+    "namespace": "ns:6",
+    "operation_id": "op:4",
+    "payload": {
+      "id": 48,
+      "tags": [
+        "tag-0",
+        "group-3"
+      ],
+      "metrics": {
+        "score": 624,
+        "ratio": 0.98
+      },
+      "trace_id": "trace-48",
+      "request_id": "request-48",
+      "action_id": "action-48",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-48",
+        "map": {
+          "k": "v-48",
+          "n": 48
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:3",
+    "value": "value-048"
+  },
+  {
+    "namespace": "ns:0",
+    "operation_id": "op:5",
+    "payload": {
+      "id": 49,
+      "tags": [
+        "tag-1",
+        "group-4"
+      ],
+      "metrics": {
+        "score": 637,
+        "ratio": 0.980392
+      },
+      "trace_id": "trace-49",
+      "request_id": "request-49",
+      "action_id": "action-49",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-49",
+        "map": {
+          "k": "v-49",
+          "n": 49
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:4",
+    "value": "value-049"
+  },
+  {
+    "namespace": "ns:1",
+    "operation_id": "op:6",
+    "payload": {
+      "id": 50,
+      "tags": [
+        "tag-2",
+        "group-0"
+      ],
+      "metrics": {
+        "score": 650,
+        "ratio": 0.980769
+      },
+      "trace_id": "trace-50",
+      "request_id": "request-50",
+      "action_id": "action-50",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-50",
+        "map": {
+          "k": "v-50",
+          "n": 50
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:5",
+    "value": "value-050"
+  },
+  {
+    "namespace": "ns:2",
+    "operation_id": "op:7",
+    "payload": {
+      "id": 51,
+      "tags": [
+        "tag-0",
+        "group-1"
+      ],
+      "metrics": {
+        "score": 663,
+        "ratio": 0.981132
+      },
+      "trace_id": "trace-51",
+      "request_id": "request-51",
+      "action_id": "action-51",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-51",
+        "map": {
+          "k": "v-51",
+          "n": 51
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:6",
+    "value": "value-051"
+  },
+  {
+    "namespace": "ns:3",
+    "operation_id": "op:8",
+    "payload": {
+      "id": 52,
+      "tags": [
+        "tag-1",
+        "group-2"
+      ],
+      "metrics": {
+        "score": 676,
+        "ratio": 0.981481
+      },
+      "trace_id": "trace-52",
+      "request_id": "request-52",
+      "action_id": "action-52",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-52",
+        "map": {
+          "k": "v-52",
+          "n": 52
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:7",
+    "value": "value-052"
+  },
+  {
+    "namespace": "ns:4",
+    "operation_id": "op:9",
+    "payload": {
+      "id": 53,
+      "tags": [
+        "tag-2",
+        "group-3"
+      ],
+      "metrics": {
+        "score": 689,
+        "ratio": 0.981818
+      },
+      "trace_id": "trace-53",
+      "request_id": "request-53",
+      "action_id": "action-53",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-53",
+        "map": {
+          "k": "v-53",
+          "n": 53
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:8",
+    "value": "value-053"
+  },
+  {
+    "namespace": "ns:5",
+    "operation_id": "op:10",
+    "payload": {
+      "id": 54,
+      "tags": [
+        "tag-0",
+        "group-4"
+      ],
+      "metrics": {
+        "score": 702,
+        "ratio": 0.982143
+      },
+      "trace_id": "trace-54",
+      "request_id": "request-54",
+      "action_id": "action-54",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-54",
+        "map": {
+          "k": "v-54",
+          "n": 54
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:0",
+    "value": "value-054"
+  },
+  {
+    "namespace": "ns:6",
+    "operation_id": "op:0",
+    "payload": {
+      "id": 55,
+      "tags": [
+        "tag-1",
+        "group-0"
+      ],
+      "metrics": {
+        "score": 715,
+        "ratio": 0.982456
+      },
+      "trace_id": "trace-55",
+      "request_id": "request-55",
+      "action_id": "action-55",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-55",
+        "map": {
+          "k": "v-55",
+          "n": 55
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:1",
+    "value": "value-055"
+  },
+  {
+    "namespace": "ns:0",
+    "operation_id": "op:1",
+    "payload": {
+      "id": 56,
+      "tags": [
+        "tag-2",
+        "group-1"
+      ],
+      "metrics": {
+        "score": 728,
+        "ratio": 0.982759
+      },
+      "trace_id": "trace-56",
+      "request_id": "request-56",
+      "action_id": "action-56",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-56",
+        "map": {
+          "k": "v-56",
+          "n": 56
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:2",
+    "value": "value-056"
+  },
+  {
+    "namespace": "ns:1",
+    "operation_id": "op:2",
+    "payload": {
+      "id": 57,
+      "tags": [
+        "tag-0",
+        "group-2"
+      ],
+      "metrics": {
+        "score": 741,
+        "ratio": 0.983051
+      },
+      "trace_id": "trace-57",
+      "request_id": "request-57",
+      "action_id": "action-57",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-57",
+        "map": {
+          "k": "v-57",
+          "n": 57
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:3",
+    "value": "value-057"
+  },
+  {
+    "namespace": "ns:2",
+    "operation_id": "op:3",
+    "payload": {
+      "id": 58,
+      "tags": [
+        "tag-1",
+        "group-3"
+      ],
+      "metrics": {
+        "score": 754,
+        "ratio": 0.983333
+      },
+      "trace_id": "trace-58",
+      "request_id": "request-58",
+      "action_id": "action-58",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-58",
+        "map": {
+          "k": "v-58",
+          "n": 58
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:4",
+    "value": "value-058"
+  },
+  {
+    "namespace": "ns:3",
+    "operation_id": "op:4",
+    "payload": {
+      "id": 59,
+      "tags": [
+        "tag-2",
+        "group-4"
+      ],
+      "metrics": {
+        "score": 767,
+        "ratio": 0.983607
+      },
+      "trace_id": "trace-59",
+      "request_id": "request-59",
+      "action_id": "action-59",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-59",
+        "map": {
+          "k": "v-59",
+          "n": 59
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:5",
+    "value": "value-059"
+  },
+  {
+    "namespace": "ns:4",
+    "operation_id": "op:5",
+    "payload": {
+      "id": 60,
+      "tags": [
+        "tag-0",
+        "group-0"
+      ],
+      "metrics": {
+        "score": 780,
+        "ratio": 0.983871
+      },
+      "trace_id": "trace-60",
+      "request_id": "request-60",
+      "action_id": "action-60",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-60",
+        "map": {
+          "k": "v-60",
+          "n": 60
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:6",
+    "value": "value-060"
+  },
+  {
+    "namespace": "ns:5",
+    "operation_id": "op:6",
+    "payload": {
+      "id": 61,
+      "tags": [
+        "tag-1",
+        "group-1"
+      ],
+      "metrics": {
+        "score": 793,
+        "ratio": 0.984127
+      },
+      "trace_id": "trace-61",
+      "request_id": "request-61",
+      "action_id": "action-61",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-61",
+        "map": {
+          "k": "v-61",
+          "n": 61
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:7",
+    "value": "value-061"
+  },
+  {
+    "namespace": "ns:6",
+    "operation_id": "op:7",
+    "payload": {
+      "id": 62,
+      "tags": [
+        "tag-2",
+        "group-2"
+      ],
+      "metrics": {
+        "score": 806,
+        "ratio": 0.984375
+      },
+      "trace_id": "trace-62",
+      "request_id": "request-62",
+      "action_id": "action-62",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-62",
+        "map": {
+          "k": "v-62",
+          "n": 62
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:8",
+    "value": "value-062"
+  },
+  {
+    "namespace": "ns:0",
+    "operation_id": "op:8",
+    "payload": {
+      "id": 63,
+      "tags": [
+        "tag-0",
+        "group-3"
+      ],
+      "metrics": {
+        "score": 819,
+        "ratio": 0.984615
+      },
+      "trace_id": "trace-63",
+      "request_id": "request-63",
+      "action_id": "action-63",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-63",
+        "map": {
+          "k": "v-63",
+          "n": 63
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:0",
+    "value": "value-063"
+  },
+  {
+    "namespace": "ns:1",
+    "operation_id": "op:9",
+    "payload": {
+      "id": 64,
+      "tags": [
+        "tag-1",
+        "group-4"
+      ],
+      "metrics": {
+        "score": 832,
+        "ratio": 0.984848
+      },
+      "trace_id": "trace-64",
+      "request_id": "request-64",
+      "action_id": "action-64",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-64",
+        "map": {
+          "k": "v-64",
+          "n": 64
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:1",
+    "value": "value-064"
+  },
+  {
+    "namespace": "ns:2",
+    "operation_id": "op:10",
+    "payload": {
+      "id": 65,
+      "tags": [
+        "tag-2",
+        "group-0"
+      ],
+      "metrics": {
+        "score": 845,
+        "ratio": 0.985075
+      },
+      "trace_id": "trace-65",
+      "request_id": "request-65",
+      "action_id": "action-65",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-65",
+        "map": {
+          "k": "v-65",
+          "n": 65
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:2",
+    "value": "value-065"
+  },
+  {
+    "namespace": "ns:3",
+    "operation_id": "op:0",
+    "payload": {
+      "id": 66,
+      "tags": [
+        "tag-0",
+        "group-1"
+      ],
+      "metrics": {
+        "score": 858,
+        "ratio": 0.985294
+      },
+      "trace_id": "trace-66",
+      "request_id": "request-66",
+      "action_id": "action-66",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-66",
+        "map": {
+          "k": "v-66",
+          "n": 66
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:3",
+    "value": "value-066"
+  },
+  {
+    "namespace": "ns:4",
+    "operation_id": "op:1",
+    "payload": {
+      "id": 67,
+      "tags": [
+        "tag-1",
+        "group-2"
+      ],
+      "metrics": {
+        "score": 871,
+        "ratio": 0.985507
+      },
+      "trace_id": "trace-67",
+      "request_id": "request-67",
+      "action_id": "action-67",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-67",
+        "map": {
+          "k": "v-67",
+          "n": 67
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:4",
+    "value": "value-067"
+  },
+  {
+    "namespace": "ns:5",
+    "operation_id": "op:2",
+    "payload": {
+      "id": 68,
+      "tags": [
+        "tag-2",
+        "group-3"
+      ],
+      "metrics": {
+        "score": 884,
+        "ratio": 0.985714
+      },
+      "trace_id": "trace-68",
+      "request_id": "request-68",
+      "action_id": "action-68",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-68",
+        "map": {
+          "k": "v-68",
+          "n": 68
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:5",
+    "value": "value-068"
+  },
+  {
+    "namespace": "ns:6",
+    "operation_id": "op:3",
+    "payload": {
+      "id": 69,
+      "tags": [
+        "tag-0",
+        "group-4"
+      ],
+      "metrics": {
+        "score": 897,
+        "ratio": 0.985915
+      },
+      "trace_id": "trace-69",
+      "request_id": "request-69",
+      "action_id": "action-69",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-69",
+        "map": {
+          "k": "v-69",
+          "n": 69
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:6",
+    "value": "value-069"
+  },
+  {
+    "namespace": "ns:0",
+    "operation_id": "op:4",
+    "payload": {
+      "id": 70,
+      "tags": [
+        "tag-1",
+        "group-0"
+      ],
+      "metrics": {
+        "score": 910,
+        "ratio": 0.986111
+      },
+      "trace_id": "trace-70",
+      "request_id": "request-70",
+      "action_id": "action-70",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-70",
+        "map": {
+          "k": "v-70",
+          "n": 70
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:7",
+    "value": "value-070"
+  },
+  {
+    "namespace": "ns:1",
+    "operation_id": "op:5",
+    "payload": {
+      "id": 71,
+      "tags": [
+        "tag-2",
+        "group-1"
+      ],
+      "metrics": {
+        "score": 923,
+        "ratio": 0.986301
+      },
+      "trace_id": "trace-71",
+      "request_id": "request-71",
+      "action_id": "action-71",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-71",
+        "map": {
+          "k": "v-71",
+          "n": 71
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:8",
+    "value": "value-071"
+  },
+  {
+    "namespace": "ns:2",
+    "operation_id": "op:6",
+    "payload": {
+      "id": 72,
+      "tags": [
+        "tag-0",
+        "group-2"
+      ],
+      "metrics": {
+        "score": 936,
+        "ratio": 0.986486
+      },
+      "trace_id": "trace-72",
+      "request_id": "request-72",
+      "action_id": "action-72",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-72",
+        "map": {
+          "k": "v-72",
+          "n": 72
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:0",
+    "value": "value-072"
+  },
+  {
+    "namespace": "ns:3",
+    "operation_id": "op:7",
+    "payload": {
+      "id": 73,
+      "tags": [
+        "tag-1",
+        "group-3"
+      ],
+      "metrics": {
+        "score": 949,
+        "ratio": 0.986667
+      },
+      "trace_id": "trace-73",
+      "request_id": "request-73",
+      "action_id": "action-73",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-73",
+        "map": {
+          "k": "v-73",
+          "n": 73
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:1",
+    "value": "value-073"
+  },
+  {
+    "namespace": "ns:4",
+    "operation_id": "op:8",
+    "payload": {
+      "id": 74,
+      "tags": [
+        "tag-2",
+        "group-4"
+      ],
+      "metrics": {
+        "score": 962,
+        "ratio": 0.986842
+      },
+      "trace_id": "trace-74",
+      "request_id": "request-74",
+      "action_id": "action-74",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-74",
+        "map": {
+          "k": "v-74",
+          "n": 74
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:2",
+    "value": "value-074"
+  },
+  {
+    "namespace": "ns:5",
+    "operation_id": "op:9",
+    "payload": {
+      "id": 75,
+      "tags": [
+        "tag-0",
+        "group-0"
+      ],
+      "metrics": {
+        "score": 975,
+        "ratio": 0.987013
+      },
+      "trace_id": "trace-75",
+      "request_id": "request-75",
+      "action_id": "action-75",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-75",
+        "map": {
+          "k": "v-75",
+          "n": 75
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:3",
+    "value": "value-075"
+  },
+  {
+    "namespace": "ns:6",
+    "operation_id": "op:10",
+    "payload": {
+      "id": 76,
+      "tags": [
+        "tag-1",
+        "group-1"
+      ],
+      "metrics": {
+        "score": 988,
+        "ratio": 0.987179
+      },
+      "trace_id": "trace-76",
+      "request_id": "request-76",
+      "action_id": "action-76",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-76",
+        "map": {
+          "k": "v-76",
+          "n": 76
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:4",
+    "value": "value-076"
+  },
+  {
+    "namespace": "ns:0",
+    "operation_id": "op:0",
+    "payload": {
+      "id": 77,
+      "tags": [
+        "tag-2",
+        "group-2"
+      ],
+      "metrics": {
+        "score": 1001,
+        "ratio": 0.987342
+      },
+      "trace_id": "trace-77",
+      "request_id": "request-77",
+      "action_id": "action-77",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-77",
+        "map": {
+          "k": "v-77",
+          "n": 77
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:5",
+    "value": "value-077"
+  },
+  {
+    "namespace": "ns:1",
+    "operation_id": "op:1",
+    "payload": {
+      "id": 78,
+      "tags": [
+        "tag-0",
+        "group-3"
+      ],
+      "metrics": {
+        "score": 1014,
+        "ratio": 0.9875
+      },
+      "trace_id": "trace-78",
+      "request_id": "request-78",
+      "action_id": "action-78",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-78",
+        "map": {
+          "k": "v-78",
+          "n": 78
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:6",
+    "value": "value-078"
+  },
+  {
+    "namespace": "ns:2",
+    "operation_id": "op:2",
+    "payload": {
+      "id": 79,
+      "tags": [
+        "tag-1",
+        "group-4"
+      ],
+      "metrics": {
+        "score": 1027,
+        "ratio": 0.987654
+      },
+      "trace_id": "trace-79",
+      "request_id": "request-79",
+      "action_id": "action-79",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-79",
+        "map": {
+          "k": "v-79",
+          "n": 79
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:7",
+    "value": "value-079"
+  },
+  {
+    "namespace": "ns:3",
+    "operation_id": "op:3",
+    "payload": {
+      "id": 80,
+      "tags": [
+        "tag-2",
+        "group-0"
+      ],
+      "metrics": {
+        "score": 1040,
+        "ratio": 0.987805
+      },
+      "trace_id": "trace-80",
+      "request_id": "request-80",
+      "action_id": "action-80",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-80",
+        "map": {
+          "k": "v-80",
+          "n": 80
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:8",
+    "value": "value-080"
+  },
+  {
+    "namespace": "ns:4",
+    "operation_id": "op:4",
+    "payload": {
+      "id": 81,
+      "tags": [
+        "tag-0",
+        "group-1"
+      ],
+      "metrics": {
+        "score": 1053,
+        "ratio": 0.987952
+      },
+      "trace_id": "trace-81",
+      "request_id": "request-81",
+      "action_id": "action-81",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-81",
+        "map": {
+          "k": "v-81",
+          "n": 81
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:0",
+    "value": "value-081"
+  },
+  {
+    "namespace": "ns:5",
+    "operation_id": "op:5",
+    "payload": {
+      "id": 82,
+      "tags": [
+        "tag-1",
+        "group-2"
+      ],
+      "metrics": {
+        "score": 1066,
+        "ratio": 0.988095
+      },
+      "trace_id": "trace-82",
+      "request_id": "request-82",
+      "action_id": "action-82",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-82",
+        "map": {
+          "k": "v-82",
+          "n": 82
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:1",
+    "value": "value-082"
+  },
+  {
+    "namespace": "ns:6",
+    "operation_id": "op:6",
+    "payload": {
+      "id": 83,
+      "tags": [
+        "tag-2",
+        "group-3"
+      ],
+      "metrics": {
+        "score": 1079,
+        "ratio": 0.988235
+      },
+      "trace_id": "trace-83",
+      "request_id": "request-83",
+      "action_id": "action-83",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-83",
+        "map": {
+          "k": "v-83",
+          "n": 83
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:2",
+    "value": "value-083"
+  },
+  {
+    "namespace": "ns:0",
+    "operation_id": "op:7",
+    "payload": {
+      "id": 84,
+      "tags": [
+        "tag-0",
+        "group-4"
+      ],
+      "metrics": {
+        "score": 1092,
+        "ratio": 0.988372
+      },
+      "trace_id": "trace-84",
+      "request_id": "request-84",
+      "action_id": "action-84",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-84",
+        "map": {
+          "k": "v-84",
+          "n": 84
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:3",
+    "value": "value-084"
+  },
+  {
+    "namespace": "ns:1",
+    "operation_id": "op:8",
+    "payload": {
+      "id": 85,
+      "tags": [
+        "tag-1",
+        "group-0"
+      ],
+      "metrics": {
+        "score": 1105,
+        "ratio": 0.988506
+      },
+      "trace_id": "trace-85",
+      "request_id": "request-85",
+      "action_id": "action-85",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-85",
+        "map": {
+          "k": "v-85",
+          "n": 85
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:4",
+    "value": "value-085"
+  },
+  {
+    "namespace": "ns:2",
+    "operation_id": "op:9",
+    "payload": {
+      "id": 86,
+      "tags": [
+        "tag-2",
+        "group-1"
+      ],
+      "metrics": {
+        "score": 1118,
+        "ratio": 0.988636
+      },
+      "trace_id": "trace-86",
+      "request_id": "request-86",
+      "action_id": "action-86",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-86",
+        "map": {
+          "k": "v-86",
+          "n": 86
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:5",
+    "value": "value-086"
+  },
+  {
+    "namespace": "ns:3",
+    "operation_id": "op:10",
+    "payload": {
+      "id": 87,
+      "tags": [
+        "tag-0",
+        "group-2"
+      ],
+      "metrics": {
+        "score": 1131,
+        "ratio": 0.988764
+      },
+      "trace_id": "trace-87",
+      "request_id": "request-87",
+      "action_id": "action-87",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-87",
+        "map": {
+          "k": "v-87",
+          "n": 87
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:6",
+    "value": "value-087"
+  },
+  {
+    "namespace": "ns:4",
+    "operation_id": "op:0",
+    "payload": {
+      "id": 88,
+      "tags": [
+        "tag-1",
+        "group-3"
+      ],
+      "metrics": {
+        "score": 1144,
+        "ratio": 0.988889
+      },
+      "trace_id": "trace-88",
+      "request_id": "request-88",
+      "action_id": "action-88",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-88",
+        "map": {
+          "k": "v-88",
+          "n": 88
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:7",
+    "value": "value-088"
+  },
+  {
+    "namespace": "ns:5",
+    "operation_id": "op:1",
+    "payload": {
+      "id": 89,
+      "tags": [
+        "tag-2",
+        "group-4"
+      ],
+      "metrics": {
+        "score": 1157,
+        "ratio": 0.989011
+      },
+      "trace_id": "trace-89",
+      "request_id": "request-89",
+      "action_id": "action-89",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-89",
+        "map": {
+          "k": "v-89",
+          "n": 89
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:8",
+    "value": "value-089"
+  },
+  {
+    "namespace": "ns:6",
+    "operation_id": "op:2",
+    "payload": {
+      "id": 90,
+      "tags": [
+        "tag-0",
+        "group-0"
+      ],
+      "metrics": {
+        "score": 1170,
+        "ratio": 0.98913
+      },
+      "trace_id": "trace-90",
+      "request_id": "request-90",
+      "action_id": "action-90",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-90",
+        "map": {
+          "k": "v-90",
+          "n": 90
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:0",
+    "value": "value-090"
+  },
+  {
+    "namespace": "ns:0",
+    "operation_id": "op:3",
+    "payload": {
+      "id": 91,
+      "tags": [
+        "tag-1",
+        "group-1"
+      ],
+      "metrics": {
+        "score": 1183,
+        "ratio": 0.989247
+      },
+      "trace_id": "trace-91",
+      "request_id": "request-91",
+      "action_id": "action-91",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-91",
+        "map": {
+          "k": "v-91",
+          "n": 91
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:1",
+    "value": "value-091"
+  },
+  {
+    "namespace": "ns:1",
+    "operation_id": "op:4",
+    "payload": {
+      "id": 92,
+      "tags": [
+        "tag-2",
+        "group-2"
+      ],
+      "metrics": {
+        "score": 1196,
+        "ratio": 0.989362
+      },
+      "trace_id": "trace-92",
+      "request_id": "request-92",
+      "action_id": "action-92",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-92",
+        "map": {
+          "k": "v-92",
+          "n": 92
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:2",
+    "value": "value-092"
+  },
+  {
+    "namespace": "ns:2",
+    "operation_id": "op:5",
+    "payload": {
+      "id": 93,
+      "tags": [
+        "tag-0",
+        "group-3"
+      ],
+      "metrics": {
+        "score": 1209,
+        "ratio": 0.989474
+      },
+      "trace_id": "trace-93",
+      "request_id": "request-93",
+      "action_id": "action-93",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-93",
+        "map": {
+          "k": "v-93",
+          "n": 93
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:3",
+    "value": "value-093"
+  },
+  {
+    "namespace": "ns:3",
+    "operation_id": "op:6",
+    "payload": {
+      "id": 94,
+      "tags": [
+        "tag-1",
+        "group-4"
+      ],
+      "metrics": {
+        "score": 1222,
+        "ratio": 0.989583
+      },
+      "trace_id": "trace-94",
+      "request_id": "request-94",
+      "action_id": "action-94",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-94",
+        "map": {
+          "k": "v-94",
+          "n": 94
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:4",
+    "value": "value-094"
+  },
+  {
+    "namespace": "ns:4",
+    "operation_id": "op:7",
+    "payload": {
+      "id": 95,
+      "tags": [
+        "tag-2",
+        "group-0"
+      ],
+      "metrics": {
+        "score": 1235,
+        "ratio": 0.989691
+      },
+      "trace_id": "trace-95",
+      "request_id": "request-95",
+      "action_id": "action-95",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-95",
+        "map": {
+          "k": "v-95",
+          "n": 95
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:5",
+    "value": "value-095"
+  },
+  {
+    "namespace": "ns:5",
+    "operation_id": "op:8",
+    "payload": {
+      "id": 96,
+      "tags": [
+        "tag-0",
+        "group-1"
+      ],
+      "metrics": {
+        "score": 1248,
+        "ratio": 0.989796
+      },
+      "trace_id": "trace-96",
+      "request_id": "request-96",
+      "action_id": "action-96",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-96",
+        "map": {
+          "k": "v-96",
+          "n": 96
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:6",
+    "value": "value-096"
+  },
+  {
+    "namespace": "ns:6",
+    "operation_id": "op:9",
+    "payload": {
+      "id": 97,
+      "tags": [
+        "tag-1",
+        "group-2"
+      ],
+      "metrics": {
+        "score": 1261,
+        "ratio": 0.989899
+      },
+      "trace_id": "trace-97",
+      "request_id": "request-97",
+      "action_id": "action-97",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-97",
+        "map": {
+          "k": "v-97",
+          "n": 97
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:7",
+    "value": "value-097"
+  },
+  {
+    "namespace": "ns:0",
+    "operation_id": "op:10",
+    "payload": {
+      "id": 98,
+      "tags": [
+        "tag-2",
+        "group-3"
+      ],
+      "metrics": {
+        "score": 1274,
+        "ratio": 0.99
+      },
+      "trace_id": "trace-98",
+      "request_id": "request-98",
+      "action_id": "action-98",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-98",
+        "map": {
+          "k": "v-98",
+          "n": 98
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:8",
+    "value": "value-098"
+  },
+  {
+    "namespace": "ns:1",
+    "operation_id": "op:0",
+    "payload": {
+      "id": 99,
+      "tags": [
+        "tag-0",
+        "group-4"
+      ],
+      "metrics": {
+        "score": 1287,
+        "ratio": 0.990099
+      },
+      "trace_id": "trace-99",
+      "request_id": "request-99",
+      "action_id": "action-99",
+      "nested": {
+        "safe": true,
+        "request_id": "nested-request-99",
+        "map": {
+          "k": "v-99",
+          "n": 99
+        }
+      }
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "tenant:0",
+    "value": "value-099"
+  }
+]

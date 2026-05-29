@@ -1,0 +1,67 @@
+[2026-05-28T09:33:23Z] REMOTE TESTING E2E UAT START
+[2026-05-28T09:33:23Z] root=/Users/brian/dev/aco/aip/sdp
+[2026-05-28T09:33:23Z] gateway_dir=/Users/brian/dev/aco/aip/sdp/sdp-ws-gateway
+[2026-05-28T09:33:23Z] Step 1: Run SDP simulation script
+{
+  "suite": "E2E UAT (WTP + SDP + gRPC INGESTION) - Go PSP Demo Simulation",
+  "timestamp_utc": "2026-05-28T09:33:23.318722Z",
+  "total": 8,
+  "passed": 8,
+  "failed": 0,
+  "results": [
+    {
+      "id": "S1",
+      "title": "CONNECT",
+      "passed": true,
+      "detail": "connection established"
+    },
+    {
+      "id": "S2",
+      "title": "SUBSCRIBE",
+      "passed": true,
+      "detail": "subscription registered"
+    },
+    {
+      "id": "S3",
+      "title": "FULL_STATE",
+      "passed": true,
+      "detail": "ack=ACCEPTED/NONE"
+    },
+    {
+      "id": "S4",
+      "title": "DELTA_UPDATE",
+      "passed": true,
+      "detail": "ack=ACCEPTED/NONE"
+    },
+    {
+      "id": "S5",
+      "title": "DUPLICATE_EVENT",
+      "passed": true,
+      "detail": "duplicate accepted without re-delivery"
+    },
+    {
+      "id": "S6",
+      "title": "INVALID_EVENT",
+      "passed": true,
+      "detail": "ack=REJECTED/INVALID_SCHEMA"
+    },
+    {
+      "id": "S7",
+      "title": "BACKPRESSURE",
+      "passed": true,
+      "detail": "ack=REJECTED/INTERNAL_ERROR"
+    },
+    {
+      "id": "S8",
+      "title": "RECONNECT_RESUME",
+      "passed": true,
+      "detail": "connection resumed and subscription restored"
+    }
+  ]
+}
+[2026-05-28T09:33:23Z] Step 2: Run gateway focused test suites
+--- FAIL: TestFirestoreAuditViewFallsBackToMemoryWhenStoreUnavailable (3.00s)
+    server_persistence_test.go:1079: read ws payload: read tcp 127.0.0.1:49826->127.0.0.1:49825: i/o timeout
+FAIL
+FAIL	sdalpe/sdk-go/sdp-ws-gateway/transport/http	3.429s
+FAIL

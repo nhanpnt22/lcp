@@ -1,0 +1,19 @@
+npm error code EUSAGE
+npm error
+npm error Run a command from a local or remote npm package
+npm error
+npm error Usage:
+npm error npm exec -- <pkg>[@<version>] [args...]
+npm error npm exec --package=<pkg>[@<version>] -- <cmd> [args...]
+npm error npm exec -c '<cmd> [args...]'
+npm error npm exec --package=foo -c '<cmd> [args...]'
+npm error
+npm error Options:
+npm error [--package <package-spec> [--package <package-spec> ...]] [-c|--call <call>]
+npm error [-w|--workspace <workspace-name> [-w|--workspace <workspace-name> ...]]
+npm error [-ws|--workspaces] [--include-workspace-root]
+npm error
+npm error alias: x
+npm error
+npm error Run "npm help exec" for more info
+npm error A complete log of this run can be found in: /Users/brian/.npm/_logs/2026-05-29T10_06_08_371Z-debug-0.log

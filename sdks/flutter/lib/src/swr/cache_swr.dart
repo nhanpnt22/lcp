@@ -43,7 +43,8 @@ class SwrRefreshRequest<T> {
 
 void scheduleSwrRefresh<T>(SwrRefreshRequest<T> request) {
   if (request.requestId.trim().isEmpty) {
-    throw ArgumentError.value(request.requestId, 'requestId', 'SWR refresh requires a non-empty requestId');
+    throw ArgumentError.value(request.requestId, 'requestId',
+        'SWR refresh requires a non-empty requestId');
   }
 
   final now = request.now ?? (() => DateTime.now().millisecondsSinceEpoch);
@@ -52,7 +53,8 @@ void scheduleSwrRefresh<T>(SwrRefreshRequest<T> request) {
     try {
       await request.singleFlight.run(request.cacheKey, () async {
         final api = await request.fetchFromApi(request.requestId);
-        final ttlMs = api.ttlMs ?? (api.headers != null ? extractOacTtlMs(api.headers!) : null);
+        final ttlMs = api.ttlMs ??
+            (api.headers != null ? extractOacTtlMs(api.headers!) : null);
 
         if (ttlMs == null) {
           return;

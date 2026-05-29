@@ -1,0 +1,35 @@
+{
+  "artifact_dir": "/Users/brian/dev/aco/aip/sdp/lcp/.artifacts/cross-sdk-modes-1780044318226",
+  "suite": "cross-sdk-max-cases-persistence-modes",
+  "all_pass": true,
+  "mode_summaries": [
+    {
+      "mode": "auto",
+      "dataset_count": 100,
+      "api_calls": 100,
+      "idb_row_count": 50,
+      "expected_idb_row_count": 50,
+      "cross_sdk_mismatches": 0,
+      "pass": true
+    },
+    {
+      "mode": "memory-only",
+      "dataset_count": 100,
+      "api_calls": 100,
+      "idb_row_count": 0,
+      "expected_idb_row_count": 0,
+      "cross_sdk_mismatches": 0,
+      "pass": true
+    },
+    {
+      "mode": "dual",
+      "dataset_count": 100,
+      "api_calls": 100,
+      "idb_row_count": 100,
+      "expected_idb_row_count": 100,
+      "cross_sdk_mismatches": 0,
+      "pass": true
+    }
+  ],
+  "bugs": []
+}

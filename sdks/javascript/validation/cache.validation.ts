@@ -2,6 +2,7 @@ import type { CacheEntry, CacheMetadataParityExpectation } from "../entry";
 import { isCacheMetadataParityValid } from "../entry";
 import { deterministicSerialize } from "../consistency";
 import { stripTraceFields } from "../trace";
+import { isH57CacheKey } from "../key/cache.key.validation";
 
 const SENSITIVE_FIELDS = new Set([
   "jwt",
@@ -71,6 +72,10 @@ export function validateCacheEntryInvariants<T = unknown>(
 
   if (!entry?.cache_key?.trim()) {
     errors.push("cache_key must be a non-empty string");
+  }
+
+  if (entry?.cache_key?.trim() && !isH57CacheKey(entry.cache_key)) {
+    errors.push("cache_key must be canonical H57");
   }
 
   if (context.expectedCacheKey && entry.cache_key !== context.expectedCacheKey) {

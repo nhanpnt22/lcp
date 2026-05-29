@@ -1,5 +1,6 @@
 import type { CacheEntry } from "../entry";
 import { deterministicSerialize } from "../consistency";
+import { assertH57CacheKey, isH57CacheKey } from "../key/cache.key.validation";
 
 const DEFAULT_DB_NAME = "lcp_local_cache";
 const DEFAULT_STORE_NAME = "cache_entries";
@@ -123,19 +124,20 @@ export class IndexedDbCacheStore<T = unknown> {
   }
 
   async get(cacheKey: string): Promise<CacheEntry<T> | undefined> {
-    const row = await this.getRow(cacheKey);
+    const normalizedKey = assertH57CacheKey(cacheKey, "indexeddb.get");
+    const row = await this.getRow(normalizedKey);
     if (!row) {
       return undefined;
     }
 
     if (this.now() >= row.expires_at) {
-      await this.delete(cacheKey);
+      await this.delete(normalizedKey);
       return undefined;
     }
 
-    const entry = this.deserializeEntry(row.entry_json, cacheKey);
+    const entry = this.deserializeEntry(row.entry_json, normalizedKey);
     if (!entry) {
-      await this.delete(cacheKey);
+      await this.delete(normalizedKey);
       return undefined;
     }
 
@@ -143,9 +145,10 @@ export class IndexedDbCacheStore<T = unknown> {
   }
 
   async set(entry: CacheEntry<T>): Promise<void> {
+    const normalizedKey = assertH57CacheKey(entry.cache_key, "indexeddb.set");
     const row: PersistedCacheRow = {
-      cache_key: entry.cache_key,
-      entry_json: deterministicSerialize(entry),
+      cache_key: normalizedKey,
+      entry_json: deterministicSerialize({ ...entry, cache_key: normalizedKey }),
       expires_at: entry.metadata.expires_at,
       updated_at: this.now()
     };
@@ -156,8 +159,9 @@ export class IndexedDbCacheStore<T = unknown> {
   }
 
   async delete(cacheKey: string): Promise<void> {
+    const normalizedKey = assertH57CacheKey(cacheKey, "indexeddb.delete");
     await this.withStore("readwrite", async (store) => {
-      await requestAsPromise(store.delete(cacheKey));
+      await requestAsPromise(store.delete(normalizedKey));
     });
   }
 
@@ -230,6 +234,10 @@ export class IndexedDbCacheStore<T = unknown> {
     }
 
     if (parsed?.cache_key !== expectedCacheKey) {
+      return undefined;
+    }
+
+    if (!isH57CacheKey(parsed.cache_key)) {
       return undefined;
     }
 

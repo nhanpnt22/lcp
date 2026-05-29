@@ -1,0 +1,424 @@
+============================================================
+Title:
+TEESI — CODEX (UNIFIED • HARDENED • ALL LANGUAGES • ALL STORIES)
+(Deterministic Structure • Execution Safety • Complexity Control • Autonomous Evolution)
+============================================================
+
+Version:
+v1.0.0
+
+Status:
+FINAL • HARD-LOCKED • ZERO-GAP • EXECUTION-CLOSED
+DETERMINISTIC • DAG-ENFORCED • COREX-PINNED
+DB-AUTHORITATIVE • LOCK-DETERMINISTIC • CACHE-STRICT
+CI-ENFORCED • DRIFT-DRIVEN • STRUCTURE-AWARE
+REPLAY-SAFE • TRACE-COMPLETE
+AUDIT-READY • PRODUCTION-SEALED
+
+Type:
+Universal Coding + Execution + Structure Standard
+
+Scope:
+ALL programming languages • ALL architectures • ALL stories
+
+Position:
+CODE → STRUCTURE → SPLIT → DAG → EXECUTION → VALIDATION → DRIFT → EVOLUTION
+
+============================================================
+0. CORE OBJECTIVE
+============================================================
+
+→ SMALL • ATOMIC • DETERMINISTIC • REPLAY-SAFE UNITS ONLY
+
+→ NO DAG → NO EXECUTION
+→ NO DETERMINISM → INVALID SYSTEM
+
+============================================================
+I. GLOBAL LAW (NON-NEGOTIABLE)
+============================================================
+
+MUST:
+
+- enforce deterministic logic, structure, and execution
+- enforce ONE responsibility per unit
+- enforce DAG-based execution only
+- enforce TEST-FIRST + CI + COREX
+- enforce knowledge resolution before BUILD
+- enforce drift detection after EXECUTION
+- persist ALL state in TEESI-DB
+- derive ALL status from execution_history ONLY
+
+MUST NOT:
+
+- allow non-determinism (logic, structure, execution)
+- allow hidden dependencies or state
+- allow execution outside DAG
+- allow manual status mutation
+- allow stale knowledge or silent refactor
+
+VIOLATION → HARD FAIL → TASK GENERATED → DAG BLOCKED
+
+============================================================
+II. IDENTITY LAW (CACHE_KEY)
+============================================================
+
+cache_key = H57(
+  canonical_json(
+    input +
+    dependencies +
+    STRUCTURE_SIGNATURE
+  )
+)
+
+RULES:
+
+- cache_key = ONLY identity across system
+- identical input MUST produce identical identity
+- structure MUST be part of identity
+
+FORBIDDEN:
+
+- surrogate IDs
+- environment-based drift
+- structure-agnostic reuse
+
+============================================================
+III. STRUCTURE & COMPLEXITY LIMITS
+============================================================
+
+FILES:
+- soft: 120–200 lines
+- hard: ≤ 300 lines
+
+CLASSES / MODULES:
+- soft: 80–150 lines
+- hard: ≤ 200 lines
+
+FUNCTIONS:
+- soft: 10–25 lines
+- hard: ≤ 40 lines
+
+COMPLEXITY:
+- cyclomatic ≤ 10
+- nesting ≤ 3
+- parameters ≤ 5
+
+FOLDERS:
+- soft: ≤ 10 files
+- hard: ≤ 25 files
+
+RULE:
+
+→ EXCEED → SPLIT IMMEDIATELY
+
+============================================================
+IV. SPLIT LAW (DETERMINISTIC)
+============================================================
+
+SPLIT TRIGGERS:
+
+- size violation
+- multi-responsibility
+- repeated logic ≥ 2
+- complex branching
+- mixed abstraction levels
+
+METHODS:
+
+- feature / bounded context
+- pipeline stage
+- pure vs side-effect split
+- dependency isolation
+
+RULE:
+
+→ SAME INPUT → SAME STRUCTURE
+
+============================================================
+V. DAG EXECUTION LAW
+============================================================
+
+- dependencies = graph_edges ONLY
+- DAG MUST be acyclic
+- execution = deterministic order
+
+READY:
+
+task READY iff all dependencies SUCCESS
+
+FORBIDDEN:
+
+- implicit dependencies
+- DAG bypass
+
+============================================================
+VI. TASK CONTRACT
+============================================================
+
+Each task MUST include:
+
+- task_key (== cache_key)
+- role
+- stage (0–8)
+- input / expected_output (canonical JSON)
+- dependencies (graph_edges)
+- acceptance_criteria
+- failure_modes (error_code)
+
+RULE:
+
+→ ONE TASK = ONE STAGE = ONE RESPONSIBILITY
+
+============================================================
+VII. EXECUTION MODEL
+============================================================
+
+- STRICTLY SEQUENTIAL (1 task at a time)
+- SINGLE-FLIGHT enforced
+- EXACTLY-ONCE success
+
+FLOW:
+
+execute(task)
+IF FAIL → STOP
+IF SUCCESS → CONTINUE
+
+============================================================
+VIII. EXECUTION HISTORY (SSOT)
+============================================================
+
+- append-only
+- immutable
+- authoritative
+
+MISSING → SYSTEM INVALID
+
+============================================================
+IX. COREX VALIDATION
+============================================================
+
+corex_version = "v1"
+
+VALIDATES:
+
+- checksum
+- replay determinism
+- DAG integrity
+- schema
+
+FAIL → HARD FAIL
+
+============================================================
+X. CI ENFORCEMENT
+============================================================
+
+VALIDATES:
+
+- structure limits
+- complexity
+- duplication
+
+FAIL:
+
+→ BLOCK BUILD
+→ GENERATE REFACTOR TASK
+
+============================================================
+XI. KNOWLEDGE LAW
+============================================================
+
+BEFORE BUILD:
+
+- resolve latest stable dependencies
+- validate deprecations/security
+- pin versions
+
+DRIFT:
+
+→ MUST generate task
+
+============================================================
+XII. DRIFT → SELF-HEALING
+============================================================
+
+FLOW:
+
+detect → classify → generate → persist → execute
+
+NO DRIFT MAY BE IGNORED
+
+============================================================
+XIII. CACHE & REUSE
+============================================================
+
+IF cache_key SUCCESS exists:
+
+→ reuse artifact
+
+ONLY IF:
+
+- dependency checksum match
+- COREX equivalence
+
+============================================================
+XIV. STATUS MODEL (DERIVED ONLY)
+============================================================
+
+task.status ∈:
+
+- PENDING
+- READY
+- RUNNING
+- DONE (exactly one SUCCESS)
+- FAILED (all failed)
+- BLOCKED
+
+RULE:
+
+status = f(execution_history)
+
+============================================================
+XV. DATABASE LAW (STRICT)
+============================================================
+
+TEESI-DB = SINGLE SOURCE OF TRUTH
+
+REQUIRED TABLES:
+
+- stories
+- tasks
+- graph_nodes / graph_edges
+- execution_history (append-only)
+- artifacts (immutable)
+- knowledge_store
+- drift_tasks
+
+RULES:
+
+- ALL constraints DB-enforced
+- NO external state
+
+============================================================
+XVI. LOCK LAW (DETERMINISTIC)
+============================================================
+
+- ONE lock per task_key
+
+ACQUIRE:
+
+- if no lock OR expired
+
+TIE-BREAK:
+
+→ smallest(task_key) wins
+
+RULE:
+
+- deterministic resolution ONLY
+
+============================================================
+XVII. CROSS-STORY LAW
+============================================================
+
+ALLOWED ONLY VIA:
+
+→ cache_key
+
+REQUIREMENTS:
+
+- artifact SUCCESS
+- immutable
+- COREX verified
+
+FORBIDDEN:
+
+- shared mutable state
+- story-level coupling
+
+============================================================
+XVIII. FAILURE MODEL
+============================================================
+
+- EXACTLY ONE error_code
+
+ON FAILURE:
+
+→ STOP
+→ BLOCK dependents
+→ GENERATE DRIFT TASK
+
+============================================================
+XIX. REPLAY LAW
+============================================================
+
+(input + dependencies)
+→ identical output + checksum
+
+MUST reproduce:
+
+- execution
+- drift
+- remediation
+
+============================================================
+XX. GLOBAL INVARIANTS
+============================================================
+
+ALWAYS TRUE:
+
+- no concurrent tasks
+- no DAG cycle
+- one SUCCESS per task
+- structure included in identity
+- no unresolved drift before release
+
+============================================================
+XXI. GUARANTEES
+============================================================
+
+- deterministic execution
+- bounded complexity
+- autonomous refactoring
+- continuous modernization
+- replay-safe system
+- audit-grade traceability
+- universal across all languages
+
+============================================================
+FINAL RULES
+============================================================
+
+“ONE UNIT → ONE RESPONSIBILITY”
+
+“IF TOO BIG → SPLIT”
+
+“NO DAG → NO EXECUTION”
+
+“EVERY DRIFT → TASK → DAG”
+
+“NON-DETERMINISTIC → INVALID”
+
+============================================================
+FINAL STATUS
+============================================================
+
+FINAL
+HARD-LOCKED
+ZERO-GAP
+EXECUTION-CLOSED
+UNIVERSAL
+DETERMINISTIC
+DB-AUTHORITATIVE
+LOCK-DETERMINISTIC
+DAG-ENFORCED
+COREX-VALIDATED
+CI-GATED
+DRIFT-DRIVEN
+CACHE-STRICT
+REPLAY-SAFE
+TRACE-COMPLETE
+AUDIT-READY
+PRODUCTION-SEALED
+
+TEESI — CODEX v1.0.0 COMPLETE
+============================================================

@@ -1,0 +1,11 @@
+steps:
+- name: gcr.io/cloud-builders/docker
+  args:
+  - build
+  - -f
+  - lcp/sdks/go/Dockerfile
+  - -t
+  - asia-southeast1-docker.pkg.dev/aiptesting/cloud-run-source-deploy/lcp-seed-cache:latest
+  - .
+images:
+- asia-southeast1-docker.pkg.dev/aiptesting/cloud-run-source-deploy/lcp-seed-cache:latest

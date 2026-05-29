@@ -1,0 +1,12 @@
+{
+  "summary": {
+    "dataset_count": 120,
+    "go_rows": 120,
+    "node_rows": 120,
+    "go_h57_all": true,
+    "node_h57_all": true,
+    "mismatch_count": 0,
+    "status": "MATCHED"
+  },
+  "mismatches": []
+}

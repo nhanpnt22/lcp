@@ -4,6 +4,7 @@ import 'package:path/path.dart' as p;
 import 'package:sqflite_common/sqlite_api.dart';
 
 import '../entry/cache_entry.dart';
+import '../key/h57_key_validation.dart';
 import 'persistent_cache_store.dart';
 
 typedef JsonEncoderFn<T> = Object? Function(T value);
@@ -68,12 +69,13 @@ CREATE TABLE $_tableName (
 
   @override
   Future<CacheEntry<T>?> get(String key) async {
+    final normalizedKey = assertH57CacheKey(key, 'sqlite.get');
     final db = await _db();
     final rows = await db.query(
       _tableName,
       columns: const ['entry_json', 'expires_at'],
       where: 'cache_key = ?',
-      whereArgs: [key],
+      whereArgs: [normalizedKey],
       limit: 1,
     );
     if (rows.isEmpty) {
@@ -83,14 +85,16 @@ CREATE TABLE $_tableName (
     final row = rows.first;
     final expiresAtMs = row['expires_at'] as int;
     if (expiresAtMs <= _now().millisecondsSinceEpoch) {
-      await db.delete(_tableName, where: 'cache_key = ?', whereArgs: [key]);
+      await db.delete(_tableName,
+          where: 'cache_key = ?', whereArgs: [normalizedKey]);
       return null;
     }
 
     final jsonString = row['entry_json'] as String;
     final entry = _decodeEntry(jsonString);
-    if (entry == null) {
-      await db.delete(_tableName, where: 'cache_key = ?', whereArgs: [key]);
+    if (entry == null || entry.cacheKey != normalizedKey) {
+      await db.delete(_tableName,
+          where: 'cache_key = ?', whereArgs: [normalizedKey]);
       return null;
     }
     return entry;
@@ -98,15 +102,25 @@ CREATE TABLE $_tableName (
 
   @override
   Future<void> set(CacheEntry<T> entry) async {
+    final normalizedKey = assertH57CacheKey(entry.cacheKey, 'sqlite.set');
     final db = await _db();
-    final values = _encodeRow(entry);
-    await db.insert(_tableName, values, conflictAlgorithm: ConflictAlgorithm.replace);
+    final values = _encodeRow(
+      CacheEntry<T>(
+        cacheKey: normalizedKey,
+        data: entry.data,
+        metadata: entry.metadata,
+      ),
+    );
+    await db.insert(_tableName, values,
+        conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   @override
   Future<void> delete(String key) async {
+    final normalizedKey = assertH57CacheKey(key, 'sqlite.delete');
     final db = await _db();
-    await db.delete(_tableName, where: 'cache_key = ?', whereArgs: [key]);
+    await db
+        .delete(_tableName, where: 'cache_key = ?', whereArgs: [normalizedKey]);
   }
 
   @override
@@ -122,7 +136,8 @@ CREATE TABLE $_tableName (
   }
 
   @override
-  Future<List<CacheEntry<T>>> hydrateAllValid({required int now, int? limit}) async {
+  Future<List<CacheEntry<T>>> hydrateAllValid(
+      {required int now, int? limit}) async {
     final db = await _db();
     final rows = await db.query(
       _tableName,
@@ -215,6 +230,10 @@ CREATE TABLE $_tableName (
           specChecksum is! String ||
           cacheNamespace is! String ||
           compressed is! bool) {
+        return null;
+      }
+
+      if (!isH57CacheKey(key)) {
         return null;
       }
 

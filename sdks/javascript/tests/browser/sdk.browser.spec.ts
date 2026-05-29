@@ -35,10 +35,6 @@ test.describe("LCP SDK browser", () => {
       });
 
       const now = () => 1000;
-      const h57 = (bytes: Uint8Array) =>
-        Array.from(bytes)
-          .map((n) => n.toString(16).padStart(2, "0"))
-          .join("");
 
       const parity = {
         schemaVersion: "schema-v1",
@@ -68,7 +64,7 @@ test.describe("LCP SDK browser", () => {
 
       const first = await engineA.execute({
         keyInput,
-        h57Hash: h57,
+        h57Hash: sdk.h57HashFn,
         fetchFromApi: async () => {
           fetchCalls++;
           return {
@@ -89,7 +85,7 @@ test.describe("LCP SDK browser", () => {
 
       const second = await engineB.execute({
         keyInput,
-        h57Hash: h57,
+        h57Hash: sdk.h57HashFn,
         fetchFromApi: async () => {
           fetchCalls++;
           return {

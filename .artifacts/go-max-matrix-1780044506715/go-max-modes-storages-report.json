@@ -1,0 +1,94 @@
+{
+  "suite": "go-sdk-max-tests-modes-storages",
+  "run_id": "go-max-matrix-1780044506715",
+  "all_pass": true,
+  "storage_results": [
+    {
+      "storage": "in-memory",
+      "mode_results": [
+        {
+          "mode": "auto",
+          "dataset_count": 100,
+          "api_calls": 100,
+          "persisted_count": 50,
+          "expected_persisted_count": 50,
+          "pass": true
+        },
+        {
+          "mode": "memory-only",
+          "dataset_count": 100,
+          "api_calls": 100,
+          "persisted_count": 0,
+          "expected_persisted_count": 0,
+          "pass": true
+        },
+        {
+          "mode": "dual",
+          "dataset_count": 100,
+          "api_calls": 100,
+          "persisted_count": 100,
+          "expected_persisted_count": 100,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "storage": "sqlite",
+      "mode_results": [
+        {
+          "mode": "auto",
+          "dataset_count": 100,
+          "api_calls": 100,
+          "persisted_count": 50,
+          "expected_persisted_count": 50,
+          "pass": true
+        },
+        {
+          "mode": "memory-only",
+          "dataset_count": 100,
+          "api_calls": 100,
+          "persisted_count": 0,
+          "expected_persisted_count": 0,
+          "pass": true
+        },
+        {
+          "mode": "dual",
+          "dataset_count": 100,
+          "api_calls": 100,
+          "persisted_count": 100,
+          "expected_persisted_count": 100,
+          "pass": true
+        }
+      ]
+    },
+    {
+      "storage": "cloud-storage",
+      "mode_results": [
+        {
+          "mode": "auto",
+          "dataset_count": 100,
+          "api_calls": 100,
+          "persisted_count": 50,
+          "expected_persisted_count": 50,
+          "pass": true
+        },
+        {
+          "mode": "memory-only",
+          "dataset_count": 100,
+          "api_calls": 100,
+          "persisted_count": 0,
+          "expected_persisted_count": 0,
+          "pass": true
+        },
+        {
+          "mode": "dual",
+          "dataset_count": 100,
+          "api_calls": 100,
+          "persisted_count": 100,
+          "expected_persisted_count": 100,
+          "pass": true
+        }
+      ]
+    }
+  ]
+}

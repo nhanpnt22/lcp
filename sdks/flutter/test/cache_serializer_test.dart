@@ -15,4 +15,12 @@ void main() {
     final normalized = canonicalize({'t': dt}) as Map<String, Object?>;
     expect(normalized['t'], equals('2026-01-01T00:00:00.000Z'));
   });
+
+  test('canonicalize preserves null map fields for parity', () {
+    final normalized =
+        canonicalize({'a': null, 'b': 1}) as Map<String, Object?>;
+    expect(normalized.containsKey('a'), isTrue);
+    expect(normalized['a'], isNull);
+    expect(normalized['b'], equals(1));
+  });
 }

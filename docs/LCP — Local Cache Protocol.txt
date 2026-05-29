@@ -55,7 +55,7 @@ MUST:
 - read-through ONLY
 - EXACTLY-ONCE execution preserved
 - API-equivalent responses
-- canonical cache_key (H57-compatible recommended)
+- canonical cache_key (H57 REQUIRED in conformant SDK profiles)
 - strict metadata parity
 - trace invariants preserved
 
@@ -94,8 +94,12 @@ cache_key = HASH(
 
 DEFAULT/RECOMMENDED:
 
-- H57-compatible hash
-- deterministic hash function injection allowed
+- H57 for cache-key hashing
+- B57 for canonical byte material and hash input handling
+- ID57 for identifier terms where identifier fields are present
+- R57 for randomness when random identifiers or nonces are required
+- S57 for secure derivation where policy requires derived secrets/tokens
+- deterministic hash function injection allowed only if behavior remains H57-compatible
 
 EXCLUDES:
 
@@ -186,6 +190,13 @@ RULES:
 - identical structure
 - deterministic serialization
 - in auto mode, short TTL entries may stay memory-only
+
+PROFILE NOTE (NON-NORMATIVE):
+
+- language/runtime profiles define concrete backend sets
+- Go Cloud Run profile v1.0.0 finalizes persistent backend matrix as:
+    - in-memory: in-memory
+    - storage: sqlite | cloud-storage
 
 ============================================================
 VII. TTL MODEL

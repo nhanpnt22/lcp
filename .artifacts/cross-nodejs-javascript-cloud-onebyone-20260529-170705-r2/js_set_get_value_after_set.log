@@ -1,0 +1,6 @@
+Error: /Users/brian/dev/aco/aip/sdp/lcp/playwright.config.ts does not exist
+    at resolveConfigFile2 (/Users/brian/dev/aco/aip/sdp/lcp/sdks/javascript/node_modules/playwright/lib/common/index.js:1507:11)
+    at resolveConfigLocation (/Users/brian/dev/aco/aip/sdp/lcp/sdks/javascript/node_modules/playwright/lib/common/index.js:1488:30)
+    at Object.loadConfigFromFile (/Users/brian/dev/aco/aip/sdp/lcp/sdks/javascript/node_modules/playwright/lib/common/index.js:1517:27)
+    at runTests (/Users/brian/dev/aco/aip/sdp/lcp/sdks/javascript/node_modules/playwright/lib/cli/testActions.js:45:51)
+    at async _Command.<anonymous> (/Users/brian/dev/aco/aip/sdp/lcp/sdks/javascript/node_modules/playwright/lib/program.js:50:7)

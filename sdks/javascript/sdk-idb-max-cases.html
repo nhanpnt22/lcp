@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LCP JS SDK IndexedDB Max Cases</title>
+  <style>
+    :root {
+      --ok: #0b7a2f;
+      --fail: #b91c1c;
+      --border: #d8d8dc;
+      --bg-soft: #f7f7f8;
+    }
+    body {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      margin: 24px;
+      line-height: 1.35;
+    }
+    .ok { color: var(--ok); }
+    .fail { color: var(--fail); }
+    fieldset {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+    }
+    label {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 13px;
+    }
+    input {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 7px;
+      font-family: inherit;
+    }
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    button {
+      border: 1px solid #242424;
+      border-radius: 6px;
+      background: #fff;
+      padding: 8px 10px;
+      font-family: inherit;
+      cursor: pointer;
+    }
+    button.primary {
+      background: #111;
+      color: #fff;
+    }
+    pre {
+      background: var(--bg-soft);
+      padding: 12px;
+      border-radius: 8px;
+      overflow: auto;
+      max-height: 300px;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+  </style>
+</head>
+<body>
+  <h1>LCP JS SDK IndexedDB Max Cases</h1>
+  <p id="status">Initializing...</p>
+
+  <fieldset>
+    <legend>Form Inputs</legend>
+    <div class="grid">
+      <label>DB Name
+        <input id="dbName" value="lcp-idb-max-cases" />
+      </label>
+      <label>Default Key
+        <input id="cacheKey" value="k1" />
+      </label>
+      <label>Default Value
+        <input id="cacheValue" value="value-1" />
+      </label>
+      <label>Created At (ms)
+        <input id="createdAt" type="number" value="1000" />
+      </label>
+      <label>TTL (ms)
+        <input id="ttlMs" type="number" value="5000" />
+      </label>
+      <label>Now (ms)
+        <input id="nowMs" type="number" value="1000" />
+      </label>
+      <label>Hydrate Limit
+        <input id="hydrateLimit" type="number" value="2" />
+      </label>
+      <label>Stress Count
+        <input id="stressCount" type="number" value="100" />
+      </label>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Actions</legend>
+    <div class="buttons">
+      <button id="btnInit" class="primary">Init Store</button>
+      <button id="btnBasicCrud">Case: Basic CRUD</button>
+      <button id="btnGetMissing">Case: Get Missing</button>
+      <button id="btnDeleteMissing">Case: Delete Missing</button>
+      <button id="btnClearIdempotent">Case: Clear Idempotent</button>
+      <button id="btnExpiryOnGet">Case: TTL Expiry On Get</button>
+      <button id="btnPruneMixed">Case: pruneExpired Mixed</button>
+      <button id="btnHydrateLimit">Case: Hydrate Limit</button>
+      <button id="btnStress">Case: Stress Set/Get</button>
+      <button id="btnRunAll" class="primary">Run All Cases</button>
+    </div>
+  </fieldset>
+
+  <h3>Operation Log</h3>
+  <pre id="log"></pre>
+
+  <h3>Last Result</h3>
+  <pre id="result"></pre>
+
+  <script type="module">
+    const statusEl = document.getElementById('status');
+    const resultEl = document.getElementById('result');
+    const logEl = document.getElementById('log');
+
+    const dbNameEl = document.getElementById('dbName');
+    const cacheKeyEl = document.getElementById('cacheKey');
+    const cacheValueEl = document.getElementById('cacheValue');
+    const createdAtEl = document.getElementById('createdAt');
+    const ttlMsEl = document.getElementById('ttlMs');
+    const nowMsEl = document.getElementById('nowMs');
+    const hydrateLimitEl = document.getElementById('hydrateLimit');
+    const stressCountEl = document.getElementById('stressCount');
+
+    function setStatus(ok, text) {
+      statusEl.textContent = text;
+      statusEl.className = ok ? 'ok' : 'fail';
+      document.body.dataset.status = ok ? 'pass' : 'fail';
+    }
+
+    function appendLog(line) {
+      const ts = new Date().toISOString();
+      logEl.textContent += `[${ts}] ${line}\n`;
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    function parseIntInput(el, fallback) {
+      const parsed = Number.parseInt(el.value, 10);
+      return Number.isFinite(parsed) ? parsed : fallback;
+    }
+
+    function writeResult(obj) {
+      window.__lcpResult = obj;
+      resultEl.textContent = JSON.stringify(obj, null, 2);
+    }
+
+    try {
+      const sdk = await import('/sdks/javascript/dist/index.js');
+
+      let currentNowMs = parseIntInput(nowMsEl, 1000);
+      let store = null;
+      let initializedDbName = '';
+
+      const mkEntry = (cacheKey, value, createdAt, ttlMs) => ({
+        cache_key: cacheKey,
+        data: { value },
+        metadata: sdk.createCacheMetadata({
+          source: 'API',
+          createdAt,
+          ttlMs,
+          schemaVersion: 'schema-v1',
+          dataVersion: 'dv-1',
+          specChecksum: 'spec-v1',
+          cacheNamespace: 'ns:v1',
+          compressed: false
+        })
+      });
+
+      async function deleteDb(dbName) {
+        await new Promise((resolve) => {
+          const req = indexedDB.deleteDatabase(dbName);
+          req.onsuccess = () => resolve();
+          req.onerror = () => resolve();
+          req.onblocked = () => resolve();
+        });
+      }
+
+      function ensureStore() {
+        if (!store) {
+          throw new Error('Store is not initialized. Click Init Store first.');
+        }
+        return store;
+      }
+
+      async function initStore() {
+        const dbName = dbNameEl.value.trim() || `lcp-idb-max-cases-${Date.now()}`;
+        dbNameEl.value = dbName;
+        currentNowMs = parseIntInput(nowMsEl, 1000);
+        await deleteDb(dbName);
+        store = new sdk.IndexedDbCacheStore({ dbName, now: () => currentNowMs });
+        initializedDbName = dbName;
+        appendLog(`init db=${dbName}`);
+        const out = { ok: true, step: 'init', dbName };
+        writeResult(out);
+        setStatus(true, 'Initialized');
+        return out;
+      }
+
+      async function caseBasicCrud() {
+        const s = ensureStore();
+        const key = cacheKeyEl.value.trim();
+        const value = cacheValueEl.value;
+        const createdAt = parseIntInput(createdAtEl, 1000);
+        const ttlMs = parseIntInput(ttlMsEl, 5000);
+
+        await s.set(mkEntry(key, value, createdAt, ttlMs));
+        const got = await s.get(key);
+        const getOk = got?.data?.value === value;
+
+        await s.delete(key);
+        const afterDelete = await s.get(key);
+        const deleteOk = afterDelete == null;
+
+        const ok = getOk && deleteOk;
+        const out = { case: 'Basic CRUD', ok, key, expected: value, got: got?.data?.value ?? null, afterDelete: afterDelete ?? null };
+        appendLog(`case Basic CRUD ok=${ok}`);
+        return out;
+      }
+
+      async function caseGetMissing() {
+        const s = ensureStore();
+        const missing = await s.get('__missing__');
+        const ok = missing == null;
+        const out = { case: 'Get Missing', ok, value: missing ?? null };
+        appendLog(`case Get Missing ok=${ok}`);
+        return out;
+      }
+
+      async function caseDeleteMissing() {
+        const s = ensureStore();
+        await s.delete('__missing_delete__');
+        const after = await s.get('__missing_delete__');
+        const ok = after == null;
+        const out = { case: 'Delete Missing', ok };
+        appendLog(`case Delete Missing ok=${ok}`);
+        return out;
+      }
+
+      async function caseClearIdempotent() {
+        const s = ensureStore();
+        await s.clear();
+        await s.clear();
+        const rows = await s.hydrateAllValid();
+        const ok = rows.length === 0;
+        const out = { case: 'Clear Idempotent', ok, remaining: rows.length };
+        appendLog(`case Clear Idempotent ok=${ok}`);
+        return out;
+      }
+
+      async function caseExpiryOnGet() {
+        const s = ensureStore();
+        currentNowMs = 1000;
+        await s.set(mkEntry('exp-get', 'old', 1000, 100));
+        currentNowMs = 5000;
+        nowMsEl.value = String(currentNowMs);
+        const expired = await s.get('exp-get');
+        const ok = expired == null;
+        const out = { case: 'TTL Expiry On Get', ok, valueAfterExpiry: expired ?? null };
+        appendLog(`case TTL Expiry On Get ok=${ok}`);
+        return out;
+      }
+
+      async function casePruneMixed() {
+        const s = ensureStore();
+        currentNowMs = 1000;
+        await s.set(mkEntry('prune-exp-1', 'e1', 1000, 100));
+        await s.set(mkEntry('prune-exp-2', 'e2', 1000, 100));
+        await s.set(mkEntry('prune-ok-1', 'v1', 1000, 10000));
+        await s.set(mkEntry('prune-ok-2', 'v2', 1000, 10000));
+        currentNowMs = 5000;
+        nowMsEl.value = String(currentNowMs);
+        const pruned = await s.pruneExpired();
+        const e1 = await s.get('prune-exp-1');
+        const e2 = await s.get('prune-exp-2');
+        const v1 = await s.get('prune-ok-1');
+        const v2 = await s.get('prune-ok-2');
+        const ok = pruned >= 2 && e1 == null && e2 == null && v1?.data?.value === 'v1' && v2?.data?.value === 'v2';
+        const out = { case: 'pruneExpired Mixed', ok, pruned, validKept: [v1?.data?.value ?? null, v2?.data?.value ?? null] };
+        appendLog(`case pruneExpired Mixed ok=${ok} pruned=${pruned}`);
+        return out;
+      }
+
+      async function caseHydrateLimit() {
+        const s = ensureStore();
+        await s.clear();
+        currentNowMs = 2000;
+        for (let i = 0; i < 5; i++) {
+          await s.set(mkEntry(`h-${i}`, `hv-${i}`, 1000, 10000));
+        }
+        const limit = parseIntInput(hydrateLimitEl, 2);
+        const rows = await s.hydrateAllValid(limit);
+        const ok = rows.length === Math.min(5, limit);
+        const out = { case: 'Hydrate Limit', ok, limit, count: rows.length, keys: rows.map((r) => r.cache_key) };
+        appendLog(`case Hydrate Limit ok=${ok} count=${rows.length}`);
+        return out;
+      }
+
+      async function caseStressSetGet() {
+        const s = ensureStore();
+        await s.clear();
+        currentNowMs = 3000;
+        const count = parseIntInput(stressCountEl, 100);
+        for (let i = 0; i < count; i++) {
+          await s.set(mkEntry(`s-${i}`, `sv-${i}`, 1000, 10000));
+        }
+        let mismatches = 0;
+        for (let i = 0; i < count; i++) {
+          const got = await s.get(`s-${i}`);
+          if (got?.data?.value !== `sv-${i}`) mismatches++;
+        }
+        const ok = mismatches === 0;
+        const out = { case: 'Stress Set/Get', ok, count, mismatches };
+        appendLog(`case Stress Set/Get ok=${ok} count=${count}`);
+        return out;
+      }
+
+      async function runAllCases() {
+        const results = [];
+        await initStore();
+        results.push(await caseBasicCrud());
+        results.push(await caseGetMissing());
+        results.push(await caseDeleteMissing());
+        results.push(await caseClearIdempotent());
+        results.push(await caseExpiryOnGet());
+        results.push(await casePruneMixed());
+        results.push(await caseHydrateLimit());
+        results.push(await caseStressSetGet());
+
+        const passed = results.filter((r) => r.ok).length;
+        const failed = results.length - passed;
+        const allOk = failed === 0;
+
+        const out = { allOk, dbName: initializedDbName, total: results.length, passed, failed, results };
+        writeResult(out);
+        setStatus(allOk, allOk ? `PASS: ${passed}/${results.length} cases passed.` : `FAIL: ${failed} case(s) failed.`);
+        appendLog(`run all complete passed=${passed} failed=${failed}`);
+        return out;
+      }
+
+      async function runSafe(fn) {
+        try {
+          const out = await fn();
+          writeResult(out);
+          if (typeof out.ok === 'boolean') {
+            setStatus(out.ok, out.ok ? `${out.case || out.step} passed.` : `${out.case || out.step} failed.`);
+          }
+        } catch (error) {
+          const message = error instanceof Error ? error.stack || error.message : String(error);
+          appendLog(`error: ${message}`);
+          const out = { allOk: false, error: message };
+          writeResult(out);
+          setStatus(false, 'FAIL: action crashed.');
+        }
+      }
+
+      document.getElementById('btnInit').addEventListener('click', () => runSafe(initStore));
+      document.getElementById('btnBasicCrud').addEventListener('click', () => runSafe(caseBasicCrud));
+      document.getElementById('btnGetMissing').addEventListener('click', () => runSafe(caseGetMissing));
+      document.getElementById('btnDeleteMissing').addEventListener('click', () => runSafe(caseDeleteMissing));
+      document.getElementById('btnClearIdempotent').addEventListener('click', () => runSafe(caseClearIdempotent));
+      document.getElementById('btnExpiryOnGet').addEventListener('click', () => runSafe(caseExpiryOnGet));
+      document.getElementById('btnPruneMixed').addEventListener('click', () => runSafe(casePruneMixed));
+      document.getElementById('btnHydrateLimit').addEventListener('click', () => runSafe(caseHydrateLimit));
+      document.getElementById('btnStress').addEventListener('click', () => runSafe(caseStressSetGet));
+      document.getElementById('btnRunAll').addEventListener('click', () => runSafe(runAllCases));
+
+      setStatus(true, 'Ready. Use buttons to run cases.');
+      appendLog('page ready');
+    } catch (error) {
+      const message = error instanceof Error ? error.stack || error.message : String(error);
+      writeResult({ allOk: false, error: message });
+      setStatus(false, 'FAIL: initialization crashed.');
+      appendLog(`init error: ${message}`);
+    }
+  </script>
+</body>
+</html>

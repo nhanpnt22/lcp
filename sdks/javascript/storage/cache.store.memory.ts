@@ -1,5 +1,6 @@
 import type { CacheEntry } from "../entry";
 import { buildDeterministicEvictionPlan } from "./cache.eviction";
+import { assertH57CacheKey } from "../key/cache.key.validation";
 
 export interface MemoryStoreOptions {
   maxEntries: number;
@@ -28,34 +29,38 @@ export class MemoryCacheStore<T = unknown> {
   }
 
   get(cacheKey: string): CacheEntry<T> | undefined {
-    const entry = this.map.get(cacheKey);
+    const normalizedKey = assertH57CacheKey(cacheKey, "memory.get");
+    const entry = this.map.get(normalizedKey);
     if (!entry) {
       return undefined;
     }
 
     // TTL validation inline for authoritative memory reads.
     if (this.isExpired(entry)) {
-      this.map.delete(cacheKey);
+      this.map.delete(normalizedKey);
       return undefined;
     }
 
     // LRU touch: move key to most-recent end deterministically.
-    this.map.delete(cacheKey);
-    this.map.set(cacheKey, entry);
+    this.map.delete(normalizedKey);
+    this.map.set(normalizedKey, entry);
     return entry;
   }
 
   peek(cacheKey: string): CacheEntry<T> | undefined {
-    return this.map.get(cacheKey);
+    const normalizedKey = assertH57CacheKey(cacheKey, "memory.peek");
+    return this.map.get(normalizedKey);
   }
 
   set(entry: CacheEntry<T>): void {
-    this.map.set(entry.cache_key, entry);
+    const normalizedKey = assertH57CacheKey(entry.cache_key, "memory.set");
+    this.map.set(normalizedKey, { ...entry, cache_key: normalizedKey });
     this.evictIfNeeded();
   }
 
   delete(cacheKey: string): boolean {
-    return this.map.delete(cacheKey);
+    const normalizedKey = assertH57CacheKey(cacheKey, "memory.delete");
+    return this.map.delete(normalizedKey);
   }
 
   clear(): void {

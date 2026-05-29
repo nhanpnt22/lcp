@@ -1,0 +1,18 @@
+[JS CASE] set/get value after set
+[JS CASE] overwrite existing key
+[JS CASE] delete removes entry
+[JS CASE] clear removes all entries
+[JS CASE] pruneExpired removes expired only
+[JS CASE] hydrateAllValid excludes expired and respects limit
+[NODE MEMORY CASE] memory set/get value after set
+[NODE MEMORY CASE] memory overwrite existing key
+[NODE MEMORY CASE] memory delete removes entry
+[NODE MEMORY CASE] memory clear removes all entries
+[NODE MEMORY CASE] memory pruneExpired removes expired only
+[NODE MEMORY CASE] memory hydrateAllValid excludes expired and respects limit
+[NODE CLOUD CASE] cloud-storage set/get value after set
+[NODE CLOUD CASE] cloud-storage overwrite existing key
+[NODE CLOUD CASE] cloud-storage delete removes entry
+[NODE CLOUD CASE] cloud-storage clear removes all entries
+[NODE CLOUD CASE] cloud-storage pruneExpired removes expired only
+[NODE CLOUD CASE] cloud-storage hydrateAllValid excludes expired and respects limit

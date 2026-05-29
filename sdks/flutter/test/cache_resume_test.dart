@@ -4,10 +4,14 @@ import 'package:lcp_flutter_sdk/lcp_flutter_sdk.dart';
 import 'package:test/test.dart';
 
 void main() {
-  test('resume state validates non-empty widget id and non-negative version', () {
-    expect(() => ResumeState(widgetId: '', stateVersion: 0), throwsArgumentError);
-    expect(() => ResumeState(widgetId: 'widget-1', stateVersion: -1), throwsArgumentError);
-    expect(ResumeState(widgetId: 'widget-1', stateVersion: 0).widgetId, equals('widget-1'));
+  test('resume state validates non-empty widget id and non-negative version',
+      () {
+    expect(
+        () => ResumeState(widgetId: '', stateVersion: 0), throwsArgumentError);
+    expect(() => ResumeState(widgetId: 'widget-1', stateVersion: -1),
+        throwsArgumentError);
+    expect(ResumeState(widgetId: 'widget-1', stateVersion: 0).widgetId,
+        equals('widget-1'));
   });
 
   test('resume store keeps max state version and exposes size', () {
@@ -35,6 +39,7 @@ void main() {
       traceId: 'trace-1',
       widgetStateMap: {'a': 1, 'b': 2},
     );
-    expect(hint['resume_token'], equals(base64Url.encode(utf8.encode(tokenMaterial))));
+    expect(hint['resume_token'],
+        equals(base64Url.encode(utf8.encode(tokenMaterial))));
   });
 }

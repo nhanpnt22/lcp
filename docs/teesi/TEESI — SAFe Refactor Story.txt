@@ -1,0 +1,208 @@
+============================================================
+STORY
+============================================================
+
+Story ID:
+REF-<system>-<component>-<id>
+
+Title:
+Refactor <component/module> to comply with TEESI — CODEX v1.1.0
+
+Type:
+ENABLER (Architecture / Refactor)
+
+============================================================
+SAFe STORY STATEMENT
+============================================================
+
+As a platform/system engineering team,
+
+We want to refactor <component/module> using
+TEESI — CODEX deterministic structure and execution rules,
+
+So that the system achieves:
+
+- deterministic behavior
+- replay-safe execution
+- CI + COREX compliance
+- reduced complexity
+- zero structural drift
+- long-term maintainability
+
+============================================================
+BUSINESS / ENGINEERING VALUE
+============================================================
+
+- Prevent production instability caused by hidden complexity
+- Enable safe cache reuse (cache_key correctness)
+- Reduce technical debt
+- Improve auditability and traceability
+- Enable autonomous refactoring via TEESI
+
+============================================================
+PROBLEM DESCRIPTION
+============================================================
+
+Current issues detected (CODEX violations):
+
+- oversized files / classes / functions
+- high cyclomatic complexity (>10)
+- deep nesting (>3)
+- mixed responsibilities
+- hidden dependencies or shared mutable state
+- non-deterministic execution paths
+- duplicated logic
+
+Impact:
+
+- non-replayable execution
+- CI failures or instability
+- drift accumulation
+- unsafe releases
+
+============================================================
+SCOPE
+============================================================
+
+Applies to:
+
+- ALL languages (Go, TS, Java, Rust, etc.)
+- ALL layers (domain, application, infra, transport)
+
+Excludes:
+
+- functional changes (unless explicitly required)
+
+============================================================
+TARGET STATE (CODEX-COMPLIANT)
+============================================================
+
+After refactor:
+
+- each unit = ONE responsibility
+- structure within CODEX limits
+- deterministic execution preserved
+- no hidden dependencies
+- no shared mutable state
+- DAG compatibility ensured
+- cache_key identity stable
+
+============================================================
+ACCEPTANCE CRITERIA
+============================================================
+
+Functional:
+
+- behavior remains unchanged
+- outputs identical for same inputs
+- replay produces identical checksum
+
+Structural (CODEX):
+
+- file size ≤ 300 lines
+- function ≤ 40 lines
+- complexity ≤ 10
+- nesting ≤ 3
+- parameters ≤ 5
+- no duplicated logic
+
+Execution (TEESI):
+
+- task is deterministic
+- DAG integrity preserved
+- no dependency bypass
+
+Validation:
+
+- CI PASS
+- COREX PASS
+- no drift detected post-execution
+
+============================================================
+NON-FUNCTIONAL REQUIREMENTS
+============================================================
+
+- deterministic only (no randomness, time-based logic)
+- no concurrency introduced
+- no hidden state
+- no environment-dependent behavior
+
+============================================================
+DEPENDENCIES
+============================================================
+
+Requires:
+
+- TEST DESIGN (Stage 0)
+- KNOWLEDGE RESOLUTION (Stage 1.5)
+- CI VALIDATION (Stage 1.8)
+
+Blocks:
+
+- BUILD / EXECUTION / RELEASE
+
+============================================================
+TASK BREAKDOWN (TEESI DAG)
+============================================================
+
+0.0 TEST DESIGN
+- define regression + replay tests
+
+1.0 PLANNING
+- identify violations and split strategy
+
+1.2 TASK REGISTRATION
+- persist tasks in TEESI-DB
+
+1.3 GRAPH BUILD
+- update DAG
+
+1.5 KNOWLEDGE RESOLUTION
+- validate standards and best practices
+
+1.8 CI VALIDATION
+- detect CODEX violations
+
+2.0 BUILD
+- apply deterministic refactor
+
+3.0 QC
+- validate structure constraints
+
+4.0 QA
+- verify no regression
+
+5.0 EXECUTION
+- run deterministic pipeline
+
+5.5 DRIFT DETECTION
+- confirm violations resolved
+
+7.0 COREX
+- checksum + replay validation
+
+7.5 CACHE VALIDATION
+- ensure safe reuse
+
+8.0 RELEASE
+- publish refactored artifact
+
+============================================================
+DEFINITION OF DONE
+============================================================
+
+- exactly ONE SUCCESS execution
+- execution_history persisted
+- COREX PASS
+- CI PASS
+- no unresolved drift
+- CODEX compliance verified
+- RELEASE SUCCESS
+
+============================================================
+FINAL RULE
+============================================================
+
+“REFACTOR MUST PRESERVE BEHAVIOR AND IMPROVE STRUCTURE”
+
+============================================================

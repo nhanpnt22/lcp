@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import '../entry/cache_entry.dart';
+import '../key/h57_key_validation.dart';
 
 class MemoryCacheStore<T> {
   MemoryCacheStore({
@@ -14,22 +15,34 @@ class MemoryCacheStore<T> {
   final LinkedHashMap<String, CacheEntry<T>> _map = LinkedHashMap();
 
   CacheEntry<T>? get(String cacheKey) {
-    final entry = _map.remove(cacheKey);
+    final normalizedKey = assertH57CacheKey(cacheKey, 'memory.get');
+    final entry = _map.remove(normalizedKey);
     if (entry == null) return null;
     if (_isExpired(entry)) return null;
-    _map[cacheKey] = entry;
+    _map[normalizedKey] = entry;
     return entry;
   }
 
-  CacheEntry<T>? peek(String cacheKey) => _map[cacheKey];
+  CacheEntry<T>? peek(String cacheKey) {
+    final normalizedKey = assertH57CacheKey(cacheKey, 'memory.peek');
+    return _map[normalizedKey];
+  }
 
   void set(CacheEntry<T> entry) {
-    _map.remove(entry.cacheKey);
-    _map[entry.cacheKey] = entry;
+    final normalizedKey = assertH57CacheKey(entry.cacheKey, 'memory.set');
+    _map.remove(normalizedKey);
+    _map[normalizedKey] = CacheEntry<T>(
+      cacheKey: normalizedKey,
+      data: entry.data,
+      metadata: entry.metadata,
+    );
     _evictIfNeeded();
   }
 
-  bool delete(String cacheKey) => _map.remove(cacheKey) != null;
+  bool delete(String cacheKey) {
+    final normalizedKey = assertH57CacheKey(cacheKey, 'memory.delete');
+    return _map.remove(normalizedKey) != null;
+  }
 
   void clear() => _map.clear();
 

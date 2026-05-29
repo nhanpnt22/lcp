@@ -1,0 +1,824 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LCP Local Cache UAT</title>
+  <style>
+    :root {
+      --bg: #0b1320;
+      --panel: #101a2b;
+      --text: #e6edf6;
+      --muted: #9cb0c9;
+      --ok: #1db954;
+      --fail: #ff4d4f;
+      --accent: #46a6ff;
+    }
+    body {
+      margin: 0;
+      font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+      background: radial-gradient(circle at 20% 20%, #13203a 0%, var(--bg) 40%);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 24px;
+    }
+    .card {
+      max-width: 900px;
+      margin: 0 auto;
+      background: color-mix(in srgb, var(--panel), black 20%);
+      border: 1px solid #22304a;
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+    }
+    h1 { margin-top: 0; font-size: 1.4rem; }
+    p { color: var(--muted); }
+    ul { padding-left: 20px; }
+    li { margin: 8px 0; }
+    .ok { color: var(--ok); }
+    .fail { color: var(--fail); }
+    code {
+      background: #1a2740;
+      border-radius: 6px;
+      padding: 2px 6px;
+      color: #c7ddff;
+    }
+    .summary { margin-top: 12px; font-weight: 600; color: var(--accent); }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>LCP Local Cache Browser UAT</h1>
+    <p>This UAT validates deterministic keying, memory cache read path, and single-flight behavior.</p>
+    <ul id="results"></ul>
+    <div id="summary" class="summary"></div>
+  </div>
+
+  <script src="../min/lcp-local-cache-1.0.0.min.js"></script>
+  <script type="module">
+    const resultsEl = document.getElementById("results");
+    const summaryEl = document.getElementById("summary");
+    const api = globalThis.LcpLocalCache ?? globalThis.SdalpLocalCache;
+    const acResults = new Map();
+
+    const AC_DEFS = [
+      ["AC-01", "EXACTLY-ONCE PRESERVATION"],
+      ["AC-02", "H57 DETERMINISM"],
+      ["AC-03", "CACHE EQUIVALENCE"],
+      ["AC-04", "TTL ENFORCEMENT"],
+      ["AC-05", "SINGLE-FLIGHT GUARANTEE"],
+      ["AC-06", "SWR SAFETY"],
+      ["AC-07", "DUAL STORAGE MODEL"],
+      ["AC-08", "DETERMINISTIC SERIALIZATION"],
+      ["AC-09", "TRACE INTEGRITY"],
+      ["AC-10", "IDENTITY SAFETY"],
+      ["AC-11", "NON-BEHAVIORAL GUARANTEE"],
+      ["AC-12", "PARITY ENFORCEMENT"],
+      ["AC-13", "RESUME SUPPORT"],
+      ["AC-14", "STANDARD JAVASCRIPT MIN BUNDLE"],
+      ["AC-15", "HTML EXAMPLES FOR ENABLEMENT"]
+    ];
+
+    function addResult(name, pass, detail) {
+      const li = document.createElement("li");
+      li.className = pass ? "ok" : "fail";
+      li.textContent = `${pass ? "PASS" : "FAIL"} - ${name}: ${detail}`;
+      resultsEl.appendChild(li);
+    }
+
+    function addAcResult(acId, title, pass, detail) {
+      acResults.set(acId, { title, pass, detail });
+      addResult(`${acId} ${title}`, pass, detail);
+    }
+
+    function toMessage(error) {
+      return error instanceof Error ? error.message : String(error);
+    }
+
+    function assert(condition, message) {
+      if (!condition) {
+        throw new Error(message);
+      }
+    }
+
+    function jsonEqual(a, b) {
+      return JSON.stringify(a) === JSON.stringify(b);
+    }
+
+    function waitMicrotask() {
+      return new Promise((resolve) => queueMicrotask(resolve));
+    }
+
+    function createParity() {
+      return {
+        schemaVersion: "1.0.0",
+        specChecksum: "spec-abc-001",
+        cacheNamespace: "lcp.cache",
+        dataVersion: "1"
+      };
+    }
+
+    function createKeyInput(operationId, payload, userScope = "tenant-a") {
+      return {
+        namespace: "lcp.cache",
+        operationId,
+        payload,
+        schemaVersion: "1.0.0",
+        specChecksum: "spec-abc-001",
+        userScope
+      };
+    }
+
+    async function canLoadExample(relativePath) {
+      return new Promise((resolve) => {
+        const iframe = document.createElement("iframe");
+        iframe.style.display = "none";
+        iframe.src = relativePath;
+
+        let completed = false;
+        const finish = (value) => {
+          if (completed) {
+            return;
+          }
+          completed = true;
+          iframe.remove();
+          resolve(value);
+        };
+
+        iframe.onload = () => finish(true);
+        iframe.onerror = () => finish(false);
+
+        document.body.appendChild(iframe);
+        setTimeout(() => finish(false), 5000);
+      });
+    }
+
+    async function runAc(acId, title, testFn) {
+      if (typeof testFn !== "function") {
+        addAcResult(acId, title, false, "No UAT runner implemented");
+        return;
+      }
+
+      try {
+        const detail = await testFn();
+        addAcResult(acId, title, true, detail || "passed");
+      } catch (error) {
+        addAcResult(acId, title, false, toMessage(error));
+      }
+    }
+
+    function finalizeSummary() {
+      const totalAc = AC_DEFS.length;
+      const passAc = AC_DEFS.filter(([acId]) => acResults.get(acId)?.pass).length;
+      const allPass = passAc === totalAc;
+
+      summaryEl.textContent = allPass
+        ? `UAT PASSED (AC ${passAc}/${totalAc})`
+        : `UAT FAILED (AC ${passAc}/${totalAc})`;
+      summaryEl.className = allPass ? "summary ok" : "summary fail";
+    }
+
+    try {
+      addResult("bundle loaded", Boolean(api), api ? "window.LcpLocalCache available" : "missing API");
+
+      if (api) {
+
+        const acRunners = {
+          "AC-01": async () => {
+            let now = 1000;
+            const parity = createParity();
+            const memoryStore = new api.MemoryCacheStore({ maxEntries: 8, now: () => now });
+            const singleFlight = new api.CacheSingleFlight();
+            const engine = new api.ReadThroughCacheEngine({
+              memoryStore,
+              singleFlight,
+              now: () => now,
+              parity
+            });
+
+            let rpcCalls = 0;
+            const request = {
+              keyInput: createKeyInput("ac01.exactly_once", { user: "u-01" }),
+              h57Hash: api.h57HashFn,
+              fetchFromApi: async () => {
+                rpcCalls += 1;
+                return { data: { user: "u-01", plan: "pro" }, ttlMs: 1200 };
+              }
+            };
+
+            const first = await engine.execute(request);
+            const second = await engine.execute(request);
+
+            assert(first.source === "API", `first source must be API, got ${first.source}`);
+            assert(second.source === "CACHE", `second source must be CACHE, got ${second.source}`);
+            assert(rpcCalls === 1, `expected rpcCalls=1, got ${rpcCalls}`);
+            return `rpcCalls=${rpcCalls}, first=${first.source}, second=${second.source}`;
+          },
+
+          "AC-02": async () => {
+            const inputA = createKeyInput("ac02.det", { b: 2, a: 1, trace_id: "trace-a" });
+            const inputB = createKeyInput("ac02.det", { a: 1, b: 2, trace_id: "trace-b" });
+
+            const keyA = api.computeCacheKey(inputA, api.h57HashFn);
+            const keyB = api.computeCacheKey(inputB, api.h57HashFn);
+            const canonicalA = api.canonicalJSONStringify({ b: 2, a: 1 });
+            const canonicalB = api.canonicalJSONStringify({ a: 1, b: 2 });
+
+            assert(keyA === keyB, "cache_key must be deterministic for semantically-equal payloads");
+            assert(canonicalA === canonicalB, "canonical JSON must be deterministic");
+
+            const material = api.buildCacheKeyMaterial(inputA);
+            assert(material.includes(canonicalA), "H57 key material must include canonical payload serialization");
+            return `key=${keyA}`;
+          },
+
+          "AC-03": async () => {
+            const parity = createParity();
+            const memoryStore = new api.MemoryCacheStore({ maxEntries: 8 });
+            const engine = new api.ReadThroughCacheEngine({ memoryStore, parity });
+            const expectedData = { id: "eq-03", score: 99, flags: ["a", "b"] };
+
+            let apiCalls = 0;
+            const request = {
+              keyInput: createKeyInput("ac03.equivalence", { id: "eq-03" }),
+              h57Hash: api.h57HashFn,
+              fetchFromApi: async () => {
+                apiCalls += 1;
+                return { data: expectedData, ttlMs: 1000 };
+              }
+            };
+
+            const first = await engine.execute(request);
+            const second = await engine.execute(request);
+
+            assert(first.source === "API" && second.source === "CACHE", "source metadata must reflect API then CACHE");
+            assert(jsonEqual(first.data, second.data), "cache response must be semantically equal to API response");
+            assert(apiCalls === 1, `expected apiCalls=1, got ${apiCalls}`);
+            return `sources=${first.source}->${second.source}`;
+          },
+
+          "AC-04": async () => {
+            const ttlFromHeader = api.extractOacTtlMs({ "x-oac-cache.ttl_ms": "77" });
+            assert(ttlFromHeader === 77, `expected TTL header 77, got ${ttlFromHeader}`);
+
+            const parity = createParity();
+            const memoryStore = new api.MemoryCacheStore({ maxEntries: 8 });
+            const engine = new api.ReadThroughCacheEngine({ memoryStore, parity });
+
+            let apiCalls = 0;
+            const request = {
+              keyInput: createKeyInput("ac04.ttl", { id: "ttl-missing" }),
+              h57Hash: api.h57HashFn,
+              fetchFromApi: async () => {
+                apiCalls += 1;
+                return { data: { mode: "no-ttl" } };
+              }
+            };
+
+            const first = await engine.execute(request);
+            const second = await engine.execute(request);
+
+            assert(first.source === "API" && second.source === "API", "missing TTL must bypass cache");
+            assert(apiCalls === 2, `expected apiCalls=2 for missing TTL bypass, got ${apiCalls}`);
+            return `ttlHeader=${ttlFromHeader}, bypassCalls=${apiCalls}`;
+          },
+
+          "AC-05": async () => {
+            const singleFlight = new api.CacheSingleFlight();
+            let calls = 0;
+
+            const factory = async () => {
+              calls += 1;
+              await new Promise((resolve) => setTimeout(resolve, 10));
+              return "ok";
+            };
+
+            const [r1, r2] = await Promise.all([
+              singleFlight.run("same-key", factory),
+              singleFlight.run("same-key", factory)
+            ]);
+
+            assert(calls === 1, `single-flight must collapse to one call, got ${calls}`);
+            assert(r1 === "ok" && r2 === "ok", "single-flight responses must be consistent");
+            return `collapsedCalls=${calls}`;
+          },
+
+          "AC-06": async () => {
+            let now = 100;
+            const parity = createParity();
+            const memoryStore = new api.MemoryCacheStore({ maxEntries: 8, now: () => now });
+            const engine = new api.ReadThroughCacheEngine({
+              memoryStore,
+              now: () => now,
+              parity
+            });
+
+            let apiCalls = 0;
+            const baseRequest = {
+              keyInput: createKeyInput("ac06.swr", { id: "stale-target" }),
+              h57Hash: api.h57HashFn,
+              trace: {
+                request_id: "req-ac06",
+                trace_id: "trace-ac06",
+                action_id: "action-ac06"
+              },
+              fetchFromApi: async () => {
+                apiCalls += 1;
+                return { data: { n: apiCalls }, ttlMs: 50 };
+              }
+            };
+
+            await engine.execute(baseRequest);
+            now = 151;
+
+            let callbackCalled = false;
+            let callbackCalledSync = false;
+            let callbackRequestId;
+
+            const stalePromise = engine.execute({
+              ...baseRequest,
+              allowStaleOnExpired: true,
+              onBackgroundRefresh: (params) => {
+                callbackCalled = true;
+                callbackRequestId = params.requestId;
+              }
+            });
+
+            if (callbackCalled) {
+              callbackCalledSync = true;
+            }
+
+            const staleOut = await stalePromise;
+            await waitMicrotask();
+
+            assert(staleOut.source === "CACHE" && staleOut.stale === true, "expired entry should return stale cache when allowed");
+            assert(callbackCalled, "background refresh callback must run asynchronously");
+            assert(!callbackCalledSync, "background refresh callback must not execute synchronously");
+            assert(callbackRequestId === "req-ac06", `request_id must propagate unchanged, got ${callbackRequestId}`);
+            assert(apiCalls === 1, `stale-return path must not trigger additional immediate RPCs, got ${apiCalls}`);
+
+            return `staleSource=${staleOut.source}, callbackRequestId=${callbackRequestId}`;
+          },
+
+          "AC-07": async () => {
+            const parity = createParity();
+
+            let now = 1100;
+            const keyMemory = api.computeCacheKey(createKeyInput("ac07.memory-hit", { id: "m" }), api.h57HashFn);
+            const memoryHitStore = new api.MemoryCacheStore({ maxEntries: 8, now: () => now });
+            const memoryEntry = {
+              cache_key: keyMemory,
+              data: { source: "memory" },
+              metadata: api.createCacheMetadata({
+                source: "API",
+                createdAt: 1000,
+                ttlMs: 1000,
+                schemaVersion: parity.schemaVersion,
+                dataVersion: parity.dataVersion,
+                specChecksum: parity.specChecksum,
+                cacheNamespace: parity.cacheNamespace
+              })
+            };
+            memoryHitStore.set(memoryEntry);
+
+            let idbGets = 0;
+            let apiCallsMemoryPath = 0;
+            const idbProbe = {
+              get: async () => {
+                idbGets += 1;
+                return undefined;
+              },
+              set: async () => undefined,
+              delete: async () => undefined
+            };
+
+            const memoryFirstEngine = new api.ReadThroughCacheEngine({
+              memoryStore: memoryHitStore,
+              indexedDbStore: idbProbe,
+              parity
+            });
+
+            const memoryHitOut = await memoryFirstEngine.execute({
+              keyInput: createKeyInput("ac07.memory-hit", { id: "m" }),
+              h57Hash: api.h57HashFn,
+              fetchFromApi: async () => {
+                apiCallsMemoryPath += 1;
+                return { data: { source: "api" }, ttlMs: 1000 };
+              }
+            });
+
+            assert(memoryHitOut.source === "CACHE", "memory path must return CACHE on hit");
+            assert(idbGets === 0, `memory hit must not query indexeddb, got idbGets=${idbGets}`);
+            assert(apiCallsMemoryPath === 0, `memory hit must not trigger API, got apiCalls=${apiCallsMemoryPath}`);
+
+            const keyIdb = api.computeCacheKey(createKeyInput("ac07.idb-hit", { id: "idb" }), api.h57HashFn);
+            let idbGetsForMiss = 0;
+            let apiCallsForMiss = 0;
+            const idbEntry = {
+              cache_key: keyIdb,
+              data: { source: "idb" },
+              metadata: api.createCacheMetadata({
+                source: "CACHE",
+                createdAt: 1000,
+                ttlMs: 1000,
+                schemaVersion: parity.schemaVersion,
+                dataVersion: parity.dataVersion,
+                specChecksum: parity.specChecksum,
+                cacheNamespace: parity.cacheNamespace
+              })
+            };
+
+            const idbHydrateEngine = new api.ReadThroughCacheEngine({
+              memoryStore: new api.MemoryCacheStore({ maxEntries: 8 }),
+              indexedDbStore: {
+                get: async () => {
+                  idbGetsForMiss += 1;
+                  return idbEntry;
+                },
+                set: async () => undefined,
+                delete: async () => undefined
+              },
+              parity
+            });
+
+            const idbHitOut = await idbHydrateEngine.execute({
+              keyInput: createKeyInput("ac07.idb-hit", { id: "idb" }),
+              h57Hash: api.h57HashFn,
+              fetchFromApi: async () => {
+                apiCallsForMiss += 1;
+                return { data: { source: "api" }, ttlMs: 1000 };
+              }
+            });
+
+            assert(idbHitOut.source === "CACHE", "indexeddb hydrate path must return CACHE on idb hit");
+            assert(idbGetsForMiss === 1, `indexeddb fallback should read once, got ${idbGetsForMiss}`);
+            assert(apiCallsForMiss === 0, `indexeddb hit should not trigger API, got ${apiCallsForMiss}`);
+
+            return `memoryPath=idbGets:${idbGets}, idbPath=idbGets:${idbGetsForMiss}`;
+          },
+
+          "AC-08": async () => {
+            const parity = createParity();
+            const canonicalA = api.canonicalJSONStringify({ z: 2, a: 1, nested: { y: 2, x: 1 } });
+            const canonicalB = api.canonicalJSONStringify({ nested: { x: 1, y: 2 }, a: 1, z: 2 });
+            assert(canonicalA === canonicalB, "canonical serialization must be deterministic");
+
+            let now = 5000;
+            const idbStore = new api.IndexedDbCacheStore({
+              dbName: "lcp_local_cache_uat_ac08",
+              storeName: "cache_entries",
+              dbVersion: 1,
+              now: () => now
+            });
+
+            const key = api.computeCacheKey(createKeyInput("ac08.serialize", { z: 2, a: 1 }), api.h57HashFn);
+            const entry = {
+              cache_key: key,
+              data: { z: 2, a: 1, nested: { y: 2, x: 1 } },
+              metadata: api.createCacheMetadata({
+                source: "API",
+                createdAt: now,
+                ttlMs: 1000,
+                schemaVersion: parity.schemaVersion,
+                dataVersion: parity.dataVersion,
+                specChecksum: parity.specChecksum,
+                cacheNamespace: parity.cacheNamespace
+              })
+            };
+
+            await idbStore.clear();
+            await idbStore.set(entry);
+            const readBack = await idbStore.get(key);
+            assert(Boolean(readBack), "indexeddb deterministic round-trip must produce a value");
+            assert(
+              api.canonicalJSONStringify(readBack.data) === api.canonicalJSONStringify(entry.data),
+              "indexeddb round-trip must preserve deterministic canonical form"
+            );
+
+            const material = api.buildCacheKeyMaterial(createKeyInput("ac08.serialize", { a: 1, z: 2 }));
+            assert(material.includes(api.canonicalJSONStringify({ a: 1, z: 2 })), "H57 material must use canonical JSON payload");
+
+            await idbStore.clear();
+            return `canonical=${canonicalA}`;
+          },
+
+          "AC-09": async () => {
+            const keyA = api.computeCacheKey(
+              createKeyInput("ac09.trace", {
+                id: "trace-safe",
+                trace_id: "trace-A",
+                nested: { action_id: "a-A" },
+                list: [{ request_id: "r-A" }]
+              }),
+              api.h57HashFn
+            );
+
+            const keyB = api.computeCacheKey(
+              createKeyInput("ac09.trace", {
+                id: "trace-safe",
+                trace_id: "trace-B",
+                nested: { action_id: "a-B" },
+                list: [{ request_id: "r-B" }]
+              }),
+              api.h57HashFn
+            );
+
+            assert(keyA === keyB, "trace fields must not influence cache_key identity");
+
+            let now = 100;
+            const parity = createParity();
+            const engine = new api.ReadThroughCacheEngine({
+              memoryStore: new api.MemoryCacheStore({ maxEntries: 8, now: () => now }),
+              now: () => now,
+              parity
+            });
+
+            const request = {
+              keyInput: createKeyInput("ac09.trace-propagation", { id: "trace-prop" }),
+              h57Hash: api.h57HashFn,
+              trace: {
+                request_id: "req-ac09",
+                trace_id: "trace-ac09",
+                action_id: "action-ac09"
+              },
+              fetchFromApi: async () => ({ data: { ok: true }, ttlMs: 40 })
+            };
+
+            await engine.execute(request);
+            now = 150;
+
+            let callbackRequestId;
+            await engine.execute({
+              ...request,
+              allowStaleOnExpired: true,
+              onBackgroundRefresh: (params) => {
+                callbackRequestId = params.requestId;
+              }
+            });
+            await waitMicrotask();
+
+            assert(callbackRequestId === "req-ac09", `request_id propagation mismatch: ${callbackRequestId}`);
+            return `traceSafeKey=${keyA}, requestId=${callbackRequestId}`;
+          },
+
+          "AC-10": async () => {
+            const parity = createParity();
+            const metadata = api.createCacheMetadata({
+              source: "API",
+              createdAt: 1000,
+              ttlMs: 1000,
+              schemaVersion: parity.schemaVersion,
+              dataVersion: parity.dataVersion,
+              specChecksum: parity.specChecksum,
+              cacheNamespace: parity.cacheNamespace
+            });
+
+            let jwtBlocked = false;
+            let userIdBlocked = false;
+
+            try {
+              api.assertCacheEntryInvariants(
+                {
+                  cache_key: "ac10-jwt",
+                  data: { jwt: "secret-token" },
+                  metadata
+                },
+                {
+                  parity: {
+                    schema_version: parity.schemaVersion,
+                    spec_checksum: parity.specChecksum,
+                    cache_namespace: parity.cacheNamespace
+                  },
+                  requireNoSensitiveData: true
+                }
+              );
+            } catch {
+              jwtBlocked = true;
+            }
+
+            try {
+              api.assertCacheEntryInvariants(
+                {
+                  cache_key: "ac10-user-id",
+                  data: { user_id: "u-sensitive" },
+                  metadata
+                },
+                {
+                  parity: {
+                    schema_version: parity.schemaVersion,
+                    spec_checksum: parity.specChecksum,
+                    cache_namespace: parity.cacheNamespace
+                  },
+                  requireNoSensitiveData: true
+                }
+              );
+            } catch {
+              userIdBlocked = true;
+            }
+
+            assert(jwtBlocked && userIdBlocked, "sensitive fields (jwt/user_id) must be rejected");
+            return `jwtBlocked=${jwtBlocked}, userIdBlocked=${userIdBlocked}`;
+          },
+
+          "AC-11": async () => {
+            const parity = createParity();
+            const stableData = { profile: { id: "ac11" }, flags: ["x", "y"] };
+            const memoryStore = new api.MemoryCacheStore({ maxEntries: 8 });
+            const engine = new api.ReadThroughCacheEngine({ memoryStore, parity });
+
+            let apiCalls = 0;
+            const request = {
+              keyInput: createKeyInput("ac11.non_behavioral", { id: "ac11" }),
+              h57Hash: api.h57HashFn,
+              fetchFromApi: async () => {
+                apiCalls += 1;
+                return { data: stableData, ttlMs: 1000 };
+              }
+            };
+
+            const first = await engine.execute(request);
+            const second = await engine.execute(request);
+
+            assert(first.source === "API" && second.source === "CACHE", "cache must be non-authoritative and preserve execution semantics");
+            assert(jsonEqual(first.data, stableData), "API path data changed unexpectedly");
+            assert(jsonEqual(second.data, stableData), "CACHE path data changed unexpectedly");
+            assert(apiCalls === 1, `expected one API call after cache fill, got ${apiCalls}`);
+
+            return `apiCalls=${apiCalls}, sources=${first.source}->${second.source}`;
+          },
+
+          "AC-12": async () => {
+            const parity = createParity();
+            const key = api.computeCacheKey(createKeyInput("ac12.parity", { id: "ac12" }), api.h57HashFn);
+            const baseMeta = api.createCacheMetadata({
+              source: "API",
+              createdAt: 1000,
+              ttlMs: 1000,
+              schemaVersion: parity.schemaVersion,
+              dataVersion: parity.dataVersion,
+              specChecksum: parity.specChecksum,
+              cacheNamespace: parity.cacheNamespace
+            });
+
+            const invalidEntry = {
+              cache_key: key,
+              data: { stale: true },
+              metadata: {
+                ...baseMeta,
+                schema_version: "0.0.0"
+              }
+            };
+
+            let deleted = 0;
+            let apiCalls = 0;
+
+            const engine = new api.ReadThroughCacheEngine({
+              memoryStore: new api.MemoryCacheStore({ maxEntries: 8 }),
+              indexedDbStore: {
+                get: async () => invalidEntry,
+                delete: async () => {
+                  deleted += 1;
+                },
+                set: async () => undefined
+              },
+              parity
+            });
+
+            const out = await engine.execute({
+              keyInput: createKeyInput("ac12.parity", { id: "ac12" }),
+              h57Hash: api.h57HashFn,
+              fetchFromApi: async () => {
+                apiCalls += 1;
+                return { data: { fresh: true }, ttlMs: 1000 };
+              }
+            });
+
+            assert(out.source === "API", "parity mismatch must invalidate cache and bypass to API");
+            assert(apiCalls === 1, `expected API call after parity mismatch, got ${apiCalls}`);
+            assert(deleted === 1, `invalid indexeddb entry should be cleaned up, delete count=${deleted}`);
+
+            return `source=${out.source}, deleteCount=${deleted}`;
+          },
+
+          "AC-13": async () => {
+            const parity = createParity();
+            const resumeStore = new api.InMemoryResumeStateStore();
+            const engine = new api.ReadThroughCacheEngine({
+              memoryStore: new api.MemoryCacheStore({ maxEntries: 8 }),
+              parity,
+              resume: {
+                store: resumeStore,
+                resolveState: ({ data }) => ({
+                  widget_id: data.widget_id,
+                  state_version: data.state_version
+                })
+              }
+            });
+
+            let apiCalls = 0;
+            const request = {
+              keyInput: createKeyInput("ac13.resume", { id: "ac13" }),
+              h57Hash: api.h57HashFn,
+              fetchFromApi: async () => {
+                apiCalls += 1;
+                return {
+                  data: { widget_id: "w-13", state_version: 3, n: apiCalls },
+                  ttlMs: 1000
+                };
+              }
+            };
+
+            await engine.execute(request);
+            await engine.execute(request);
+            assert(apiCalls === 1, `cache hit should avoid extra RPCs, got ${apiCalls}`);
+
+            await engine.execute({
+              ...request,
+              resumeState: {
+                widget_id: "w-13",
+                state_version: 2
+              }
+            });
+            assert(engine.getWidgetStateMap()["w-13"] === 3, "state_version must remain monotonic when lower resume state is provided");
+
+            await engine.execute({
+              ...request,
+              resumeState: {
+                widget_id: "w-13",
+                state_version: 4
+              }
+            });
+            assert(engine.getWidgetStateMap()["w-13"] === 4, "state_version must update monotonically when higher state is provided");
+
+            const callsBeforeHint = apiCalls;
+            const hint = engine.buildResumeHint({
+              traceId: "trace-ac13",
+              h57Hash: api.h57HashFn
+            });
+            assert(apiCalls === callsBeforeHint, "buildResumeHint must not trigger additional RPCs");
+            assert(hint.widget_state_map["w-13"] === 4, "resume hint must carry latest widget_state_map");
+            assert(typeof hint.resume_token === "string" && hint.resume_token.length > 0, "resume hint must include resume_token");
+
+            return `apiCalls=${apiCalls}, widgetState=${JSON.stringify(hint.widget_state_map)}`;
+          },
+
+          "AC-14": async () => {
+            const hasMinScript = Array.from(document.querySelectorAll("script")).some((script) => {
+              const src = script.getAttribute("src") || "";
+              return src.includes("min/lcp-local-cache-1.0.0.min.js");
+            });
+
+            assert(hasMinScript, "lcp-local-cache-1.0.0.min.js must be loaded as browser runtime asset");
+
+            const expectedExports = [
+              "ReadThroughCacheEngine",
+              "MemoryCacheStore",
+              "IndexedDbCacheStore",
+              "computeCacheKey",
+              "buildResumeHint"
+            ];
+
+            const missing = expectedExports.filter((name) => api[name] === undefined);
+            assert(missing.length === 0, `min bundle missing exports: ${missing.join(", ")}`);
+
+            return `minScriptLoaded=${hasMinScript}, exports=${expectedExports.length}`;
+          },
+
+          "AC-15": async () => {
+            const simpleLoaded = await canLoadExample("simple-cache.html");
+            const liveLoaded = await canLoadExample("simple-cache-live.html");
+            const uatPathOk = /lcp-uat(\.versioned)?\.html$/.test(globalThis.location.pathname);
+
+            assert(simpleLoaded, "simple-cache.html must be present and loadable");
+            assert(liveLoaded, "simple-cache-live.html must be present and loadable");
+            assert(uatPathOk, "lcp-uat(.versioned).html must be the active UAT artifact");
+
+            return `simpleLoaded=${simpleLoaded}, liveLoaded=${liveLoaded}`;
+          }
+        };
+
+        for (const [acId, title] of AC_DEFS) {
+          await runAc(acId, title, acRunners[acId]);
+        }
+
+        const missingCoverage = AC_DEFS.filter(([acId]) => !acResults.has(acId));
+        for (const [acId, title] of missingCoverage) {
+          addAcResult(acId, title, false, "No UAT runner implemented");
+        }
+
+        finalizeSummary();
+      } else {
+        for (const [acId, title] of AC_DEFS) {
+          addAcResult(acId, title, false, "bundle not loaded");
+        }
+        finalizeSummary();
+      }
+
+    } catch (error) {
+      addResult("runtime", false, toMessage(error));
+      summaryEl.textContent = "UAT FAILED (runtime error)";
+      summaryEl.className = "summary fail";
+    }
+  </script>
+</body>
+</html>

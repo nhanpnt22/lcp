@@ -1,0 +1,14 @@
+
+> @sdp/lcp-nodejs-sdk@1.0.0 test
+> vitest run tests/persistent.store.contract.test.ts -t sqlite overwrite existing key
+
+
+ RUN  v3.2.4 /Users/brian/dev/aco/aip/sdp/lcp/sdks/nodejs
+
+ ✓ tests/persistent.store.contract.test.ts (12 tests | 11 skipped) 7ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed | 11 skipped (12)
+   Start at  17:09:48
+   Duration  381ms (transform 61ms, setup 0ms, collect 84ms, tests 7ms, environment 0ms, prepare 36ms)
+

@@ -1,0 +1,1 @@
+.artifacts/cross-nodejs-javascript-cloud-onebyone-20260529-170606

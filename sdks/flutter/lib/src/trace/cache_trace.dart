@@ -7,13 +7,16 @@ class TraceContext {
     required this.requestId,
   }) {
     if (traceId.trim().isEmpty) {
-      throw ArgumentError.value(traceId, 'traceId', 'must be a non-empty string');
+      throw ArgumentError.value(
+          traceId, 'traceId', 'must be a non-empty string');
     }
     if (actionId.trim().isEmpty) {
-      throw ArgumentError.value(actionId, 'actionId', 'must be a non-empty string');
+      throw ArgumentError.value(
+          actionId, 'actionId', 'must be a non-empty string');
     }
     if (requestId.trim().isEmpty) {
-      throw ArgumentError.value(requestId, 'requestId', 'must be a non-empty string');
+      throw ArgumentError.value(
+          requestId, 'requestId', 'must be a non-empty string');
     }
   }
 
@@ -82,6 +85,7 @@ bool isTraceContextEqual(TraceContext expected, TraceContext actual) {
 
 void assertTraceContextEqual(TraceContext expected, TraceContext actual) {
   if (!isTraceContextEqual(expected, actual)) {
-    throw StateError('Trace context mismatch: trace_id/action_id/request_id must propagate unchanged');
+    throw StateError(
+        'Trace context mismatch: trace_id/action_id/request_id must propagate unchanged');
   }
 }

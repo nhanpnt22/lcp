@@ -4,6 +4,8 @@ export 'src/entry/cache_entry.dart';
 export 'src/execution/read_through_cache_engine.dart';
 export 'src/failure/cache_failure.dart';
 export 'src/key/cache_key.dart';
+export 'src/key/h57_hash_fn.dart';
+export 'src/key/h57_key_validation.dart';
 export 'src/namespace/cache_namespace.dart';
 export 'src/resume/cache_resume.dart';
 export 'src/singleflight/cache_single_flight.dart';

@@ -34,6 +34,12 @@ Precedence Rule:
 If any statement in this profile conflicts with the parent protocol,
 LCP — Local Cache Protocol v1.0.0 takes precedence.
 
+57 Family References:
+
+- https://github.com/nhanpnt22/f57
+- https://github.com/nhanpnt22/f57/tree/main/implementations/javascript
+- https://github.com/nhanpnt22/f57/tree/main/implementations/ts
+
 ============================================================
 0. PURPOSE
 ============================================================
@@ -93,8 +99,8 @@ RUNTIME API SURFACE:
 
 BROWSER MIN BUNDLE:
 
-- window.LcpLocalCache (primary, min/lcp-local-cache.min.js)
-- window.SdalpLocalCache (legacy alias)
+- window.LcpLocalCache (stable, min/lcp-local-cache.min.js)
+- window.LcpLocalCache (versioned, min/lcp-local-cache-X.Y.Z.min.js)
 
 ============================================================
 3. LCP SECTION MAPPING (JS PROFILE)
@@ -115,7 +121,8 @@ III. CACHE KEY
 
 - MUST build key from namespace + operationId + canonical payload + schemaVersion + specChecksum + userScope
 - MUST exclude trace_id/request_id/action_id from key payload material
-- MUST use deterministic hash via injected h57Hash
+- MUST use H57 for hashing and B57 canonical byte material handling
+- ID57/R57/S57 terms MUST be used where identifier/random/derivation rules apply
 
 IV. CACHE ENTRY
 
@@ -198,7 +205,7 @@ REQUEST (execute):
 
 - keyInput:
   namespace, operationId, payload, schemaVersion, specChecksum, userScope
-- h57Hash
+- H57HashFn
 - fetchFromApi -> { data, ttlMs?, headers? }
 - allowStaleOnExpired?
 - resumeState?
@@ -239,10 +246,10 @@ A JavaScript integration is conformant when all are true:
 
 From repository root:
 
-- npm --prefix cache run test
-- npm --prefix cache run coverage
-- npm --prefix cache run typecheck
-- npm --prefix cache run test:browser:uat
+- npm --prefix sdks/javascript run test
+- npm --prefix sdks/javascript run coverage
+- npm --prefix sdks/javascript run typecheck
+- npm --prefix sdks/javascript run test:browser:uat
 
 ============================================================
 FINAL STATUS

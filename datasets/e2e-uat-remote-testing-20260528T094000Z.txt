@@ -1,0 +1,124 @@
+[2026-05-28T09:40:00Z] REMOTE TESTING E2E UAT START
+[2026-05-28T09:40:00Z] root=/Users/brian/dev/aco/aip/sdp
+[2026-05-28T09:40:00Z] gateway_dir=/Users/brian/dev/aco/aip/sdp/sdp-ws-gateway
+[2026-05-28T09:40:00Z] Step 1: Run SDP simulation script
+{
+  "suite": "E2E UAT (WTP + SDP + gRPC INGESTION) - Go PSP Demo Simulation",
+  "timestamp_utc": "2026-05-28T09:40:01.867422Z",
+  "total": 8,
+  "passed": 8,
+  "failed": 0,
+  "results": [
+    {
+      "id": "S1",
+      "title": "CONNECT",
+      "passed": true,
+      "detail": "connection established"
+    },
+    {
+      "id": "S2",
+      "title": "SUBSCRIBE",
+      "passed": true,
+      "detail": "subscription registered"
+    },
+    {
+      "id": "S3",
+      "title": "FULL_STATE",
+      "passed": true,
+      "detail": "ack=ACCEPTED/NONE"
+    },
+    {
+      "id": "S4",
+      "title": "DELTA_UPDATE",
+      "passed": true,
+      "detail": "ack=ACCEPTED/NONE"
+    },
+    {
+      "id": "S5",
+      "title": "DUPLICATE_EVENT",
+      "passed": true,
+      "detail": "duplicate accepted without re-delivery"
+    },
+    {
+      "id": "S6",
+      "title": "INVALID_EVENT",
+      "passed": true,
+      "detail": "ack=REJECTED/INVALID_SCHEMA"
+    },
+    {
+      "id": "S7",
+      "title": "BACKPRESSURE",
+      "passed": true,
+      "detail": "ack=REJECTED/INTERNAL_ERROR"
+    },
+    {
+      "id": "S8",
+      "title": "RECONNECT_RESUME",
+      "passed": true,
+      "detail": "connection resumed and subscription restored"
+    }
+  ]
+}
+[2026-05-28T09:40:01Z] Step 2: Run gateway focused test suites
+ok  	sdalpe/sdk-go/sdp-ws-gateway/transport/http	(cached)
+[2026-05-28T09:40:02Z] Step 3: Start gateway in ENV=testing
+[2026-05-28T09:40:02Z] gateway pid=28468
+[2026-05-28T09:40:02Z] Step 4: Mint Firebase ID token for testing user
+[2026-05-28T09:40:04Z] Step 5: Authenticated HTTP CONNECT in testing mode
+HTTP/1.1 200 OK
+Content-Type: application/json
+Traceparent: 00-8de3d919c833b62cb1a1a41a4ddd8855-7fc1db1b23d4e793-01
+X-Ratelimit-Limit: 120
+X-Ratelimit-Remaining: 119
+X-Ratelimit-Reset: 60
+X-Request-Id: zwKS6RFPu8EyWJuEq3pM9
+X-Trace-Id: bfpsUz6wFWmhJCwWSFKSEQ
+Date: Thu, 28 May 2026 09:40:04 GMT
+Content-Length: 56
+
+{"Status":"OK","ConnectionID":"hhSTpWwNmaGa4RzeCJiWxa"}
+[2026-05-28T09:40:04Z] Step 6: Authenticated WebSocket CONNECT/SUBSCRIBE/UNSUBSCRIBE in testing mode
+{
+  "ws_url": "ws://localhost:18102/v1/ws",
+  "connect_type": "CONNECT_ACK",
+  "connect_status": "OK",
+  "subscribe_type": "SUBSCRIBE_ACK",
+  "subscribe_status": "OK",
+  "unsubscribe_type": "UNSUBSCRIBE_ACK",
+  "unsubscribe_status": "OK",
+  "trace_id": "BuXTYQ41svZnCVT1rBs9Vt",
+  "result": "PASS"
+}
+[2026-05-28T09:40:04Z] Step 7: Run sdp-ws-client simulation report
+
+> simulation:report
+> node scripts/generate-uat-report.mjs
+
+{
+  "output_directory": "/Users/brian/dev/aco/aip/sdp/sdp-ws-client/simulation/reports",
+  "generated_reports": [
+    {
+      "mode": "module",
+      "timestamp_utc": "2026-05-28T09:40:04.868Z",
+      "total": 8,
+      "passed": 8,
+      "failed": 0
+    },
+    {
+      "mode": "global",
+      "timestamp_utc": "2026-05-28T09:40:04.870Z",
+      "total": 8,
+      "passed": 8,
+      "failed": 0
+    }
+  ]
+}
+[2026-05-28T09:40:04Z] Step 8: Run cache browser UAT
+
+> test:browser:uat
+> node scripts/browser-uat-check.mjs
+
+[browser-uat] PASS local-cache-uat: UAT PASSED (AC 15/15)
+[browser-uat] PASS simple-cache: SELF-TEST PASSED
+[browser-uat] PASS all browser UAT checks
+[2026-05-28T09:40:06Z] REMOTE TESTING E2E UAT PASS

@@ -1,5 +1,6 @@
 import { canonicalJSONStringify } from "./canonical-json";
 import { stripTraceFields } from "../trace";
+import { h57Hash, H57Length } from "@aco/b57-js/h57.js";
 
 export interface CacheKeyInput {
   namespace: string;
@@ -39,7 +40,17 @@ export function buildCacheKeyMaterial(input: CacheKeyInput): string {
  * - https://github.com/nhanpnt22/f57/tree/main/implementations/javascript
  * - https://github.com/nhanpnt22/f57/tree/main/implementations/ts
  */
-export function computeCacheKey(input: CacheKeyInput, h57Hash: H57HashFunction): string {
+export function computeCacheKey(input: CacheKeyInput, h57HashFn: H57HashFunction): string {
   const material = buildCacheKeyMaterial(input);
-  return h57Hash(textEncoder.encode(material));
+  return h57HashFn(textEncoder.encode(material));
+}
+
+/**
+ * H57 hash function: BLAKE3 → B57 encoding.
+ * Uses the F57 reference implementation (@aco/b57-js).
+ *
+ * Use this as the hashFn argument to computeCacheKey.
+ */
+export function h57HashFn(input: Uint8Array): string {
+  return h57Hash(input, H57Length.HASH_AUTO);
 }

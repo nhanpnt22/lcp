@@ -4,10 +4,12 @@ class NamespaceScope {
     required this.userScope,
   }) {
     if (cacheNamespace.trim().isEmpty) {
-      throw ArgumentError.value(cacheNamespace, 'cacheNamespace', 'must be a non-empty string');
+      throw ArgumentError.value(
+          cacheNamespace, 'cacheNamespace', 'must be a non-empty string');
     }
     if (userScope.trim().isEmpty) {
-      throw ArgumentError.value(userScope, 'userScope', 'must be a non-empty string');
+      throw ArgumentError.value(
+          userScope, 'userScope', 'must be a non-empty string');
     }
   }
 

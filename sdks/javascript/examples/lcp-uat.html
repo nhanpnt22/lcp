@@ -199,7 +199,7 @@
             let rpcCalls = 0;
             const request = {
               keyInput: createKeyInput("ac01.exactly_once", { user: "u-01" }),
-              h57Hash: api.demoHash,
+              h57Hash: api.h57HashFn,
               fetchFromApi: async () => {
                 rpcCalls += 1;
                 return { data: { user: "u-01", plan: "pro" }, ttlMs: 1200 };
@@ -219,8 +219,8 @@
             const inputA = createKeyInput("ac02.det", { b: 2, a: 1, trace_id: "trace-a" });
             const inputB = createKeyInput("ac02.det", { a: 1, b: 2, trace_id: "trace-b" });
 
-            const keyA = api.computeCacheKey(inputA, api.demoHash);
-            const keyB = api.computeCacheKey(inputB, api.demoHash);
+            const keyA = api.computeCacheKey(inputA, api.h57HashFn);
+            const keyB = api.computeCacheKey(inputB, api.h57HashFn);
             const canonicalA = api.canonicalJSONStringify({ b: 2, a: 1 });
             const canonicalB = api.canonicalJSONStringify({ a: 1, b: 2 });
 
@@ -241,7 +241,7 @@
             let apiCalls = 0;
             const request = {
               keyInput: createKeyInput("ac03.equivalence", { id: "eq-03" }),
-              h57Hash: api.demoHash,
+              h57Hash: api.h57HashFn,
               fetchFromApi: async () => {
                 apiCalls += 1;
                 return { data: expectedData, ttlMs: 1000 };
@@ -268,7 +268,7 @@
             let apiCalls = 0;
             const request = {
               keyInput: createKeyInput("ac04.ttl", { id: "ttl-missing" }),
-              h57Hash: api.demoHash,
+              h57Hash: api.h57HashFn,
               fetchFromApi: async () => {
                 apiCalls += 1;
                 return { data: { mode: "no-ttl" } };
@@ -316,7 +316,7 @@
             let apiCalls = 0;
             const baseRequest = {
               keyInput: createKeyInput("ac06.swr", { id: "stale-target" }),
-              h57Hash: api.demoHash,
+              h57Hash: api.h57HashFn,
               trace: {
                 request_id: "req-ac06",
                 trace_id: "trace-ac06",
@@ -364,7 +364,7 @@
             const parity = createParity();
 
             let now = 1100;
-            const keyMemory = api.computeCacheKey(createKeyInput("ac07.memory-hit", { id: "m" }), api.demoHash);
+            const keyMemory = api.computeCacheKey(createKeyInput("ac07.memory-hit", { id: "m" }), api.h57HashFn);
             const memoryHitStore = new api.MemoryCacheStore({ maxEntries: 8, now: () => now });
             const memoryEntry = {
               cache_key: keyMemory,
@@ -400,7 +400,7 @@
 
             const memoryHitOut = await memoryFirstEngine.execute({
               keyInput: createKeyInput("ac07.memory-hit", { id: "m" }),
-              h57Hash: api.demoHash,
+              h57Hash: api.h57HashFn,
               fetchFromApi: async () => {
                 apiCallsMemoryPath += 1;
                 return { data: { source: "api" }, ttlMs: 1000 };
@@ -411,7 +411,7 @@
             assert(idbGets === 0, `memory hit must not query indexeddb, got idbGets=${idbGets}`);
             assert(apiCallsMemoryPath === 0, `memory hit must not trigger API, got apiCalls=${apiCallsMemoryPath}`);
 
-            const keyIdb = api.computeCacheKey(createKeyInput("ac07.idb-hit", { id: "idb" }), api.demoHash);
+            const keyIdb = api.computeCacheKey(createKeyInput("ac07.idb-hit", { id: "idb" }), api.h57HashFn);
             let idbGetsForMiss = 0;
             let apiCallsForMiss = 0;
             const idbEntry = {
@@ -443,7 +443,7 @@
 
             const idbHitOut = await idbHydrateEngine.execute({
               keyInput: createKeyInput("ac07.idb-hit", { id: "idb" }),
-              h57Hash: api.demoHash,
+              h57Hash: api.h57HashFn,
               fetchFromApi: async () => {
                 apiCallsForMiss += 1;
                 return { data: { source: "api" }, ttlMs: 1000 };
@@ -471,7 +471,7 @@
               now: () => now
             });
 
-            const key = api.computeCacheKey(createKeyInput("ac08.serialize", { z: 2, a: 1 }), api.demoHash);
+            const key = api.computeCacheKey(createKeyInput("ac08.serialize", { z: 2, a: 1 }), api.h57HashFn);
             const entry = {
               cache_key: key,
               data: { z: 2, a: 1, nested: { y: 2, x: 1 } },
@@ -510,7 +510,7 @@
                 nested: { action_id: "a-A" },
                 list: [{ request_id: "r-A" }]
               }),
-              api.demoHash
+              api.h57HashFn
             );
 
             const keyB = api.computeCacheKey(
@@ -520,7 +520,7 @@
                 nested: { action_id: "a-B" },
                 list: [{ request_id: "r-B" }]
               }),
-              api.demoHash
+              api.h57HashFn
             );
 
             assert(keyA === keyB, "trace fields must not influence cache_key identity");
@@ -535,7 +535,7 @@
 
             const request = {
               keyInput: createKeyInput("ac09.trace-propagation", { id: "trace-prop" }),
-              h57Hash: api.demoHash,
+              h57Hash: api.h57HashFn,
               trace: {
                 request_id: "req-ac09",
                 trace_id: "trace-ac09",
@@ -629,7 +629,7 @@
             let apiCalls = 0;
             const request = {
               keyInput: createKeyInput("ac11.non_behavioral", { id: "ac11" }),
-              h57Hash: api.demoHash,
+              h57Hash: api.h57HashFn,
               fetchFromApi: async () => {
                 apiCalls += 1;
                 return { data: stableData, ttlMs: 1000 };
@@ -649,7 +649,7 @@
 
           "AC-12": async () => {
             const parity = createParity();
-            const key = api.computeCacheKey(createKeyInput("ac12.parity", { id: "ac12" }), api.demoHash);
+            const key = api.computeCacheKey(createKeyInput("ac12.parity", { id: "ac12" }), api.h57HashFn);
             const baseMeta = api.createCacheMetadata({
               source: "API",
               createdAt: 1000,
@@ -686,7 +686,7 @@
 
             const out = await engine.execute({
               keyInput: createKeyInput("ac12.parity", { id: "ac12" }),
-              h57Hash: api.demoHash,
+              h57Hash: api.h57HashFn,
               fetchFromApi: async () => {
                 apiCalls += 1;
                 return { data: { fresh: true }, ttlMs: 1000 };
@@ -718,7 +718,7 @@
             let apiCalls = 0;
             const request = {
               keyInput: createKeyInput("ac13.resume", { id: "ac13" }),
-              h57Hash: api.demoHash,
+              h57Hash: api.h57HashFn,
               fetchFromApi: async () => {
                 apiCalls += 1;
                 return {
@@ -753,7 +753,7 @@
             const callsBeforeHint = apiCalls;
             const hint = engine.buildResumeHint({
               traceId: "trace-ac13",
-              h57Hash: api.demoHash
+              h57Hash: api.h57HashFn
             });
             assert(apiCalls === callsBeforeHint, "buildResumeHint must not trigger additional RPCs");
             assert(hint.widget_state_map["w-13"] === 4, "resume hint must carry latest widget_state_map");
@@ -787,11 +787,11 @@
           "AC-15": async () => {
             const simpleLoaded = await canLoadExample("simple-cache.html");
             const liveLoaded = await canLoadExample("simple-cache-live.html");
-            const uatPathOk = globalThis.location.pathname.endsWith("lcp-uat.html");
+            const uatPathOk = /lcp-uat(\.versioned)?\.html$/.test(globalThis.location.pathname);
 
             assert(simpleLoaded, "simple-cache.html must be present and loadable");
             assert(liveLoaded, "simple-cache-live.html must be present and loadable");
-            assert(uatPathOk, "lcp-uat.html must be the active UAT artifact");
+            assert(uatPathOk, "lcp-uat(.versioned).html must be the active UAT artifact");
 
             return `simpleLoaded=${simpleLoaded}, liveLoaded=${liveLoaded}`;
           }

@@ -1,0 +1,453 @@
+============================================================
+Title:
+TEESI — TASK SPLIT (UNIVERSAL)
+(Role-Based Deterministic Task Decomposition • Language-Agnostic • Execution-Closed)
+============================================================
+
+Version:
+v1.0.0
+
+Status:
+FINAL • HARD-LOCKED • ZERO-GAP • EXECUTION-CLOSED
+UNIVERSAL • LANGUAGE-AGNOSTIC • PLATFORM-NEUTRAL
+DETERMINISTIC • DAG-ENFORCED • SEQUENTIAL-READY
+TEST-FIRST • DRIFT-INTEGRATED • CI-GATED
+CACHE-STRICT • VALIDATION-ENFORCED • STATUS-DERIVED
+DB-AUTHORITATIVE • SELF-HEALING • AUDIT-READY
+
+Type:
+Universal Task Decomposition & Execution Plan Specification
+
+Applies To:
+- ALL software projects
+- ALL programming languages
+- ALL architectures (monolith, microservices, distributed)
+- ALL environments (local, cloud, hybrid)
+
+============================================================
+0. DESIGN GOAL
+============================================================
+
+- Transform EVERY story into a COMPLETE, EXECUTION-CLOSED DAG
+- Guarantee deterministic, replay-safe execution
+- Enforce TEST-FIRST + CI + KNOWLEDGE + DRIFT + CACHE coverage
+- Eliminate missing responsibilities BEFORE execution
+
+CORE OBJECTIVE:
+
+→ NO GAP • NO SKIPPED STAGE • NO PRE-DAG EXECUTION
+
+============================================================
+1. UNIVERSAL SYSTEM ALIGNMENT
+============================================================
+
+MUST ALIGN WITH:
+
+- Deterministic execution framework (TEESI or equivalent)
+- Persistent state store (DB-agnostic)
+- Canonical data model (JSON or equivalent)
+- Deterministic validation engine (COREX-equivalent)
+
+INHERITED RULES:
+
+- status = function(execution_history ONLY)
+- EXACTLY-ONCE + SINGLE-FLIGHT required
+- strict sequential execution (one task at a time)
+- DAG legality required before execution
+- no manual state mutation
+
+============================================================
+2. MANDATORY STAGE COVERAGE (UNIVERSAL)
+============================================================
+
+Each STORY MUST include ALL stages below:
+
+0.0 TEST DESIGN  
+0.5 STORY REGISTRATION  
+1.0 PLANNING  
+1.2 TASK REGISTRATION  
+1.3 GRAPH BUILD  
+1.5 KNOWLEDGE RESOLUTION  
+1.6 KNOWLEDGE UPDATE  
+1.7 CONTEXT INDEX UPDATE (e.g., RAG or equivalent)  
+1.8 CI VALIDATION  
+2.0 BUILD  
+3.0 QC  
+4.0 QA  
+5.0 EXECUTION  
+5.5 DRIFT DETECTION  
+6.0 UAT  
+7.0 VALIDATION (COREX-equivalent)  
+7.5 CACHE VALIDATION  
+8.0 RELEASE  
+
+RULE:
+
+→ NO stage may be skipped  
+→ Stage 0.5 STORY REGISTRATION is required as story lifecycle event (not a generated task)  
+→ All remaining 17 stages require exactly one deterministic stage task each  
+→ Each STORY therefore materializes exactly 17 stage tasks  
+→ Missing stage = INVALID DAG  
+
+============================================================
+3. CANONICAL EXECUTION ORDER
+============================================================
+
+TEST
+→ STORY REGISTRATION
+→ PLAN
+→ TASK REGISTRATION
+→ GRAPH BUILD
+→ KNOWLEDGE RESOLUTION
+→ KNOWLEDGE UPDATE
+→ CONTEXT INDEX UPDATE
+→ CI VALIDATION
+→ BUILD
+→ QC
+→ QA
+→ EXECUTION
+→ DRIFT DETECTION
+→ UAT
+→ VALIDATION
+→ CACHE VALIDATION
+→ RELEASE
+
+RULE:
+
+→ deterministic and mandatory  
+→ reordering is forbidden  
+
+============================================================
+4. STAGE TASK CONTRACTS (UNIVERSAL)
+============================================================
+
+4.1 TEST DESIGN
+
+- define test-first contracts (unit, integration, acceptance)
+- include deterministic expected outputs
+
+------------------------------------------------------------
+
+4.2 STORY REGISTRATION
+
+- persist story in state store
+- assign deterministic identity
+
+RULE:
+→ no story → no task split
+
+------------------------------------------------------------
+
+4.3 PLANNING
+
+- decompose story into roles and stages
+- map acceptance criteria to tasks
+
+------------------------------------------------------------
+
+4.4 TASK REGISTRATION
+
+- persist ALL tasks BEFORE execution
+- include identity, stage, dependencies, I/O contracts
+
+RULE:
+→ partial registration = HARD FAIL
+
+------------------------------------------------------------
+
+4.5 GRAPH BUILD
+
+- construct DAG (nodes + edges)
+- enforce acyclic structure
+- validate identity consistency
+
+------------------------------------------------------------
+
+4.6 KNOWLEDGE RESOLUTION
+
+- resolve dependencies (libraries, APIs, configs)
+- validate compatibility and security
+
+RULE:
+→ BUILD cannot start without this
+
+------------------------------------------------------------
+
+4.7 KNOWLEDGE UPDATE
+
+- persist validated knowledge into state store
+- ensure versioned traceability
+
+------------------------------------------------------------
+
+4.8 CONTEXT INDEX UPDATE
+
+- update retrieval/index system (RAG or equivalent)
+- source ONLY from validated internal data
+
+------------------------------------------------------------
+
+4.9 CI VALIDATION
+
+- validate structure, complexity, policies
+- block execution on failure
+
+RULE:
+→ NO CI PASS → NO BUILD
+
+------------------------------------------------------------
+
+4.10 BUILD
+
+- implement deterministic logic
+- avoid randomness or hidden state
+
+------------------------------------------------------------
+
+4.11 QC / QA
+
+- verify correctness and contract integrity
+- ensure deterministic outputs
+
+------------------------------------------------------------
+
+4.12 EXECUTION
+
+- run sequentially
+- persist execution evidence
+- stop on failure
+
+------------------------------------------------------------
+
+4.13 DRIFT DETECTION
+
+- compare expected vs actual state
+- generate remediation tasks if needed
+
+RULE:
+→ NO DRIFT DETECTION → INVALID EXECUTION
+
+------------------------------------------------------------
+
+4.14 UAT
+
+- validate business acceptance deterministically
+
+------------------------------------------------------------
+
+4.15 VALIDATION (COREX-equivalent)
+
+- validate checksum, replay, dependencies
+- ensure deterministic correctness
+
+------------------------------------------------------------
+
+4.16 CACHE VALIDATION
+
+- verify identity consistency
+- invalidate stale cache deterministically
+
+------------------------------------------------------------
+
+4.17 RELEASE
+
+- allow release ONLY if all gates pass
+- include full execution evidence
+
+============================================================
+5. DAG CONSTRUCTION LAW
+============================================================
+
+MUST:
+
+- represent all required execution stages as tasks
+- keep stage 0.5 STORY REGISTRATION as a mandatory lifecycle event (not a generated task)
+- define dependencies explicitly
+- maintain acyclic structure
+
+FORBIDDEN:
+
+- pre-DAG execution
+- hidden dependencies
+- stage skipping
+
+============================================================
+6. STATE AUTHORITY LAW
+============================================================
+
+ALL system state MUST be stored in:
+
+- tasks
+- DAG structure
+- execution history
+
+RULE:
+
+→ NO hidden or external state  
+→ ALL transitions must be evidence-backed  
+
+============================================================
+7. STATUS MODEL (UNIVERSAL)
+============================================================
+
+Derived ONLY from execution evidence:
+
+- PENDING
+- READY
+- RUNNING
+- DONE (exactly ONE success)
+- FAILED (all failed)
+- BLOCKED (dependency failure)
+
+RULE:
+
+→ no manual updates  
+→ status = pure function(execution_history + dependencies)
+
+============================================================
+8. TASK GRANULARITY LAW
+============================================================
+
+MUST:
+
+- be atomic
+- be stage-aligned
+- have explicit input/output
+
+FORBIDDEN:
+
+- multi-stage tasks
+- ambiguous responsibilities
+
+============================================================
+9. DEPENDENCY LAW
+============================================================
+
+MUST:
+
+- declare all dependencies explicitly
+- enforce deterministic order
+
+FORBIDDEN:
+
+- implicit or runtime-only dependencies
+
+============================================================
+10. ACCEPTANCE CRITERIA LAW
+============================================================
+
+Each task MUST define:
+
+- deterministic expected result
+- validation conditions
+- replay expectation
+- structure constraints (if applicable)
+
+============================================================
+11. FAILURE MODEL
+============================================================
+
+ON FAILURE:
+
+- assign exactly ONE error_code
+- persist evidence
+- stop execution
+- block dependents
+
+FORBIDDEN:
+
+- silent continuation
+- hidden retries
+
+============================================================
+12. DRIFT SELF-HEALING LAW
+============================================================
+
+IF drift detected:
+
+- MUST generate remediation task(s)
+- MUST insert into DAG before continuation
+
+RULE:
+
+→ NO drift escape
+
+============================================================
+13. REPLAY MODEL
+============================================================
+
+execution_history MUST reproduce:
+
+- outputs
+- checksums
+- stage order
+- drift/remediation
+
+============================================================
+14. DATABASE INTEGRITY LAW
+============================================================
+
+ALL identity constraints MUST be enforced at DB level:
+
+- story uniqueness
+- task identity uniqueness
+- DAG node uniqueness
+- drift uniqueness
+- knowledge uniqueness
+- index uniqueness
+
+RULE:
+
+→ ONE KEY → ONE ENTITY  
+→ DUPLICATE → HARD FAIL  
+
+============================================================
+15. STAGE COMPLETENESS LAW
+============================================================
+
+VALID ONLY IF:
+
+- all stages present
+- DAG valid
+- CI passed before BUILD
+- knowledge resolved before BUILD
+- drift detection after EXECUTION
+- cache validation before RELEASE
+- replay-safe evidence exists
+
+============================================================
+16. FINAL EXECUTION RULES
+============================================================
+
+NO CI PASS → NO BUILD  
+NO KNOWLEDGE → INVALID DAG  
+NO DRIFT DETECTION → INVALID EXECUTION  
+NO CACHE VALIDATION → INVALID RELEASE  
+
+EVERY REQUIRED EXECUTION STEP (except lifecycle stage 0.5) = TASK IN DAG  
+
+STATUS = DERIVED ONLY  
+
+============================================================
+FINAL STATUS
+============================================================
+
+FINAL
+HARD-LOCKED
+ZERO-GAP
+UNIVERSAL
+LANGUAGE-AGNOSTIC
+PLATFORM-NEUTRAL
+EXECUTION-CLOSED
+DETERMINISTIC
+CI-GATED
+DRIFT-ENFORCED
+KNOWLEDGE-AWARE
+CACHE-STRICT
+REPLAY-SAFE
+SELF-HEALING
+AUDIT-READY
+PRODUCTION-SEALED
+
+TEESI — TASK SPLIT (UNIVERSAL) v1.0.0 COMPLETE
+============================================================

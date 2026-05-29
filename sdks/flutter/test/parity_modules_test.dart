@@ -23,7 +23,11 @@ void main() {
         'ok': true,
       },
     });
-    expect(stripped, equals({'payload': {'ok': true}}));
+    expect(
+        stripped,
+        equals({
+          'payload': {'ok': true}
+        }));
   });
 
   test('compression helpers round-trip with codec registry', () async {
@@ -72,7 +76,8 @@ void main() {
   });
 
   test('scheduleSwrRefresh updates memory with refreshed data', () async {
-    final memory = MemoryCacheStore<Map<String, Object>>(maxEntries: 5, now: () => 10);
+    final memory =
+        MemoryCacheStore<Map<String, Object>>(maxEntries: 5, now: () => 10);
     final stale = CacheEntry<Map<String, Object>>(
       cacheKey: 'k1',
       data: {'v': 'old'},

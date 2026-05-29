@@ -1,0 +1,8 @@
+
+Running 1 test using 1 worker
+
+[2m[WebServer] [22m127.0.0.1 - - [29/May/2026 17:10:50] "GET / HTTP/1.1" 200 -
+[2m[WebServer] [22m127.0.0.1 - - [29/May/2026 17:10:50] "GET /dist/index.js HTTP/1.1" 200 -
+  ✓  1 [chromium] › sdks/javascript/tests/browser/sdk.idb.contract.onebyone.spec.ts:69:3 › LCP SDK IndexedDB contract one-by-one › overwrite existing key (69ms)
+
+  1 passed (582ms)

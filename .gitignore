@@ -19,3 +19,7 @@
 
 # OS/editor
 .DS_Store
+
+# Local cloud credentials (never commit)
+sdks/go/config/local-dev/*.json
+sdks/go/config/testing/*.json

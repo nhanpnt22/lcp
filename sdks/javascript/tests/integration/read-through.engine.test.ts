@@ -3,9 +3,10 @@ import {
   CacheSingleFlight,
   MemoryCacheStore,
   ReadThroughCacheEngine,
+  h57HashFn,
   type ReadThroughRequest
 } from "../../index";
-import { h57Fixture, keyInputFixture, parityFixture } from "../helpers/fixtures";
+import { keyInputFixture, parityFixture } from "../helpers/fixtures";
 
 interface ApiData {
   id: number;
@@ -15,7 +16,7 @@ interface ApiData {
 function buildRequest(fetchFromApi: () => Promise<{ data: ApiData; ttlMs?: number }>): ReadThroughRequest<ApiData> {
   return {
     keyInput: keyInputFixture,
-    h57Hash: h57Fixture,
+    h57Hash: h57HashFn,
     fetchFromApi
   };
 }

@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LCP JS SDK IndexedDB Ops Test</title>
+  <style>
+    :root {
+      --ok: #0b7a2f;
+      --fail: #b91c1c;
+      --border: #d8d8dc;
+      --bg-soft: #f7f7f8;
+    }
+    body {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      margin: 24px;
+      line-height: 1.4;
+    }
+    .ok { color: var(--ok); }
+    .fail { color: var(--fail); }
+    fieldset {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+    }
+    label {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 13px;
+    }
+    input {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 7px;
+      font-family: inherit;
+    }
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    button {
+      border: 1px solid #242424;
+      border-radius: 6px;
+      background: #fff;
+      padding: 8px 10px;
+      font-family: inherit;
+      cursor: pointer;
+    }
+    button.primary {
+      background: #111;
+      color: #fff;
+    }
+    pre {
+      background: var(--bg-soft);
+      padding: 12px;
+      border-radius: 8px;
+      overflow: auto;
+      max-height: 320px;
+    }
+  </style>
+</head>
+<body>
+  <h1>LCP JS SDK IndexedDB Ops Test</h1>
+  <p id="status">Initializing...</p>
+
+  <fieldset>
+    <legend>Form Inputs</legend>
+    <div class="grid">
+      <label>DB Name
+        <input id="dbName" value="lcp-idb-html-form" />
+      </label>
+      <label>Cache Key
+        <input id="cacheKey" value="k1" />
+      </label>
+      <label>Value
+        <input id="cacheValue" value="value-1" />
+      </label>
+      <label>Created At (ms)
+        <input id="createdAt" type="number" value="1000" />
+      </label>
+      <label>TTL (ms)
+        <input id="ttlMs" type="number" value="5000" />
+      </label>
+      <label>Now (ms)
+        <input id="nowMs" type="number" value="1000" />
+      </label>
+    </div>
+    <div class="buttons">
+      <button id="btnInit" class="primary">Init Store</button>
+      <button id="btnSet">Set</button>
+      <button id="btnGet">Get</button>
+      <button id="btnDelete">Delete</button>
+      <button id="btnClear">Clear</button>
+      <button id="btnPrune">pruneExpired</button>
+      <button id="btnScenario" class="primary">Run Full Scenario</button>
+    </div>
+  </fieldset>
+
+  <h3>Operation Log</h3>
+  <pre id="log"></pre>
+
+  <h3>Last Result</h3>
+  <pre id="result"></pre>
+
+  <script type="module">
+    const statusEl = document.getElementById('status');
+    const resultEl = document.getElementById('result');
+    const logEl = document.getElementById('log');
+
+    const dbNameEl = document.getElementById('dbName');
+    const cacheKeyEl = document.getElementById('cacheKey');
+    const cacheValueEl = document.getElementById('cacheValue');
+    const createdAtEl = document.getElementById('createdAt');
+    const ttlMsEl = document.getElementById('ttlMs');
+    const nowMsEl = document.getElementById('nowMs');
+
+    const btnInit = document.getElementById('btnInit');
+    const btnSet = document.getElementById('btnSet');
+    const btnGet = document.getElementById('btnGet');
+    const btnDelete = document.getElementById('btnDelete');
+    const btnClear = document.getElementById('btnClear');
+    const btnPrune = document.getElementById('btnPrune');
+    const btnScenario = document.getElementById('btnScenario');
+
+    function setStatus(ok, text) {
+      statusEl.textContent = text;
+      statusEl.className = ok ? 'ok' : 'fail';
+      document.body.dataset.status = ok ? 'pass' : 'fail';
+    }
+
+    function appendLog(line) {
+      const ts = new Date().toISOString();
+      logEl.textContent += `[${ts}] ${line}\n`;
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    function writeResult(obj) {
+      window.__lcpResult = obj;
+      resultEl.textContent = JSON.stringify(obj, null, 2);
+    }
+
+    function parseIntInput(el, fallback) {
+      const parsed = Number.parseInt(el.value, 10);
+      return Number.isFinite(parsed) ? parsed : fallback;
+    }
+
+    try {
+      const sdk = await import('/sdks/javascript/dist/index.js');
+
+      let currentNowMs = parseIntInput(nowMsEl, 1000);
+      let store = null;
+
+      const mkEntry = (cacheKey, value, createdAt, ttlMs) => ({
+        cache_key: cacheKey,
+        data: { value },
+        metadata: sdk.createCacheMetadata({
+          source: 'API',
+          createdAt,
+          ttlMs,
+          schemaVersion: 'schema-v1',
+          dataVersion: 'dv-1',
+          specChecksum: 'spec-v1',
+          cacheNamespace: 'ns:v1',
+          compressed: false
+        })
+      });
+
+      async function deleteDb(dbName) {
+        await new Promise((resolve) => {
+          const req = indexedDB.deleteDatabase(dbName);
+          req.onsuccess = () => resolve();
+          req.onerror = () => resolve();
+          req.onblocked = () => resolve();
+        });
+      }
+
+      function ensureStore() {
+        if (!store) {
+          throw new Error('Store is not initialized. Click "Init Store" first.');
+        }
+        return store;
+      }
+
+      async function initStore() {
+        const dbName = dbNameEl.value.trim() || `lcp-idb-html-form-${Date.now()}`;
+        dbNameEl.value = dbName;
+        currentNowMs = parseIntInput(nowMsEl, 1000);
+        await deleteDb(dbName);
+        store = new sdk.IndexedDbCacheStore({ dbName, now: () => currentNowMs });
+        appendLog(`init store dbName=${dbName}`);
+        writeResult({ ok: true, step: 'init', dbName });
+        setStatus(true, 'Initialized');
+      }
+
+      async function onSet() {
+        const s = ensureStore();
+        const key = cacheKeyEl.value.trim();
+        const value = cacheValueEl.value;
+        const createdAt = parseIntInput(createdAtEl, 1000);
+        const ttlMs = parseIntInput(ttlMsEl, 5000);
+        await s.set(mkEntry(key, value, createdAt, ttlMs));
+        const out = { ok: true, step: 'set', key, value, createdAt, ttlMs };
+        appendLog(`set key=${key} value=${value}`);
+        writeResult(out);
+        setStatus(true, 'Set OK');
+      }
+
+      async function onGet() {
+        const s = ensureStore();
+        const key = cacheKeyEl.value.trim();
+        const got = await s.get(key);
+        const out = { ok: true, step: 'get', key, value: got?.data?.value ?? null };
+        appendLog(`get key=${key} value=${out.value}`);
+        writeResult(out);
+        setStatus(true, 'Get OK');
+      }
+
+      async function onDelete() {
+        const s = ensureStore();
+        const key = cacheKeyEl.value.trim();
+        await s.delete(key);
+        const got = await s.get(key);
+        const ok = got == null;
+        const out = { ok, step: 'delete', key, afterDelete: got ?? null };
+        appendLog(`delete key=${key} ok=${ok}`);
+        writeResult(out);
+        setStatus(ok, ok ? 'Delete OK' : 'Delete failed');
+      }
+
+      async function onClear() {
+        const s = ensureStore();
+        await s.clear();
+        const rows = await s.hydrateAllValid();
+        const ok = rows.length === 0;
+        const out = { ok, step: 'clear', remaining: rows.length };
+        appendLog(`clear remaining=${rows.length}`);
+        writeResult(out);
+        setStatus(ok, ok ? 'Clear OK' : 'Clear failed');
+      }
+
+      async function onPruneExpired() {
+        const s = ensureStore();
+        currentNowMs = parseIntInput(nowMsEl, currentNowMs);
+        const pruned = await s.pruneExpired();
+        const out = { ok: true, step: 'pruneExpired', nowMs: currentNowMs, pruned };
+        appendLog(`pruneExpired now=${currentNowMs} pruned=${pruned}`);
+        writeResult(out);
+        setStatus(true, 'pruneExpired OK');
+      }
+
+      async function onScenario() {
+        const steps = [];
+        await initStore();
+
+        cacheKeyEl.value = 'k1';
+        cacheValueEl.value = 'value-1';
+        createdAtEl.value = '1000';
+        ttlMsEl.value = '5000';
+        await onSet();
+        const got1 = await ensureStore().get('k1');
+        steps.push({ step: 'set+get', ok: got1?.data?.value === 'value-1', got: got1?.data?.value ?? null });
+
+        await onDelete();
+        const afterDelete = await ensureStore().get('k1');
+        steps.push({ step: 'delete', ok: afterDelete == null });
+
+        await ensureStore().set(mkEntry('k2', 'value-2', 1000, 5000));
+        await ensureStore().set(mkEntry('k3', 'value-3', 1000, 5000));
+        await onClear();
+        const afterClear = await ensureStore().hydrateAllValid();
+        steps.push({ step: 'clear', ok: afterClear.length === 0, remaining: afterClear.length });
+
+        await ensureStore().set(mkEntry('k4', 'expired', 1000, 100));
+        await ensureStore().set(mkEntry('k5', 'valid', 1000, 10000));
+        nowMsEl.value = '5000';
+        await onPruneExpired();
+        const afterExpired = await ensureStore().get('k4');
+        const afterValid = await ensureStore().get('k5');
+        const pruneOk = afterExpired == null && afterValid?.data?.value === 'valid';
+        steps.push({
+          step: 'pruneExpired',
+          ok: pruneOk,
+          expiredAfterPrune: afterExpired ?? null,
+          validAfterPrune: afterValid?.data?.value ?? null
+        });
+
+        const allOk = steps.every((s) => s.ok === true);
+        const report = { allOk, steps };
+        appendLog(`scenario complete allOk=${allOk}`);
+        writeResult(report);
+        setStatus(allOk, allOk ? 'PASS: all operations succeeded.' : 'FAIL: one or more operations failed.');
+      }
+
+      btnInit.addEventListener('click', () => runSafe(initStore));
+      btnSet.addEventListener('click', () => runSafe(onSet));
+      btnGet.addEventListener('click', () => runSafe(onGet));
+      btnDelete.addEventListener('click', () => runSafe(onDelete));
+      btnClear.addEventListener('click', () => runSafe(onClear));
+      btnPrune.addEventListener('click', () => runSafe(onPruneExpired));
+      btnScenario.addEventListener('click', () => runSafe(onScenario));
+
+      async function runSafe(fn) {
+        try {
+          await fn();
+        } catch (error) {
+          const message = error instanceof Error ? error.stack || error.message : String(error);
+          appendLog(`error: ${message}`);
+          writeResult({ allOk: false, error: message });
+          setStatus(false, 'FAIL: action crashed.');
+        }
+      }
+
+      setStatus(true, 'Ready. Use buttons to test operations.');
+      appendLog('page ready');
+    } catch (error) {
+      const message = error instanceof Error ? error.stack || error.message : String(error);
+      const report = { allOk: false, error: message };
+      writeResult(report);
+      setStatus(false, 'FAIL: test crashed.');
+    }
+  </script>
+</body>
+</html>

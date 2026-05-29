@@ -1,0 +1,60 @@
+{
+  "artifact_dir": "/Users/brian/dev/aco/aip/sdp/lcp/.artifacts/go-storage-matrix-1780045430254",
+  "suite": "go-sdk-multiple-storages",
+  "total": 5,
+  "passed": 5,
+  "failed": 0,
+  "all_pass": true,
+  "results": [
+    {
+      "case": "local-in-memory",
+      "storage": "in-memory",
+      "runtime_mode": "local",
+      "pass": true,
+      "exit_code": 0,
+      "signal": null,
+      "duration_ms": 3542,
+      "log_file": "/Users/brian/dev/aco/aip/sdp/lcp/.artifacts/go-storage-matrix-1780045430254/local-in-memory.log"
+    },
+    {
+      "case": "local-sqlite",
+      "storage": "sqlite",
+      "runtime_mode": "local",
+      "pass": true,
+      "exit_code": 0,
+      "signal": null,
+      "duration_ms": 1138,
+      "log_file": "/Users/brian/dev/aco/aip/sdp/lcp/.artifacts/go-storage-matrix-1780045430254/local-sqlite.log"
+    },
+    {
+      "case": "local-cloud-storage",
+      "storage": "cloud-storage",
+      "runtime_mode": "local",
+      "pass": true,
+      "exit_code": 0,
+      "signal": null,
+      "duration_ms": 1143,
+      "log_file": "/Users/brian/dev/aco/aip/sdp/lcp/.artifacts/go-storage-matrix-1780045430254/local-cloud-storage.log"
+    },
+    {
+      "case": "cloud-run-sqlite",
+      "storage": "sqlite",
+      "runtime_mode": "cloud-run",
+      "pass": true,
+      "exit_code": 0,
+      "signal": null,
+      "duration_ms": 1167,
+      "log_file": "/Users/brian/dev/aco/aip/sdp/lcp/.artifacts/go-storage-matrix-1780045430254/cloud-run-sqlite.log"
+    },
+    {
+      "case": "cloud-run-cloud-storage",
+      "storage": "cloud-storage",
+      "runtime_mode": "cloud-run",
+      "pass": true,
+      "exit_code": 0,
+      "signal": null,
+      "duration_ms": 1131,
+      "log_file": "/Users/brian/dev/aco/aip/sdp/lcp/.artifacts/go-storage-matrix-1780045430254/cloud-run-cloud-storage.log"
+    }
+  ]
+}

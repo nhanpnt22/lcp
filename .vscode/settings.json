@@ -1,0 +1,8 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^npm --prefix /Users/brian/dev/aco/aip/sdp/lcp/sdks/javascript run test:browser -- tests/browser/cross\\.sdk\\.parity\\.spec\\.ts$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}

@@ -1,0 +1,66 @@
+[2026-05-28T11:08:41Z] REMOTE TESTING E2E UAT START
+[2026-05-28T11:08:41Z] root=/Users/brian/dev/aco/aip/sdp
+[2026-05-28T11:08:41Z] gateway_dir=/Users/brian/dev/aco/aip/sdp/sdp-ws-gateway
+[2026-05-28T11:08:41Z] Step 1: Run SDP simulation script
+{
+  "suite": "E2E UAT (WTP + SDP + gRPC INGESTION) - Go PSP Demo Simulation",
+  "timestamp_utc": "2026-05-28T11:08:41.357822Z",
+  "total": 8,
+  "passed": 8,
+  "failed": 0,
+  "results": [
+    {
+      "id": "S1",
+      "title": "CONNECT",
+      "passed": true,
+      "detail": "connection established"
+    },
+    {
+      "id": "S2",
+      "title": "SUBSCRIBE",
+      "passed": true,
+      "detail": "subscription registered"
+    },
+    {
+      "id": "S3",
+      "title": "FULL_STATE",
+      "passed": true,
+      "detail": "ack=ACCEPTED/NONE"
+    },
+    {
+      "id": "S4",
+      "title": "DELTA_UPDATE",
+      "passed": true,
+      "detail": "ack=ACCEPTED/NONE"
+    },
+    {
+      "id": "S5",
+      "title": "DUPLICATE_EVENT",
+      "passed": true,
+      "detail": "duplicate accepted without re-delivery"
+    },
+    {
+      "id": "S6",
+      "title": "INVALID_EVENT",
+      "passed": true,
+      "detail": "ack=REJECTED/INVALID_SCHEMA"
+    },
+    {
+      "id": "S7",
+      "title": "BACKPRESSURE",
+      "passed": true,
+      "detail": "ack=REJECTED/INTERNAL_ERROR"
+    },
+    {
+      "id": "S8",
+      "title": "RECONNECT_RESUME",
+      "passed": true,
+      "detail": "connection resumed and subscription restored"
+    }
+  ]
+}
+[2026-05-28T11:08:41Z] Step 2: Run gateway focused test suites
+ok  	sdalpe/sdk-go/sdp-ws-gateway/transport/http	0.609s
+[2026-05-28T11:08:44Z] Step 3: Start gateway in ENV=testing
+[2026-05-28T11:08:44Z] gateway pid=81852
+[2026-05-28T11:08:44Z] Step 4: Mint Firebase ID token for testing user

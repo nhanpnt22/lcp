@@ -1,0 +1,5 @@
+set/get value after set	PASS
+overwrite existing key	PASS
+delete removes entry	PASS
+clear removes all entries	PASS
+pruneExpired removes expired only	PASS

@@ -1,0 +1,33 @@
+{
+  "suite": "javascript-max-cases-persistence-modes",
+  "all_pass": true,
+  "mode_results": [
+    {
+      "mode": "auto",
+      "dataset_count": 100,
+      "api_calls": 100,
+      "persisted_count": 50,
+      "expected_persisted_count": 50,
+      "pass": true,
+      "db_name": "lcp-js-max-auto-1780044218560-7170"
+    },
+    {
+      "mode": "memory-only",
+      "dataset_count": 100,
+      "api_calls": 100,
+      "persisted_count": 0,
+      "expected_persisted_count": 0,
+      "pass": true,
+      "db_name": "lcp-js-max-memory-only-1780044218586-7559"
+    },
+    {
+      "mode": "dual",
+      "dataset_count": 100,
+      "api_calls": 100,
+      "persisted_count": 100,
+      "expected_persisted_count": 100,
+      "pass": true,
+      "db_name": "lcp-js-max-dual-1780044218593-5775"
+    }
+  ]
+}

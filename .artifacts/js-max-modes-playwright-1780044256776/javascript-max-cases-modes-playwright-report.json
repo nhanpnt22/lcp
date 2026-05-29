@@ -1,0 +1,34 @@
+{
+  "runner": "playwright-chromium",
+  "suite": "javascript-sdk-max-cases-persistence-modes",
+  "all_pass": true,
+  "mode_results": [
+    {
+      "mode": "auto",
+      "dataset_count": 100,
+      "api_calls": 100,
+      "persisted_count": 50,
+      "expected_persisted_count": 50,
+      "pass": true,
+      "db_name": "lcp-js-max-auto-1780044257200-2416"
+    },
+    {
+      "mode": "memory-only",
+      "dataset_count": 100,
+      "api_calls": 100,
+      "persisted_count": 0,
+      "expected_persisted_count": 0,
+      "pass": true,
+      "db_name": "lcp-js-max-memory-only-1780044257245-5365"
+    },
+    {
+      "mode": "dual",
+      "dataset_count": 100,
+      "api_calls": 100,
+      "persisted_count": 100,
+      "expected_persisted_count": 100,
+      "pass": true,
+      "db_name": "lcp-js-max-dual-1780044257253-1307"
+    }
+  ]
+}

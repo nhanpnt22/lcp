@@ -1,14 +1,21 @@
 # LCP SDK Parity Matrix
 
-This document tracks feature and module parity between:
+This document tracks feature and module parity across SDKs:
 
 - JavaScript SDK: `sdks/javascript`
 - Flutter SDK: `sdks/flutter`
+- Go SDK: `sdks/go`
+- NodeJS SDK: `sdks/nodejs`
 
 Status key:
 
-- `MATCHED`: Equivalent capability exists in both SDKs.
+- `MATCHED`: Equivalent capability exists in compared SDKs.
 - `PLATFORM-SPECIFIC`: Capability differs by runtime/platform design.
+
+Scope note:
+
+- The module and release tables below are the authoritative JavaScript <-> Flutter parity view.
+- Go and NodeJS parity are tracked in baseline sections and profile references.
 
 ## Module Parity
 
@@ -53,3 +60,17 @@ Any new module or protocol behavior added in one SDK should be tracked here and 
 
 1. implemented in the other SDK, or
 2. marked as `PLATFORM-SPECIFIC` with rationale.
+
+## Go SDK Baseline
+
+The Go SDK has been added as a standalone package under `sdks/go`.
+
+- Status: `MATCHED` for core protocol surface (key, entry, execution, failure, namespace, resume, singleflight, storage abstraction, swr, trace, ttl, validation).
+- Platform-specific note: persistent implementations include in-memory, sqlite, and cloud-storage modes, with Cloud Run guidance documented in `profiles/go/LCP — Go SDK Profile(Cloud Run).txt`.
+
+## NodeJS SDK Baseline
+
+The NodeJS SDK has been added under `sdks/nodejs`.
+
+- Status: `MATCHED` for core protocol runtime surface through NodeJS integration of key, entry, execution, failure, namespace, resume, singleflight, swr, trace, ttl, and validation modules.
+- Platform-specific note: NodeJS persistence backends include in-memory, sqlite, and cloud-storage (`gs://`) with Firebase App Hosting guidance in `profiles/nodejs/LCP — NodeJS SDK Profile(Firebase App Hosting).txt`.

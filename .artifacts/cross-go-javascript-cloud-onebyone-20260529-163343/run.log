@@ -1,0 +1,120 @@
+[1/5] Preparing artifact dir: /Users/brian/dev/aco/aip/sdp/lcp/.artifacts/cross-go-javascript-cloud-onebyone-20260529-163343
+Using cloud URI: gs://aiptesting.firebasestorage.app/lcp
+[2/5] Skipping JavaScript build (LCP_CROSS_GO_JS_SKIP_BUILD=1)
+[3/5] Running Go one-by-one cases (memory + cloud-storage in each case)
+- Go case: TestPersistentStoreCloudContractSetGetValue
+=== RUN   TestPersistentStoreCloudContractSetGetValue
+=== RUN   TestPersistentStoreCloudContractSetGetValue/set_get_value/memory
+=== RUN   TestPersistentStoreCloudContractSetGetValue/set_get_value/cloud-storage
+--- PASS: TestPersistentStoreCloudContractSetGetValue (2.85s)
+    --- PASS: TestPersistentStoreCloudContractSetGetValue/set_get_value/memory (0.00s)
+    --- PASS: TestPersistentStoreCloudContractSetGetValue/set_get_value/cloud-storage (2.85s)
+PASS
+ok  	github.com/nhanpnt22/lcp/sdks/go	3.238s
+- Go case: TestPersistentStoreCloudContractOverwrite
+=== RUN   TestPersistentStoreCloudContractOverwrite
+=== RUN   TestPersistentStoreCloudContractOverwrite/overwrite/memory
+=== RUN   TestPersistentStoreCloudContractOverwrite/overwrite/cloud-storage
+--- PASS: TestPersistentStoreCloudContractOverwrite (3.61s)
+    --- PASS: TestPersistentStoreCloudContractOverwrite/overwrite/memory (0.00s)
+    --- PASS: TestPersistentStoreCloudContractOverwrite/overwrite/cloud-storage (3.61s)
+PASS
+ok  	github.com/nhanpnt22/lcp/sdks/go	3.915s
+- Go case: TestPersistentStoreCloudContractDelete
+=== RUN   TestPersistentStoreCloudContractDelete
+=== RUN   TestPersistentStoreCloudContractDelete/delete/memory
+=== RUN   TestPersistentStoreCloudContractDelete/delete/cloud-storage
+    persistent_store_cloud_contract_test.go:164: get failed: cloud storage read object: storage: object doesn't exist: rpc error: code = NotFound desc = No such object: aiptesting.firebasestorage.app/lcp/go-js-cloud/TestPersistentStoreCloudContractDelete-delete-cloud-storage-1780047234959824000/k1
+--- FAIL: TestPersistentStoreCloudContractDelete (2.82s)
+    --- PASS: TestPersistentStoreCloudContractDelete/delete/memory (0.00s)
+    --- FAIL: TestPersistentStoreCloudContractDelete/delete/cloud-storage (2.82s)
+FAIL
+exit status 1
+FAIL	github.com/nhanpnt22/lcp/sdks/go	3.159s
+- Go case: TestPersistentStoreCloudContractClear
+=== RUN   TestPersistentStoreCloudContractClear
+=== RUN   TestPersistentStoreCloudContractClear/clear/memory
+=== RUN   TestPersistentStoreCloudContractClear/clear/cloud-storage
+    persistent_store_cloud_contract_test.go:177: get failed: cloud storage read object: storage: object doesn't exist: rpc error: code = NotFound desc = No such object: aiptesting.firebasestorage.app/lcp/go-js-cloud/TestPersistentStoreCloudContractClear-clear-cloud-storage-1780047238945037000/k1
+--- FAIL: TestPersistentStoreCloudContractClear (4.85s)
+    --- PASS: TestPersistentStoreCloudContractClear/clear/memory (0.00s)
+    --- FAIL: TestPersistentStoreCloudContractClear/clear/cloud-storage (4.85s)
+FAIL
+exit status 1
+FAIL	github.com/nhanpnt22/lcp/sdks/go	5.185s
+- Go case: TestPersistentStoreCloudContractPruneExpired
+=== RUN   TestPersistentStoreCloudContractPruneExpired
+=== RUN   TestPersistentStoreCloudContractPruneExpired/prune_expired/memory
+=== RUN   TestPersistentStoreCloudContractPruneExpired/prune_expired/cloud-storage
+    persistent_store_cloud_contract_test.go:199: get failed: cloud storage read object: storage: object doesn't exist: rpc error: code = NotFound desc = No such object: aiptesting.firebasestorage.app/lcp/go-js-cloud/TestPersistentStoreCloudContractPruneExpired-prune_expired-cloud-storage-1780047244954433000/expired
+--- FAIL: TestPersistentStoreCloudContractPruneExpired (5.78s)
+    --- PASS: TestPersistentStoreCloudContractPruneExpired/prune_expired/memory (0.00s)
+    --- FAIL: TestPersistentStoreCloudContractPruneExpired/prune_expired/cloud-storage (5.78s)
+FAIL
+exit status 1
+FAIL	github.com/nhanpnt22/lcp/sdks/go	6.114s
+- Go case: TestPersistentStoreCloudContractHydrateAllValidAndLimit
+=== RUN   TestPersistentStoreCloudContractHydrateAllValidAndLimit
+=== RUN   TestPersistentStoreCloudContractHydrateAllValidAndLimit/hydrate_valid_limit/memory
+=== RUN   TestPersistentStoreCloudContractHydrateAllValidAndLimit/hydrate_valid_limit/cloud-storage
+--- PASS: TestPersistentStoreCloudContractHydrateAllValidAndLimit (9.14s)
+    --- PASS: TestPersistentStoreCloudContractHydrateAllValidAndLimit/hydrate_valid_limit/memory (0.00s)
+    --- PASS: TestPersistentStoreCloudContractHydrateAllValidAndLimit/hydrate_valid_limit/cloud-storage (9.14s)
+PASS
+ok  	github.com/nhanpnt22/lcp/sdks/go	9.478s
+[4/5] Running JavaScript one-by-one IndexedDB cases
+- JS case: set/get value after set
+
+Running 1 test using 1 worker
+
+[2m[WebServer] [22m127.0.0.1 - - [29/May/2026 16:34:22] "GET / HTTP/1.1" 200 -
+[2m[WebServer] [22m127.0.0.1 - - [29/May/2026 16:34:22] "GET /dist/index.js HTTP/1.1" 200 -
+  ✓  1 [chromium] › tests/browser/sdk.idb.contract.onebyone.spec.ts:11:3 › LCP SDK IndexedDB contract one-by-one › set/get value after set (235ms)
+
+  1 passed (1.1s)
+- JS case: overwrite existing key
+
+Running 1 test using 1 worker
+
+[2m[WebServer] [22m127.0.0.1 - - [29/May/2026 16:34:23] "GET / HTTP/1.1" 200 -
+[2m[WebServer] [22m127.0.0.1 - - [29/May/2026 16:34:23] "GET /dist/index.js HTTP/1.1" 200 -
+  ✓  1 [chromium] › tests/browser/sdk.idb.contract.onebyone.spec.ts:58:3 › LCP SDK IndexedDB contract one-by-one › overwrite existing key (67ms)
+
+  1 passed (575ms)
+- JS case: delete removes entry
+
+Running 1 test using 1 worker
+
+[2m[WebServer] [22m127.0.0.1 - - [29/May/2026 16:34:24] "GET / HTTP/1.1" 200 -
+[2m[WebServer] [22m127.0.0.1 - - [29/May/2026 16:34:25] "GET /dist/index.js HTTP/1.1" 200 -
+  ✓  1 [chromium] › tests/browser/sdk.idb.contract.onebyone.spec.ts:102:3 › LCP SDK IndexedDB contract one-by-one › delete removes entry (64ms)
+
+  1 passed (574ms)
+- JS case: clear removes all entries
+
+Running 1 test using 1 worker
+
+[2m[WebServer] [22m127.0.0.1 - - [29/May/2026 16:34:26] "GET / HTTP/1.1" 200 -
+[2m[WebServer] [22m127.0.0.1 - - [29/May/2026 16:34:26] "GET /dist/index.js HTTP/1.1" 200 -
+  ✓  1 [chromium] › tests/browser/sdk.idb.contract.onebyone.spec.ts:142:3 › LCP SDK IndexedDB contract one-by-one › clear removes all entries (64ms)
+
+  1 passed (575ms)
+- JS case: pruneExpired removes expired only
+
+Running 1 test using 1 worker
+
+[2m[WebServer] [22m127.0.0.1 - - [29/May/2026 16:34:27] "GET / HTTP/1.1" 200 -
+[2m[WebServer] [22m127.0.0.1 - - [29/May/2026 16:34:27] "GET /dist/index.js HTTP/1.1" 200 -
+  ✓  1 [chromium] › tests/browser/sdk.idb.contract.onebyone.spec.ts:190:3 › LCP SDK IndexedDB contract one-by-one › pruneExpired removes expired only (71ms)
+
+  1 passed (578ms)
+- JS case: hydrateAllValid excludes expired and respects limit
+
+Running 1 test using 1 worker
+
+[2m[WebServer] [22m127.0.0.1 - - [29/May/2026 16:34:28] "GET / HTTP/1.1" 200 -
+[2m[WebServer] [22m127.0.0.1 - - [29/May/2026 16:34:28] "GET /dist/index.js HTTP/1.1" 200 -
+  ✓  1 [chromium] › tests/browser/sdk.idb.contract.onebyone.spec.ts:248:3 › LCP SDK IndexedDB contract one-by-one › hydrateAllValid excludes expired and respects limit (71ms)
+
+  1 passed (577ms)
+[5/5] Comparing per-case outcomes and writing report

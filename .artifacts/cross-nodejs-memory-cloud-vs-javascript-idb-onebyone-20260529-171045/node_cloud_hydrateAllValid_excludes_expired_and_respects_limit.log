@@ -1,0 +1,7 @@
+
+> @sdp/lcp-nodejs-sdk@1.0.0 test
+> vitest run tests/persistent.store.cloud.contract.test.ts -t cloud-storage hydrateAllValid excludes expired and respects limit
+
+
+ RUN  v3.2.4 /Users/brian/dev/aco/aip/sdp/lcp/sdks/nodejs
+

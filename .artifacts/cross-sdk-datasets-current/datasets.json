@@ -1,0 +1,114 @@
+[
+  {
+    "namespace": "uat:0",
+    "operation_id": "e2e-uat-remote-testing-20260528T093313Z.txt",
+    "payload": {
+      "dataset_file": "e2e-uat-remote-testing-20260528T093313Z.txt",
+      "content_sha256": "e25067db075da0d079b215496151995efb27405646323922b457101bca816d8b",
+      "content_len": 1602,
+      "preview": "[2026-05-28T09:33:13Z] REMOTE TESTING E2E UAT START\n[2026-05-28T09:33:13Z] root=/Users/brian/dev/aco/aip/sdp\n[2026-05-28T09:33:13Z] gateway_dir=/Users/brian/dev/aco/aip/sdp/sdp-ws-gateway\n[2026-05-28T09:33:13Z] Step 1: Run SDP simulation sc"
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "user:0",
+    "value": "ds-000-e25067db075d"
+  },
+  {
+    "namespace": "uat:1",
+    "operation_id": "e2e-uat-remote-testing-20260528T093323Z.txt",
+    "payload": {
+      "dataset_file": "e2e-uat-remote-testing-20260528T093323Z.txt",
+      "content_sha256": "faaafc31394fcdd41f7ca430928c095a23052bfba64db6ff418c66b0f8c61ab7",
+      "content_len": 1790,
+      "preview": "[2026-05-28T09:33:23Z] REMOTE TESTING E2E UAT START\n[2026-05-28T09:33:23Z] root=/Users/brian/dev/aco/aip/sdp\n[2026-05-28T09:33:23Z] gateway_dir=/Users/brian/dev/aco/aip/sdp/sdp-ws-gateway\n[2026-05-28T09:33:23Z] Step 1: Run SDP simulation sc"
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "user:1",
+    "value": "ds-001-faaafc31394f"
+  },
+  {
+    "namespace": "uat:2",
+    "operation_id": "e2e-uat-remote-testing-20260528T093345Z.txt",
+    "payload": {
+      "dataset_file": "e2e-uat-remote-testing-20260528T093345Z.txt",
+      "content_sha256": "c453c84e290892ac31d7482c87b1cd36371af4a087951dca745eead63fe95847",
+      "content_len": 3456,
+      "preview": "[2026-05-28T09:33:45Z] REMOTE TESTING E2E UAT START\n[2026-05-28T09:33:45Z] root=/Users/brian/dev/aco/aip/sdp\n[2026-05-28T09:33:45Z] gateway_dir=/Users/brian/dev/aco/aip/sdp/sdp-ws-gateway\n[2026-05-28T09:33:45Z] Step 1: Run SDP simulation sc"
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "user:2",
+    "value": "ds-002-c453c84e2908"
+  },
+  {
+    "namespace": "uat:3",
+    "operation_id": "e2e-uat-remote-testing-20260528T093449Z.txt",
+    "payload": {
+      "dataset_file": "e2e-uat-remote-testing-20260528T093449Z.txt",
+      "content_sha256": "3fd1c0a951cfcddc7f1880adf7b48894bef990ac876ca92232d91c8ab30c025d",
+      "content_len": 3458,
+      "preview": "[2026-05-28T09:34:49Z] REMOTE TESTING E2E UAT START\n[2026-05-28T09:34:49Z] root=/Users/brian/dev/aco/aip/sdp\n[2026-05-28T09:34:49Z] gateway_dir=/Users/brian/dev/aco/aip/sdp/sdp-ws-gateway\n[2026-05-28T09:34:49Z] Step 1: Run SDP simulation sc"
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "user:3",
+    "value": "ds-003-3fd1c0a951cf"
+  },
+  {
+    "namespace": "uat:4",
+    "operation_id": "e2e-uat-remote-testing-20260528T094000Z.txt",
+    "payload": {
+      "dataset_file": "e2e-uat-remote-testing-20260528T094000Z.txt",
+      "content_sha256": "588560ba396313818c32151980b450dce9e5c9b852f6d8cde39e52f647f001d0",
+      "content_len": 3458,
+      "preview": "[2026-05-28T09:40:00Z] REMOTE TESTING E2E UAT START\n[2026-05-28T09:40:00Z] root=/Users/brian/dev/aco/aip/sdp\n[2026-05-28T09:40:00Z] gateway_dir=/Users/brian/dev/aco/aip/sdp/sdp-ws-gateway\n[2026-05-28T09:40:00Z] Step 1: Run SDP simulation sc"
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "user:4",
+    "value": "ds-004-588560ba3963"
+  },
+  {
+    "namespace": "uat:5",
+    "operation_id": "e2e-uat-remote-testing-20260528T110841Z.txt",
+    "payload": {
+      "dataset_file": "e2e-uat-remote-testing-20260528T110841Z.txt",
+      "content_sha256": "ce4d142f5df608357d6d32ac663d2ca87aa32d538c66d451259eb6ba04d8e821",
+      "content_len": 1765,
+      "preview": "[2026-05-28T11:08:41Z] REMOTE TESTING E2E UAT START\n[2026-05-28T11:08:41Z] root=/Users/brian/dev/aco/aip/sdp\n[2026-05-28T11:08:41Z] gateway_dir=/Users/brian/dev/aco/aip/sdp/sdp-ws-gateway\n[2026-05-28T11:08:41Z] Step 1: Run SDP simulation sc"
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "user:0",
+    "value": "ds-005-ce4d142f5df6"
+  },
+  {
+    "namespace": "uat:6",
+    "operation_id": "e2e-uat-remote-testing-20260528T122604Z.txt",
+    "payload": {
+      "dataset_file": "e2e-uat-remote-testing-20260528T122604Z.txt",
+      "content_sha256": "e75c1c0b5e5b650de9e58e6a5218cb5dc022f2ddfe0d586cd23e59d157e9b7fc",
+      "content_len": 7601,
+      "preview": "[2026-05-28T12:26:04Z] REMOTE TESTING E2E UAT START\n[2026-05-28T12:26:04Z] root=/Users/brian/dev/aco/aip/sdp\n[2026-05-28T12:26:04Z] gateway_dir=/Users/brian/dev/aco/aip/sdp/sdp-ws-gateway\n[2026-05-28T12:26:04Z] Step 1: Run SDP simulation sc"
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "user:1",
+    "value": "ds-006-e75c1c0b5e5b"
+  },
+  {
+    "namespace": "uat:0",
+    "operation_id": "e2e-uat-remote-testing-20260528T170350Z.txt",
+    "payload": {
+      "dataset_file": "e2e-uat-remote-testing-20260528T170350Z.txt",
+      "content_sha256": "1ce3e59e59f4e44ccca7f0fc6186e0e203792655eb91bd19dd85f404489c900a",
+      "content_len": 7106,
+      "preview": "[2026-05-28T17:03:50Z] REMOTE TESTING E2E UAT START\n[2026-05-28T17:03:50Z] root=/Users/brian/dev/aco/aip/sdp\n[2026-05-28T17:03:50Z] gateway_dir=/Users/brian/dev/aco/aip/sdp/sdp-ws-gateway\n[2026-05-28T17:03:50Z] Step 0: Sync local-cache.min."
+    },
+    "schema_version": "schema-v1",
+    "spec_checksum": "spec-v1",
+    "user_scope": "user:2",
+    "value": "ds-007-1ce3e59e59f4"
+  }
+]

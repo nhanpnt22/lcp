@@ -1,0 +1,61 @@
+{
+  "status": "MISMATCH",
+  "mismatch_count": 3,
+  "fail_count": 3,
+  "baseline": "javascript",
+  "go_backends": [
+    "memory",
+    "cloud-storage"
+  ],
+  "js_backend": "indexeddb",
+  "cases": [
+    {
+      "index": 1,
+      "go_case": "TestPersistentStoreCloudContractSetGetValue",
+      "js_case": "set/get value after set",
+      "go_status": "PASS",
+      "js_status": "PASS",
+      "mismatch": "NO"
+    },
+    {
+      "index": 2,
+      "go_case": "TestPersistentStoreCloudContractOverwrite",
+      "js_case": "overwrite existing key",
+      "go_status": "PASS",
+      "js_status": "PASS",
+      "mismatch": "NO"
+    },
+    {
+      "index": 3,
+      "go_case": "TestPersistentStoreCloudContractDelete",
+      "js_case": "delete removes entry",
+      "go_status": "FAIL",
+      "js_status": "PASS",
+      "mismatch": "YES"
+    },
+    {
+      "index": 4,
+      "go_case": "TestPersistentStoreCloudContractClear",
+      "js_case": "clear removes all entries",
+      "go_status": "FAIL",
+      "js_status": "PASS",
+      "mismatch": "YES"
+    },
+    {
+      "index": 5,
+      "go_case": "TestPersistentStoreCloudContractPruneExpired",
+      "js_case": "pruneExpired removes expired only",
+      "go_status": "FAIL",
+      "js_status": "PASS",
+      "mismatch": "YES"
+    },
+    {
+      "index": 6,
+      "go_case": "TestPersistentStoreCloudContractHydrateAllValidAndLimit",
+      "js_case": "hydrateAllValid excludes expired and respects limit",
+      "go_status": "PASS",
+      "js_status": "PASS",
+      "mismatch": "NO"
+    }
+  ]
+}

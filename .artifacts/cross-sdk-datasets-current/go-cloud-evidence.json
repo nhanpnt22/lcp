@@ -1,0 +1,72 @@
+{
+  "backend": "cloud-storage",
+  "db_path": "gs://aiptesting.firebasestorage.app/lcp",
+  "records": [
+    {
+      "cache_key": "gKcyc1tRJzcu1VuQxUGkfNdLdE6dBctbuiCKDgzAB7f4",
+      "dataset_index": 0,
+      "db_cache_key": "gKcyc1tRJzcu1VuQxUGkfNdLdE6dBctbuiCKDgzAB7f4",
+      "db_value": "ds-000-e25067db075d",
+      "h57_match": true,
+      "value": "ds-000-e25067db075d"
+    },
+    {
+      "cache_key": "NhMCm1KpDwiRxAdGrgXcErMDVZawUhWr8Sw2dJwmecn6",
+      "dataset_index": 1,
+      "db_cache_key": "NhMCm1KpDwiRxAdGrgXcErMDVZawUhWr8Sw2dJwmecn6",
+      "db_value": "ds-001-faaafc31394f",
+      "h57_match": true,
+      "value": "ds-001-faaafc31394f"
+    },
+    {
+      "cache_key": "HJWWGk42hZqn1msmqJiyvHy5JgMtxdXxMzBFuVEK2YHN",
+      "dataset_index": 2,
+      "db_cache_key": "HJWWGk42hZqn1msmqJiyvHy5JgMtxdXxMzBFuVEK2YHN",
+      "db_value": "ds-002-c453c84e2908",
+      "h57_match": true,
+      "value": "ds-002-c453c84e2908"
+    },
+    {
+      "cache_key": "VwqfN95uAnH13GMP5VAptypU4RQ19uqq6V4migj5uZL6",
+      "dataset_index": 3,
+      "db_cache_key": "VwqfN95uAnH13GMP5VAptypU4RQ19uqq6V4migj5uZL6",
+      "db_value": "ds-003-3fd1c0a951cf",
+      "h57_match": true,
+      "value": "ds-003-3fd1c0a951cf"
+    },
+    {
+      "cache_key": "iHRiDKmZim8ECCT4ZwWAvDLzuRQsT3jWK56ZTeTcvysS",
+      "dataset_index": 4,
+      "db_cache_key": "iHRiDKmZim8ECCT4ZwWAvDLzuRQsT3jWK56ZTeTcvysS",
+      "db_value": "ds-004-588560ba3963",
+      "h57_match": true,
+      "value": "ds-004-588560ba3963"
+    },
+    {
+      "cache_key": "GDGRDpS5HdrVCBHKzBhAWUvx7659pJne8UiEDxSFHCi3",
+      "dataset_index": 5,
+      "db_cache_key": "GDGRDpS5HdrVCBHKzBhAWUvx7659pJne8UiEDxSFHCi3",
+      "db_value": "ds-005-ce4d142f5df6",
+      "h57_match": true,
+      "value": "ds-005-ce4d142f5df6"
+    },
+    {
+      "cache_key": "BcegxNLKpVYHYn6xWcd4jTC4CDL6GLfVAR3DKbBuQgUS",
+      "dataset_index": 6,
+      "db_cache_key": "BcegxNLKpVYHYn6xWcd4jTC4CDL6GLfVAR3DKbBuQgUS",
+      "db_value": "ds-006-e75c1c0b5e5b",
+      "h57_match": true,
+      "value": "ds-006-e75c1c0b5e5b"
+    },
+    {
+      "cache_key": "ft3t5VBMPjeRAdjaNt1ztj26KnSbNufE1LJZWmsYzZ4p",
+      "dataset_index": 7,
+      "db_cache_key": "ft3t5VBMPjeRAdjaNt1ztj26KnSbNufE1LJZWmsYzZ4p",
+      "db_value": "ds-007-1ce3e59e59f4",
+      "h57_match": true,
+      "value": "ds-007-1ce3e59e59f4"
+    }
+  ],
+  "row_count": 8,
+  "sdk": "go"
+}

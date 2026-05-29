@@ -122,7 +122,7 @@ class ReadThroughCacheEngine<T> {
         _parity = parity,
         _persistence = persistence,
         _resumeStore = resumeStore,
-      _resolveResumeState = resolveResumeState,
+        _resolveResumeState = resolveResumeState,
         _now = now ?? (() => DateTime.now().millisecondsSinceEpoch);
 
   final MemoryCacheStore<T> _memoryStore;
@@ -155,7 +155,9 @@ class ReadThroughCacheEngine<T> {
     final cacheKey = computeCacheKey(request.keyInput, request.hashFn);
     final staleEntry = _expiredPeek(cacheKey);
 
-    if (staleEntry != null && request.allowStaleOnExpired && !_shouldBypassStateAlignment(request, staleEntry.data)) {
+    if (staleEntry != null &&
+        request.allowStaleOnExpired &&
+        !_shouldBypassStateAlignment(request, staleEntry.data)) {
       _emitBackgroundRefreshSignal(request, cacheKey);
       _trackResumeState(
         source: CacheSource.cache,
@@ -172,7 +174,8 @@ class ReadThroughCacheEngine<T> {
     }
 
     final memoryHit = _memoryStore.get(cacheKey);
-    if (memoryHit != null && !_shouldBypassStateAlignment(request, memoryHit.data)) {
+    if (memoryHit != null &&
+        !_shouldBypassStateAlignment(request, memoryHit.data)) {
       _trackResumeState(
         source: CacheSource.cache,
         data: memoryHit.data,
@@ -212,7 +215,8 @@ class ReadThroughCacheEngine<T> {
       }
     }
 
-    Future<CacheExecutionResult<T>> runFetch() => _fetchAndPopulate(cacheKey, request);
+    Future<CacheExecutionResult<T>> runFetch() =>
+        _fetchAndPopulate(cacheKey, request);
     final singleFlight = _singleFlight;
     if (singleFlight != null) {
       return singleFlight.run(cacheKey, runFetch);
@@ -266,16 +270,22 @@ class ReadThroughCacheEngine<T> {
     }
 
     final resumeState = request.resumeState;
-    if (resumeState != null && widgetId == resumeState.widgetId && stateVersion < resumeState.stateVersion) {
+    if (resumeState != null &&
+        widgetId == resumeState.widgetId &&
+        stateVersion < resumeState.stateVersion) {
       return true;
     }
 
     return false;
   }
 
-  Future<CacheExecutionResult<T>> _fetchAndPopulate(String cacheKey, CacheRequest<T> request) async {
+  Future<CacheExecutionResult<T>> _fetchAndPopulate(
+      String cacheKey, CacheRequest<T> request) async {
     final apiResult = await request.fetchFromApi();
-    final ttlMs = apiResult.ttlMs ?? (apiResult.headers != null ? extractOacTtlMs(apiResult.headers!) : null);
+    final ttlMs = apiResult.ttlMs ??
+        (apiResult.headers != null
+            ? extractOacTtlMs(apiResult.headers!)
+            : null);
 
     if (ttlMs == null) {
       _trackResumeState(

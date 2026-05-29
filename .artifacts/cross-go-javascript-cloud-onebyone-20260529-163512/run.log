@@ -1,0 +1,114 @@
+[1/5] Preparing artifact dir: /Users/brian/dev/aco/aip/sdp/lcp/.artifacts/cross-go-javascript-cloud-onebyone-20260529-163512
+Using cloud URI: gs://aiptesting.firebasestorage.app/lcp
+[2/5] Skipping JavaScript build (LCP_CROSS_GO_JS_SKIP_BUILD=1)
+[3/5] Running Go one-by-one cases (memory + cloud-storage in each case)
+- Go case: TestPersistentStoreCloudContractSetGetValue
+=== RUN   TestPersistentStoreCloudContractSetGetValue
+=== RUN   TestPersistentStoreCloudContractSetGetValue/set_get_value/memory
+=== RUN   TestPersistentStoreCloudContractSetGetValue/set_get_value/cloud-storage
+--- PASS: TestPersistentStoreCloudContractSetGetValue (2.83s)
+    --- PASS: TestPersistentStoreCloudContractSetGetValue/set_get_value/memory (0.00s)
+    --- PASS: TestPersistentStoreCloudContractSetGetValue/set_get_value/cloud-storage (2.83s)
+PASS
+ok  	github.com/nhanpnt22/lcp/sdks/go	3.452s
+- Go case: TestPersistentStoreCloudContractOverwrite
+=== RUN   TestPersistentStoreCloudContractOverwrite
+=== RUN   TestPersistentStoreCloudContractOverwrite/overwrite/memory
+=== RUN   TestPersistentStoreCloudContractOverwrite/overwrite/cloud-storage
+--- PASS: TestPersistentStoreCloudContractOverwrite (3.59s)
+    --- PASS: TestPersistentStoreCloudContractOverwrite/overwrite/memory (0.00s)
+    --- PASS: TestPersistentStoreCloudContractOverwrite/overwrite/cloud-storage (3.59s)
+PASS
+ok  	github.com/nhanpnt22/lcp/sdks/go	3.927s
+- Go case: TestPersistentStoreCloudContractDelete
+=== RUN   TestPersistentStoreCloudContractDelete
+=== RUN   TestPersistentStoreCloudContractDelete/delete/memory
+=== RUN   TestPersistentStoreCloudContractDelete/delete/cloud-storage
+--- PASS: TestPersistentStoreCloudContractDelete (2.79s)
+    --- PASS: TestPersistentStoreCloudContractDelete/delete/memory (0.00s)
+    --- PASS: TestPersistentStoreCloudContractDelete/delete/cloud-storage (2.79s)
+PASS
+ok  	github.com/nhanpnt22/lcp/sdks/go	3.128s
+- Go case: TestPersistentStoreCloudContractClear
+=== RUN   TestPersistentStoreCloudContractClear
+=== RUN   TestPersistentStoreCloudContractClear/clear/memory
+=== RUN   TestPersistentStoreCloudContractClear/clear/cloud-storage
+--- PASS: TestPersistentStoreCloudContractClear (4.99s)
+    --- PASS: TestPersistentStoreCloudContractClear/clear/memory (0.00s)
+    --- PASS: TestPersistentStoreCloudContractClear/clear/cloud-storage (4.99s)
+PASS
+ok  	github.com/nhanpnt22/lcp/sdks/go	5.300s
+- Go case: TestPersistentStoreCloudContractPruneExpired
+=== RUN   TestPersistentStoreCloudContractPruneExpired
+=== RUN   TestPersistentStoreCloudContractPruneExpired/prune_expired/memory
+=== RUN   TestPersistentStoreCloudContractPruneExpired/prune_expired/cloud-storage
+--- PASS: TestPersistentStoreCloudContractPruneExpired (6.14s)
+    --- PASS: TestPersistentStoreCloudContractPruneExpired/prune_expired/memory (0.00s)
+    --- PASS: TestPersistentStoreCloudContractPruneExpired/prune_expired/cloud-storage (6.14s)
+PASS
+ok  	github.com/nhanpnt22/lcp/sdks/go	6.479s
+- Go case: TestPersistentStoreCloudContractHydrateAllValidAndLimit
+=== RUN   TestPersistentStoreCloudContractHydrateAllValidAndLimit
+=== RUN   TestPersistentStoreCloudContractHydrateAllValidAndLimit/hydrate_valid_limit/memory
+=== RUN   TestPersistentStoreCloudContractHydrateAllValidAndLimit/hydrate_valid_limit/cloud-storage
+--- PASS: TestPersistentStoreCloudContractHydrateAllValidAndLimit (9.19s)
+    --- PASS: TestPersistentStoreCloudContractHydrateAllValidAndLimit/hydrate_valid_limit/memory (0.00s)
+    --- PASS: TestPersistentStoreCloudContractHydrateAllValidAndLimit/hydrate_valid_limit/cloud-storage (9.19s)
+PASS
+ok  	github.com/nhanpnt22/lcp/sdks/go	9.528s
+[4/5] Running JavaScript one-by-one IndexedDB cases
+- JS case: set/get value after set
+
+Running 1 test using 1 worker
+
+[2m[WebServer] [22m127.0.0.1 - - [29/May/2026 16:35:54] "GET / HTTP/1.1" 200 -
+[2m[WebServer] [22m127.0.0.1 - - [29/May/2026 16:35:54] "GET /dist/index.js HTTP/1.1" 200 -
+  ✓  1 [chromium] › tests/browser/sdk.idb.contract.onebyone.spec.ts:11:3 › LCP SDK IndexedDB contract one-by-one › set/get value after set (227ms)
+
+  1 passed (1.1s)
+- JS case: overwrite existing key
+
+Running 1 test using 1 worker
+
+[2m[WebServer] [22m127.0.0.1 - - [29/May/2026 16:35:55] "GET / HTTP/1.1" 200 -
+[2m[WebServer] [22m127.0.0.1 - - [29/May/2026 16:35:55] "GET /dist/index.js HTTP/1.1" 200 -
+  ✓  1 [chromium] › tests/browser/sdk.idb.contract.onebyone.spec.ts:58:3 › LCP SDK IndexedDB contract one-by-one › overwrite existing key (63ms)
+
+  1 passed (571ms)
+- JS case: delete removes entry
+
+Running 1 test using 1 worker
+
+[2m[WebServer] [22m127.0.0.1 - - [29/May/2026 16:35:56] "GET / HTTP/1.1" 200 -
+[2m[WebServer] [22m127.0.0.1 - - [29/May/2026 16:35:56] "GET /dist/index.js HTTP/1.1" 200 -
+  ✓  1 [chromium] › tests/browser/sdk.idb.contract.onebyone.spec.ts:102:3 › LCP SDK IndexedDB contract one-by-one › delete removes entry (63ms)
+
+  1 passed (854ms)
+- JS case: clear removes all entries
+
+Running 1 test using 1 worker
+
+[2m[WebServer] [22m127.0.0.1 - - [29/May/2026 16:35:57] "GET / HTTP/1.1" 200 -
+[2m[WebServer] [22m127.0.0.1 - - [29/May/2026 16:35:57] "GET /dist/index.js HTTP/1.1" 200 -
+  ✓  1 [chromium] › tests/browser/sdk.idb.contract.onebyone.spec.ts:142:3 › LCP SDK IndexedDB contract one-by-one › clear removes all entries (67ms)
+
+  1 passed (596ms)
+- JS case: pruneExpired removes expired only
+
+Running 1 test using 1 worker
+
+[2m[WebServer] [22m127.0.0.1 - - [29/May/2026 16:35:58] "GET / HTTP/1.1" 200 -
+[2m[WebServer] [22m127.0.0.1 - - [29/May/2026 16:35:58] "GET /dist/index.js HTTP/1.1" 200 -
+  ✓  1 [chromium] › tests/browser/sdk.idb.contract.onebyone.spec.ts:190:3 › LCP SDK IndexedDB contract one-by-one › pruneExpired removes expired only (65ms)
+
+  1 passed (574ms)
+- JS case: hydrateAllValid excludes expired and respects limit
+
+Running 1 test using 1 worker
+
+[2m[WebServer] [22m127.0.0.1 - - [29/May/2026 16:35:59] "GET / HTTP/1.1" 200 -
+[2m[WebServer] [22m127.0.0.1 - - [29/May/2026 16:35:59] "GET /dist/index.js HTTP/1.1" 200 -
+  ✓  1 [chromium] › tests/browser/sdk.idb.contract.onebyone.spec.ts:248:3 › LCP SDK IndexedDB contract one-by-one › hydrateAllValid excludes expired and respects limit (69ms)
+
+  1 passed (584ms)
+[5/5] Comparing per-case outcomes and writing report

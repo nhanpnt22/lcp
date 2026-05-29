@@ -1,0 +1,12 @@
+[JS CASE] set/get value after set
+[JS CASE] overwrite existing key
+[JS CASE] delete removes entry
+[JS CASE] clear removes all entries
+[JS CASE] pruneExpired removes expired only
+[JS CASE] hydrateAllValid excludes expired and respects limit
+[NODE CASE] set/get value after set
+[NODE CASE] overwrite existing key
+[NODE CASE] delete removes entry
+[NODE CASE] clear removes all entries
+[NODE CASE] pruneExpired removes expired only
+[NODE CASE] hydrateAllValid excludes expired and respects limit

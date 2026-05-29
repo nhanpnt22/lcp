@@ -9,10 +9,12 @@ class ResumeState {
     required this.stateVersion,
   }) {
     if (widgetId.trim().isEmpty) {
-      throw ArgumentError.value(widgetId, 'widgetId', 'must be a non-empty string');
+      throw ArgumentError.value(
+          widgetId, 'widgetId', 'must be a non-empty string');
     }
     if (stateVersion < 0) {
-      throw ArgumentError.value(stateVersion, 'stateVersion', 'must be a non-negative integer');
+      throw ArgumentError.value(
+          stateVersion, 'stateVersion', 'must be a non-negative integer');
     }
   }
 
@@ -45,11 +47,13 @@ Map<String, int> _canonicalizeWidgetStateMap(Map<String, int> widgetStateMap) {
   final canonical = <String, int>{};
   for (final key in keys) {
     if (key.trim().isEmpty) {
-      throw ArgumentError.value(key, 'widgetStateMap key', 'must be a non-empty string');
+      throw ArgumentError.value(
+          key, 'widgetStateMap key', 'must be a non-empty string');
     }
     final value = widgetStateMap[key]!;
     if (value < 0) {
-      throw ArgumentError.value(value, 'widgetStateMap[$key]', 'must be a non-negative integer');
+      throw ArgumentError.value(
+          value, 'widgetStateMap[$key]', 'must be a non-negative integer');
     }
     canonical[key] = value;
   }

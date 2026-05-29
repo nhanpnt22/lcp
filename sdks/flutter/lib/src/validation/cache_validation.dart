@@ -1,5 +1,6 @@
 import '../entry/cache_entry.dart';
 import '../key/canonical_json.dart';
+import '../key/h57_key_validation.dart';
 
 class ValidationResult {
   const ValidationResult({
@@ -45,7 +46,11 @@ ValidationResult validateCacheEntryInvariants<T>(
   if (entry.cacheKey.trim().isEmpty) {
     errors.add('cache_key must be a non-empty string');
   }
-  if (options.expectedCacheKey != null && entry.cacheKey != options.expectedCacheKey) {
+  if (entry.cacheKey.trim().isNotEmpty && !isH57CacheKey(entry.cacheKey)) {
+    errors.add('cache_key must be canonical H57');
+  }
+  if (options.expectedCacheKey != null &&
+      entry.cacheKey != options.expectedCacheKey) {
     errors.add('cache_key mismatch with expected identity');
   }
   if (!isCacheMetadataParityValid(entry.metadata, options.parity)) {
@@ -74,14 +79,16 @@ ValidationResult validateCacheEntryInvariants<T>(
   return ValidationResult(ok: errors.isEmpty, errors: errors);
 }
 
-void assertCacheEntryInvariants<T>(CacheEntry<T> entry, ValidationOptions options) {
+void assertCacheEntryInvariants<T>(
+    CacheEntry<T> entry, ValidationOptions options) {
   final result = validateCacheEntryInvariants(entry, options);
   if (!result.ok) {
     throw StateError('Cache validation failed: ${result.errors.join('; ')}');
   }
 }
 
-List<String> _findForbiddenPaths(Object? value, Set<String> forbidden, [String root = 'data']) {
+List<String> _findForbiddenPaths(Object? value, Set<String> forbidden,
+    [String root = 'data']) {
   if (value is List) {
     final out = <String>[];
     for (var i = 0; i < value.length; i++) {

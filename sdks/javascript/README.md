@@ -27,6 +27,13 @@ This package produces:
 The browser bundle exposes `window.LcpLocalCache` as the primary LCP browser global.
 `window.SdalpLocalCache` remains available as a legacy-compatible alias.
 
+Production browser bundles are emitted with ES2020 targets and source maps to improve runtime compatibility and debugging:
+
+- `dist/lcp-javascript-sdk.min.js` + `dist/lcp-javascript-sdk.min.js.map`
+- `dist/lcp-javascript-sdk-<package-version>.min.js` + `dist/lcp-javascript-sdk-<package-version>.min.js.map`
+- `dist/browser.min.js` + `dist/browser.min.js.map`
+- `min/lcp-local-cache.min.js` + `min/lcp-local-cache.min.js.map`
+
 ## Build
 
 ```bash
@@ -103,6 +110,18 @@ npm pack --dry-run
 
 Detailed release gates and test portfolio are documented in `TEST_PLAN.md`.
 Cross-SDK parity checks are documented in `../PARITY_MATRIX.md`.
+
+## Production-Readiness Checklist
+
+- [x] Core contract tests pass
+- [x] H57 cache keys enforced in tested paths
+- [x] Browser bundle builds cleanly with ES2020 target
+- [x] Source maps generated for release artifacts
+- [x] Cross-SDK parity passes for seven-case matrix
+- [ ] Broad browser support matrix validated
+- [ ] Production deployment/ops validation completed
+- [ ] Load and performance validation completed
+- [ ] Long-term backward-compatibility validation completed
 
 Publish from this folder:
 

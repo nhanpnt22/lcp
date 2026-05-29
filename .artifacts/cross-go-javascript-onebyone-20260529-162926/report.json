@@ -1,0 +1,56 @@
+{
+  "status": "MATCHED",
+  "mismatch_count": 0,
+  "fail_count": 0,
+  "baseline": "javascript",
+  "cases": [
+    {
+      "index": 1,
+      "go_case": "TestPersistentStoreContractSetGetValue",
+      "js_case": "set/get value after set",
+      "go_status": "PASS",
+      "js_status": "PASS",
+      "mismatch": "NO"
+    },
+    {
+      "index": 2,
+      "go_case": "TestPersistentStoreContractOverwrite",
+      "js_case": "overwrite existing key",
+      "go_status": "PASS",
+      "js_status": "PASS",
+      "mismatch": "NO"
+    },
+    {
+      "index": 3,
+      "go_case": "TestPersistentStoreContractDelete",
+      "js_case": "delete removes entry",
+      "go_status": "PASS",
+      "js_status": "PASS",
+      "mismatch": "NO"
+    },
+    {
+      "index": 4,
+      "go_case": "TestPersistentStoreContractClear",
+      "js_case": "clear removes all entries",
+      "go_status": "PASS",
+      "js_status": "PASS",
+      "mismatch": "NO"
+    },
+    {
+      "index": 5,
+      "go_case": "TestPersistentStoreContractPruneExpired",
+      "js_case": "pruneExpired removes expired only",
+      "go_status": "PASS",
+      "js_status": "PASS",
+      "mismatch": "NO"
+    },
+    {
+      "index": 6,
+      "go_case": "TestPersistentStoreContractHydrateAllValidAndLimit",
+      "js_case": "hydrateAllValid excludes expired and respects limit",
+      "go_status": "PASS",
+      "js_status": "PASS",
+      "mismatch": "NO"
+    }
+  ]
+}

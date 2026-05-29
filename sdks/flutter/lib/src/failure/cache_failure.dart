@@ -103,7 +103,8 @@ Future<FallbackExecutionResult<T>> executeWithApiFallback<T>({
     case CacheFailureAction.returnStaleAndRefresh:
       final staleEntry = decision.staleEntry;
       if (staleEntry == null) {
-        throw StateError('Missing stale entry for returnStaleAndRefresh action');
+        throw StateError(
+            'Missing stale entry for returnStaleAndRefresh action');
       }
       return FallbackExecutionResult<T>(
         source: FallbackSource.cache,

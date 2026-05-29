@@ -1,0 +1,126 @@
+
+> @sdp/lcp-javascript-sdk@1.0.0 build
+> npm run clean && npm run build:esm && npm run build:cjs && npm run build:types && npm run build:browser && npm run build:browser:versioned && npm run build:browser:alias && npm run build:min
+
+
+> @sdp/lcp-javascript-sdk@1.0.0 clean
+> rm -rf dist
+
+
+> @sdp/lcp-javascript-sdk@1.0.0 build:esm
+> esbuild index.ts --bundle --format=esm --platform=neutral --target=es2020 --outfile=dist/index.js
+
+
+  dist/index.js  59.3kb
+
+⚡ Done in 18ms
+
+> @sdp/lcp-javascript-sdk@1.0.0 build:cjs
+> esbuild index.ts --bundle --format=cjs --platform=neutral --target=es2020 --outfile=dist/index.cjs
+
+
+  dist/index.cjs  61.2kb
+
+⚡ Done in 7ms
+
+> @sdp/lcp-javascript-sdk@1.0.0 build:types
+> tsc -p tsconfig.types.json
+
+
+> @sdp/lcp-javascript-sdk@1.0.0 build:browser
+> esbuild browser.global.entry.ts --bundle --format=iife --platform=browser --minify --target=es2019 --outfile=dist/lcp-javascript-sdk.min.js --global-name=LcpLocalCache
+
+▲ [WARNING] Big integer literals are not available in the configured target environment ("es2019") and may crash at run-time [bigint]
+
+    ../../../third_party/f57/implementations/javascript/b57.js:4:20:
+      4 │ export const BASE = 57n;
+        ╵                     ~~~
+
+▲ [WARNING] Big integer literals are not available in the configured target environment ("es2019") and may crash at run-time [bigint]
+
+    ../../../third_party/f57/implementations/javascript/b57.js:26:14:
+      26 │   let value = 0n;
+         ╵               ~~
+
+▲ [WARNING] Big integer literals are not available in the configured target environment ("es2019") and may crash at run-time [bigint]
+
+    ../../../third_party/f57/implementations/javascript/b57.js:28:22:
+      28 │     value = (value << 8n) + BigInt(b);
+         ╵                       ~~
+
+▲ [WARNING] Big integer literals are not available in the configured target environment ("es2019") and may crash at run-time [bigint]
+
+    ../../../third_party/f57/implementations/javascript/b57.js:34:16:
+      34 │   if (value === 0n) {
+         ╵                 ~~
+
+▲ [WARNING] Big integer literals are not available in the configured target environment ("es2019") and may crash at run-time [bigint]
+
+    ../../../third_party/f57/implementations/javascript/b57.js:39:15:
+      39 │   while (cur > 0n) {
+         ╵                ~~
+
+▲ [WARNING] Big integer literals are not available in the configured target environment ("es2019") and may crash at run-time [bigint]
+
+    ../../../third_party/f57/implementations/javascript/b57.js:40:26:
+      40 │     out.push(Number(cur & 0xffn));
+         ╵                           ~~~~~
+
+6 of 9 warnings shown (disable the message limit with --log-limit=0)
+
+  dist/lcp-javascript-sdk.min.js  32.3kb
+
+⚡ Done in 5ms
+
+> @sdp/lcp-javascript-sdk@1.0.0 build:browser:versioned
+> node -e "const fs=require('node:fs'); const pkg=require('./package.json'); fs.copyFileSync('dist/lcp-javascript-sdk.min.js', 'dist/lcp-javascript-sdk-' + pkg.version + '.min.js');"
+
+
+> @sdp/lcp-javascript-sdk@1.0.0 build:browser:alias
+> node -e "const fs=require('node:fs'); fs.copyFileSync('dist/lcp-javascript-sdk.min.js', 'dist/browser.min.js');"
+
+
+> @sdp/lcp-javascript-sdk@1.0.0 build:min
+> esbuild examples/lcp-local-cache.entry.ts --bundle --format=iife --platform=browser --minify --target=es2019 --outfile=min/lcp-local-cache.min.js
+
+▲ [WARNING] Big integer literals are not available in the configured target environment ("es2019") and may crash at run-time [bigint]
+
+    ../../../third_party/f57/implementations/javascript/b57.js:4:20:
+      4 │ export const BASE = 57n;
+        ╵                     ~~~
+
+▲ [WARNING] Big integer literals are not available in the configured target environment ("es2019") and may crash at run-time [bigint]
+
+    ../../../third_party/f57/implementations/javascript/b57.js:26:14:
+      26 │   let value = 0n;
+         ╵               ~~
+
+▲ [WARNING] Big integer literals are not available in the configured target environment ("es2019") and may crash at run-time [bigint]
+
+    ../../../third_party/f57/implementations/javascript/b57.js:28:22:
+      28 │     value = (value << 8n) + BigInt(b);
+         ╵                       ~~
+
+▲ [WARNING] Big integer literals are not available in the configured target environment ("es2019") and may crash at run-time [bigint]
+
+    ../../../third_party/f57/implementations/javascript/b57.js:34:16:
+      34 │   if (value === 0n) {
+         ╵                 ~~
+
+▲ [WARNING] Big integer literals are not available in the configured target environment ("es2019") and may crash at run-time [bigint]
+
+    ../../../third_party/f57/implementations/javascript/b57.js:39:15:
+      39 │   while (cur > 0n) {
+         ╵                ~~
+
+▲ [WARNING] Big integer literals are not available in the configured target environment ("es2019") and may crash at run-time [bigint]
+
+    ../../../third_party/f57/implementations/javascript/b57.js:40:26:
+      40 │     out.push(Number(cur & 0xffn));
+         ╵                           ~~~~~
+
+6 of 9 warnings shown (disable the message limit with --log-limit=0)
+
+  min/lcp-local-cache.min.js  19.8kb
+
+⚡ Done in 5ms

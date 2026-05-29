@@ -1,0 +1,33 @@
+{
+  "name": "@sdp/lcp-nodejs-sdk",
+  "version": "1.0.0",
+  "description": "LCP NodeJS SDK for Firebase App Hosting aligned to LCP v1.0.0.",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build": "npm run clean && tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "prepack": "npm run build",
+    "release:check": "npm run typecheck && npm run test && npm pack --dry-run"
+  },
+  "dependencies": {
+    "@aco/b57-js": "file:../../../third_party/f57/implementations/javascript",
+    "@google-cloud/storage": "^7.16.0",
+    "@sdp/lcp-javascript-sdk": "file:../javascript",
+    "better-sqlite3": "^11.8.1"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  }
+}

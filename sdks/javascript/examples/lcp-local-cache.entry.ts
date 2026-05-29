@@ -1,6 +1,6 @@
 import { ReadThroughCacheEngine } from "../execution";
 import { createCacheMetadata, isCacheMetadataParityValid } from "../entry";
-import { buildCacheKeyMaterial, computeCacheKey, canonicalJSONStringify } from "../key";
+import { buildCacheKeyMaterial, computeCacheKey, canonicalJSONStringify, h57HashFn } from "../key";
 import { CacheSingleFlight } from "../singleflight";
 import { MemoryCacheStore, IndexedDbCacheStore, buildDeterministicEvictionPlan } from "../storage";
 import { extractOacTtlMs, evaluateTtl } from "../ttl";
@@ -33,6 +33,7 @@ const LcpLocalCacheGlobal = Object.freeze({
   InMemoryResumeStateStore,
   buildResumeHint,
   buildResumeTokenMaterial,
+  h57HashFn,
   demoHash
 });
 

@@ -1,0 +1,244 @@
+============================================================
+LCP GO SDK — PROJECT STRUCTURE (RFC-GRADE, UPDATED)
+============================================================
+
+Module:
+github.com/nhanpnt22/lcp/sdks/go
+
+Status:
+FINAL • ZERO-GAP • RFC-GRADE • CONFIG-COMPLETE • PRODUCTION-READY
+
+============================================================
+1. ROOT STRUCTURE
+============================================================
+
+lcp/
+│
+├── go.mod
+├── go.sum
+│
+├── README.md
+├── LICENSE
+│
+├── sdk/                            # PUBLIC API (STABLE CONTRACT)
+│   ├── engine.go                   # NewReadThroughCacheEngine
+│   ├── execute.go                  # Execute() entrypoint
+│   ├── config.go                   # public Config struct
+│   ├── options.go                  # functional options
+│   ├── types.go                    # request/response models
+│   ├── errors.go                   # SDK error model
+│   └── doc.go                      # package documentation
+│
+├── internal/                       # PRIVATE IMPLEMENTATION (STRICT)
+│
+│   ├── engine/                     # CORE RUNTIME ENGINE
+│   │   ├── engine.go
+│   │   ├── pipeline.go             # execution flow (STRICT ORDER)
+│   │   ├── decision.go             # BYPASS / STALE / HARD_FAIL
+│   │   └── context.go
+│   │
+│   ├── key/                        # CANONICAL KEY SYSTEM (H57)
+│   │   ├── builder.go              # BuildCacheKeyMaterial
+│   │   ├── canonical_json.go       # deterministic encoding
+│   │   ├── normalize.go            # payload normalization
+│   │   └── hash_h57.go             # hash implementation
+│   │
+│   ├── store/                      # STORAGE LAYER (PLUGGABLE)
+│   │   ├── memory.go               # REQUIRED (in-memory)
+│   │   ├── persistent.go           # interface
+│   │   ├── sqlite.go               # /tmp-backed store
+│   │   ├── gcs.go                  # gs:// cloud storage
+│   │   ├── inmemory_persistent.go  # process-local persistence
+│   │   └── codec.go                # entry serialization
+│   │
+│   ├── ttl/                        # TTL EVALUATION (NO SYNTHESIS)
+│   │   ├── evaluator.go
+│   │   └── clock.go
+│   │
+│   ├── validation/                 # INVARIANT ENFORCEMENT
+│   │   ├── invariants.go           # protocol rules
+│   │   ├── parity.go               # metadata parity
+│   │   ├── schema.go               # schema/version checks
+│   │   ├── sensitive.go            # sensitive field detection
+│   │   └── result.go
+│   │
+│   ├── swr/                        # STALE-WHILE-REVALIDATE
+│   │   ├── swr.go
+│   │   └── policy.go
+│   │
+│   ├── singleflight/               # OPTIONAL DEDUP
+│   │   ├── group.go
+│   │   └── noop.go
+│   │
+│   ├── state/                      # STATE ALIGNMENT
+│   │   ├── state.go
+│   │   ├── resume.go
+│   │   └── ordering.go
+│   │
+│   ├── trace/                      # TRACE RULES
+│   │   ├── trace.go
+│   │   └── strip.go                # remove from key/payload
+│   │
+│   ├── serialize/                  # DETERMINISTIC SERIALIZATION
+│   │   ├── codec.go
+│   │   └── canonical.go
+│   │
+│   └── config/                     # INTERNAL CONFIG SYSTEM (SDK-PRIVATE)
+│       ├── loader.go               # LoadFromEnv()
+│       ├── env.go                  # env helpers
+│       ├── defaults.go             # safe defaults ONLY
+│       ├── validate.go             # config validation
+│       └── mapping.go              # ENV → sdk.Config
+│
+├── config/                         # ENVIRONMENT LAYER (APP-LEVEL ONLY)
+│   └── env/
+│       ├── local-dev/
+│       │   └── .env
+│       │
+│       ├── testing/
+│       │   └── .env
+│       │
+│       └── production/
+│           └── .env (REFERENCE / OPTIONAL)
+│
+├── adapters/                       # OPTIONAL INTEGRATIONS
+│   └── http/
+│       ├── client.go
+│       ├── request.go
+│       └── response.go
+│
+├── pkg/                            # OPTIONAL PUBLIC UTILITIES
+│   ├── pagination/
+│   │   └── pager.go
+│   │
+│   └── iterator/
+│       └── iterator.go
+│
+├── examples/                       # USAGE EXAMPLES
+│   ├── basic/
+│   │   └── main.go
+│   │
+│   └── cloudrun/
+│       └── main.go
+│
+├── test/                           # INTEGRATION / CONFORMANCE TESTS
+│   ├── engine_test.go
+│   ├── storage_test.go
+│   ├── swr_test.go
+│   ├── singleflight_test.go
+│   └── conformance_test.go
+│
+└── scripts/                        # DEV / CI TOOLING
+    ├── test.sh
+    ├── lint.sh
+    └── run-local.sh
+
+============================================================
+2. CONFIG ARCHITECTURE (STRICT SEPARATION)
+============================================================
+
+RULE:
+
+.env → APPLICATION → sdk.Config → SDK
+
+SDK MUST NOT depend directly on .env files.
+
+------------------------------------------------------------
+2.1 PUBLIC CONFIG (sdk/config.go)
+------------------------------------------------------------
+
+type Config struct {
+    CacheNamespace string
+    SchemaVersion  string
+    SpecChecksum   string
+
+    StorageBackend string   // memory | sqlite | cloud-storage
+    StorageURI     string
+
+    PersistentMode string   // auto | memory-only | dual
+
+    AllowStaleOnExpired bool
+    EnableSingleFlight  bool
+
+    TimeoutMs int
+    FailClosed bool
+}
+
+------------------------------------------------------------
+2.2 INTERNAL CONFIG LOADER
+------------------------------------------------------------
+
+LoadFromEnv():
+
+- Reads ENV
+- Maps → Config
+- Validates
+
+------------------------------------------------------------
+2.3 ENV FILES (APP SIDE)
+------------------------------------------------------------
+
+config/env/local-dev/.env
+config/env/testing/.env
+config/env/production/.env
+
+============================================================
+3. STRUCTURE PRINCIPLES
+============================================================
+
+- sdk/ = ONLY stable public API
+- internal/ = protocol enforcement (private)
+- config/ = environment (app responsibility)
+- adapters/ = external integrations
+- pkg/ = minimal reusable helpers
+
+============================================================
+4. EXECUTION FLOW OWNERSHIP
+============================================================
+
+internal/engine/pipeline.go controls:
+
+1. Key build
+2. Cache lookup
+3. TTL evaluation
+4. Decision (HIT / STALE / MISS)
+5. API call (ONLY if needed)
+6. Validation
+7. Store write
+8. Response return
+
+============================================================
+5. CLOUD RUN ALIGNMENT
+============================================================
+
+- sqlite path → /tmp/*
+- GCS → gs://bucket/path
+- storage failure → fallback to memory
+- MUST NOT crash runtime
+
+============================================================
+6. INVARIANT ENFORCEMENT LAYERS
+============================================================
+
+key/            → deterministic identity
+validation/     → protocol safety
+ttl/            → expiration correctness
+trace/          → trace exclusion
+state/          → ordering safety
+
+============================================================
+7. DESIGN GUARANTEES
+============================================================
+
+- Deterministic
+- Read-through only
+- EXACTLY-ONCE execution preserved
+- No-backflow enforced
+- Replay-safe
+- State-safe
+- Observability-neutral
+- RFC-compliant
+
+============================================================
+END
+============================================================

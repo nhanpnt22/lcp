@@ -7,8 +7,9 @@ void main() {
       maxEntries: 2,
       now: () => 100,
     );
+    final key = _h57Key('k1');
     final entry = CacheEntry<Map<String, Object>>(
-      cacheKey: 'k1',
+      cacheKey: key,
       data: {'ok': true},
       metadata: createCacheMetadata(
         source: CacheSource.api,
@@ -22,14 +23,16 @@ void main() {
     );
 
     store.set(entry);
-    expect(store.get('k1')?.data['ok'], isTrue);
+    expect(store.get(key)?.data['ok'], isTrue);
   });
 
   test('memory cache evicts oldest when over capacity', () {
     final store = MemoryCacheStore<int>(maxEntries: 1, now: () => 0);
+    final keyA = _h57Key('a');
+    final keyB = _h57Key('b');
     store.set(
       CacheEntry<int>(
-        cacheKey: 'a',
+        cacheKey: keyA,
         data: 1,
         metadata: createCacheMetadata(
           source: CacheSource.api,
@@ -44,7 +47,7 @@ void main() {
     );
     store.set(
       CacheEntry<int>(
-        cacheKey: 'b',
+        cacheKey: keyB,
         data: 2,
         metadata: createCacheMetadata(
           source: CacheSource.api,
@@ -58,7 +61,21 @@ void main() {
       ),
     );
 
-    expect(store.get('a'), isNull);
-    expect(store.get('b')?.data, equals(2));
+    expect(store.get(keyA), isNull);
+    expect(store.get(keyB)?.data, equals(2));
   });
+}
+
+String _h57Key(String label) {
+  return computeCacheKey(
+    CacheKeyInput(
+      namespace: 'test',
+      operationId: label,
+      payload: {'label': label},
+      schemaVersion: 'v1',
+      specChecksum: 'spec-v1',
+      userScope: 'test-user',
+    ),
+    h57HashFn,
+  );
 }

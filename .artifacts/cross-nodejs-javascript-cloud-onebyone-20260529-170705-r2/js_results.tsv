@@ -1,0 +1,6 @@
+set/get value after set	FAIL
+overwrite existing key	FAIL
+delete removes entry	FAIL
+clear removes all entries	FAIL
+pruneExpired removes expired only	FAIL
+hydrateAllValid excludes expired and respects limit	FAIL

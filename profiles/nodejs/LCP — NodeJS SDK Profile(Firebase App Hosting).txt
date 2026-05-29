@@ -1,0 +1,312 @@
+============================================================
+Title:
+LCP — NodeJS SDK Profile (Firebase App Hosting)
+============================================================
+
+Parent Protocol:
+LCP — Local Cache Protocol (Deterministic Client Cache Layer)
+
+Version:
+v1.0.0
+
+Status:
+FINAL • ZERO-GAP • RFC-GRADE
+PROFILE-ALIGNED • SDK-NORMATIVE
+DETERMINISTIC • NON-AUTHORITATIVE • READ-THROUGH
+CANONICAL-HASH • SINGLE-FLIGHT-OPTIONAL
+SWR-HOOKED • DUAL-LAYER • TRACE-SAFE
+PARITY-ENFORCED • NO-BACKFLOW • STATE-AWARE
+FIREBASE-APP-HOSTING-ALIGNED • PRODUCTION-SEALED
+
+Type:
+Language/Runtime Child Profile (NodeJS / Firebase App Hosting)
+
+Position:
+Firebase App Hosting Runtime -> LCP NodeJS SDK Profile -> LCP Core Protocol
+
+Normative Language:
+
+The key words MUST, MUST NOT, SHOULD, SHOULD NOT, and MAY in this profile
+are to be interpreted as requirement levels for NodeJS SDK conformance.
+
+Precedence Rule:
+
+If any statement in this profile conflicts with the parent protocol,
+LCP — Local Cache Protocol v1.0.0 takes precedence.
+
+57 Family References:
+
+- https://github.com/nhanpnt22/f57
+- https://github.com/nhanpnt22/f57/tree/main/implementations/ts
+
+============================================================
+0. PURPOSE
+============================================================
+
+- Translate LCP v1.0.0 into concrete NodeJS SDK behavior for Firebase App Hosting workloads
+- Define normative integration rules for in-memory and storage-backed cache modes
+- Preserve all parent protocol invariants without drift
+
+This profile is subordinate to LCP core protocol.
+
+============================================================
+1. SCOPE
+============================================================
+
+IN SCOPE:
+
+- ReadThroughCacheEngine usage in NodeJS services
+- Deterministic keying and parity validation in NodeJS
+- Memory + optional persistent store behavior
+- Optional single-flight and callback-driven SWR behavior
+- Advisory resume/state alignment hooks
+- Firebase App Hosting deployment expectations for in-memory, sqlite, and cloud-storage backends
+
+OUT OF SCOPE:
+
+- Server-side authority or protocol mutation
+- Cache-led business, authorization, or orchestration decisions
+- Firebase IAM provisioning and network policy administration
+
+============================================================
+1.A CONFORMANCE TARGET
+============================================================
+
+Conformant implementations MUST:
+
+- satisfy all MUST/MUST NOT requirements in this profile
+- preserve all parent protocol invariants
+- remain behavior-preserving relative to APIaaF authority
+
+============================================================
+2. SDK SURFACE (NODEJS)
+============================================================
+
+PACKAGE:
+
+- @sdp/lcp-javascript-sdk (NodeJS runtime usage)
+
+RUNTIME API SURFACE:
+
+- ReadThroughCacheEngine
+- buildCacheKeyMaterial
+- computeCacheKey
+- assertCacheEntryInvariants
+- MemoryCacheStore
+- IndexedDbCacheStore (optional for web contexts)
+- CacheSingleFlight
+- InMemoryResumeStateStore
+- buildResumeHint
+
+PERSISTENT MODES (FIREBASE APP HOSTING):
+
+- in-memory mode (process-local persistent map)
+- sqlite mode (SQLite-backed store)
+- cloud-storage mode (direct Cloud Storage API)
+
+============================================================
+3. LCP SECTION MAPPING (NODEJS PROFILE)
+============================================================
+
+I. CORE INVARIANTS
+
+- MUST execute read-through only
+- MUST keep API as source of truth
+- MUST preserve parity fields and deterministic identity
+
+II. NO-BACKFLOW
+
+- Cache results MUST NOT alter business/protocol decisions
+- Background refresh callback MUST remain advisory-only
+
+III. CACHE KEY
+
+- MUST build key from namespace + operationId + canonical payload + schemaVersion + specChecksum + userScope
+- MUST exclude trace_id/request_id/action_id from key payload material
+- MUST use H57 for hashing and B57 canonical byte material handling
+- ID57/R57/S57 terms MUST be used where identifier/random/derivation rules apply
+
+IV. CACHE ENTRY
+
+- Metadata fields REQUIRED:
+  source, created_at, expires_at, ttl_ms, schema_version, data_version,
+  spec_checksum, cache_namespace, compressed
+- Metadata parity MUST match configured contract
+
+V. EXECUTION MODEL
+
+- Ordered path MUST be: memory -> optional persistent store -> API
+- Missing TTL MUST bypass cache write and return API response
+- Stale fallback MUST be gated by allowStaleOnExpired
+- Foreground path MUST keep one request -> one API fetch execution path
+
+VI. STORAGE MODEL
+
+- Memory store REQUIRED
+- Persistent store OPTIONAL
+- Supported modes: auto | memory-only | dual
+
+VII. TTL MODEL
+
+- TTL MUST come from upstream result only (ttl_ms-compatible metadata)
+- Local TTL synthesis for writes MUST NOT be introduced
+
+VIII. SWR MODEL
+
+- Stale return MAY be enabled
+- Refresh MUST be caller-managed
+- Engine MUST NOT emit implicit refresh RPC
+
+IX. SINGLE-FLIGHT
+
+- Single-flight is OPTIONAL
+- It is enabled only when CacheSingleFlight is supplied
+- Scope MUST be cache_key
+
+X. STATE ALIGNMENT
+
+- When state context exists, stale entries violating state_version ordering MUST be bypassed
+- Resume/state tracking MUST remain advisory
+
+XI. TRACE RULES
+
+- Trace context MAY be carried for request context
+- Trace fields MUST NOT be persisted in cache payload data
+- Trace fields MUST NOT be included in key material
+
+XII. VALIDATION
+
+- Deterministic serialization and parity checks MUST be enforced
+- Sensitive-field and trace-field rejection policy MUST be enforced
+- Default validation failure handling MUST be BYPASS_TO_API
+- HARD_FAIL MUST be limited to fail-closed or invariant-critical policy
+
+XIII. FAILURE MODEL
+
+- Decision classes:
+  BYPASS_TO_API, RETURN_STALE_AND_REFRESH, HARD_FAIL
+- storage/lookup/serialization issues SHOULD resolve as BYPASS_TO_API or RETURN_STALE_AND_REFRESH
+- invariant-critical/fail-closed policy MUST resolve as HARD_FAIL
+
+XIV. INVALID CONDITIONS
+
+- Any semantic mutation or non-deterministic identity behavior is invalid
+
+XV. GUARANTEES
+
+- Deterministic read-through behavior
+- Replay-safe keying and parity-safe caching
+- Optional single-flight and optional SWR stale fallback
+- No-backflow behavior for execution/state/observability pathways
+
+============================================================
+4. FIREBASE APP HOSTING INTEGRATION CONTRACT
+============================================================
+
+REQUEST (Execute):
+
+- keyInput:
+  namespace, operationId, payload, schemaVersion, specChecksum, userScope
+- H57HashFn
+- fetchFromAPI -> { data, ttl_ms?, headers? }
+- allowStaleOnExpired?
+- resumeState?
+- trace?
+- onBackgroundRefresh?
+
+RESPONSE:
+
+- cacheKey
+- source: API | CACHE
+- data
+- stale: bool
+
+Behavioral constraints:
+
+- fetchFromAPI is the authoritative upstream fetcher
+- cache writes MUST occur only after successful parity/invariant validation
+- missing TTL responses MUST return source=API, stale=false
+
+============================================================
+5. FIREBASE APP HOSTING STORAGE PATTERNS
+============================================================
+
+PATTERN A: IN-MEMORY + IN-MEMORY PERSISTENT STORE
+
+- SDK persistent layer MAY use in-memory persistent store for process-local persistence
+
+PATTERN B: SQLITE + SQLITE PERSISTENT STORE
+
+- sqlite path SHOULD be explicitly configured (example: /tmp/lcp/lcp_cache.db)
+- storage backend selection SHOULD use sqlite mode
+
+PATTERN C: CLOUD-STORAGE + DIRECT CLOUD STORAGE PERSISTENT STORE
+
+- storage backend selection SHOULD use cloud-storage mode
+- storage target SHOULD use gs:// bucket URI (example: gs://bucket/lcp)
+- runtime identity or service-account credentials MUST have object read/write access
+
+============================================================
+6. FIREBASE APP HOSTING OPERATIONAL RULES
+============================================================
+
+- cloud-storage backend MUST use valid gs:// URI semantics
+- sqlite backend path SHOULD be writable by runtime
+- startup behavior MUST tolerate backend init failures with safe cache bypass behavior
+- cache behavior MUST remain non-authoritative under instance restart/scale events
+
+============================================================
+7. CONFORMANCE CHECKLIST (NODEJS FIREBASE APP HOSTING)
+============================================================
+
+A NodeJS integration is conformant when all are true:
+
+- Uses ReadThroughCacheEngine read-through path
+- Uses deterministic key material and hash
+- Preserves configured parity fields
+- Does not persist sensitive or trace fields in cache payload data
+- Bypasses cache write when TTL is missing
+- Treats SWR refresh callback as caller-managed
+- Does not assume single-flight unless configured
+- Preserves no-backflow invariants under all cache outcomes
+- Uses one of the approved Firebase App Hosting persistence patterns
+
+============================================================
+8. VERIFICATION COMMANDS
+============================================================
+
+From repository root:
+
+- npm --prefix sdks/javascript run test
+- npm --prefix sdks/javascript run test:integration
+- npm --prefix sdks/javascript run test:browser
+- npm --prefix sdks/javascript run typecheck
+
+Deployment validation SHOULD include:
+
+- Firebase App Hosting deploy with selected cache mode
+- cache read/write smoke test for selected persistence mode
+- restart/replay behavior check against non-authoritative invariants
+
+============================================================
+FINAL STATUS
+============================================================
+
+FINAL
+ZERO-GAP
+RFC-GRADE
+PROFILE-ALIGNED
+SDK-NORMATIVE
+DETERMINISTIC
+NON-AUTHORITATIVE
+READ-THROUGH ONLY
+CANONICAL-HASH
+SINGLE-FLIGHT OPTIONAL
+SWR-HOOKED
+TRACE-SAFE
+NO-BACKFLOW ENFORCED
+FIREBASE-APP-HOSTING-ALIGNED
+PRODUCTION-SEALED
+
+LCP — NodeJS SDK Profile (Firebase App Hosting) v1.0.0 COMPLETE
+============================================================

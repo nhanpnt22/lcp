@@ -1,11 +1,10 @@
-import 'dart:convert';
-
 import 'package:lcp_flutter_sdk/lcp_flutter_sdk.dart';
 import 'package:test/test.dart';
 
 void main() {
   test('engine returns API then cache on second call', () async {
-    final store = MemoryCacheStore<Map<String, dynamic>>(maxEntries: 10, now: () => 1000);
+    final store =
+        MemoryCacheStore<Map<String, dynamic>>(maxEntries: 10, now: () => 1000);
     var calls = 0;
 
     final engine = ReadThroughCacheEngine<Map<String, dynamic>>(
@@ -28,7 +27,7 @@ void main() {
         specChecksum: 'spec',
         userScope: 'u1',
       ),
-      hashFn: (bytes) => base64Url.encode(bytes),
+      hashFn: h57HashFn,
       fetchFromApi: () async {
         calls++;
         return const ApiFetchResult<Map<String, dynamic>>(
@@ -47,7 +46,8 @@ void main() {
   });
 
   test('engine bypasses write when ttl is missing', () async {
-    final store = MemoryCacheStore<Map<String, dynamic>>(maxEntries: 10, now: () => 1000);
+    final store =
+        MemoryCacheStore<Map<String, dynamic>>(maxEntries: 10, now: () => 1000);
     var calls = 0;
 
     final engine = ReadThroughCacheEngine<Map<String, dynamic>>(
@@ -70,7 +70,7 @@ void main() {
         specChecksum: 'spec',
         userScope: 'u1',
       ),
-      hashFn: (bytes) => base64Url.encode(bytes),
+      hashFn: h57HashFn,
       fetchFromApi: () async {
         calls++;
         return const ApiFetchResult<Map<String, dynamic>>(
@@ -87,8 +87,11 @@ void main() {
     expect(calls, equals(2));
   });
 
-  test('engine bypasses stale cache when resume store has newer state without request resumeState', () async {
-    final store = MemoryCacheStore<Map<String, dynamic>>(maxEntries: 10, now: () => 1000);
+  test(
+      'engine bypasses stale cache when resume store has newer state without request resumeState',
+      () async {
+    final store =
+        MemoryCacheStore<Map<String, dynamic>>(maxEntries: 10, now: () => 1000);
     final resumeStore = InMemoryResumeStateStore()
       ..update(
         ResumeState(
@@ -97,8 +100,18 @@ void main() {
         ),
       );
 
+    const keyInput = CacheKeyInput(
+      namespace: 'profile',
+      operationId: 'get',
+      payload: {'userId': 'u1'},
+      schemaVersion: 'v1',
+      specChecksum: 'spec',
+      userScope: 'u1',
+    );
+    final cacheKey = computeCacheKey(keyInput, h57HashFn);
+
     final cacheEntry = CacheEntry<Map<String, dynamic>>(
-      cacheKey: 'cached-key',
+      cacheKey: cacheKey,
       data: {
         'widget_id': 'widget-1',
         'state_version': 2,
@@ -131,15 +144,8 @@ void main() {
 
     final result = await engine.execute(
       CacheRequest<Map<String, dynamic>>(
-        keyInput: const CacheKeyInput(
-          namespace: 'profile',
-          operationId: 'get',
-          payload: {'userId': 'u1'},
-          schemaVersion: 'v1',
-          specChecksum: 'spec',
-          userScope: 'u1',
-        ),
-        hashFn: (bytes) => 'cached-key',
+        keyInput: keyInput,
+        hashFn: h57HashFn,
         fetchFromApi: () async {
           calls++;
           return const ApiFetchResult<Map<String, dynamic>>(
@@ -156,7 +162,8 @@ void main() {
   });
 
   test('engine continues when memory write fails', () async {
-    final store = _ThrowingMemoryCacheStore<Map<String, dynamic>>(maxEntries: 10, now: () => 1000);
+    final store = _ThrowingMemoryCacheStore<Map<String, dynamic>>(
+        maxEntries: 10, now: () => 1000);
     var calls = 0;
 
     final engine = ReadThroughCacheEngine<Map<String, dynamic>>(
@@ -179,7 +186,7 @@ void main() {
         specChecksum: 'spec',
         userScope: 'u1',
       ),
-      hashFn: (bytes) => base64Url.encode(bytes),
+      hashFn: h57HashFn,
       fetchFromApi: () async {
         calls++;
         return const ApiFetchResult<Map<String, dynamic>>(
@@ -198,7 +205,8 @@ void main() {
   });
 
   test('engine continues when persistent write fails', () async {
-    final store = MemoryCacheStore<Map<String, dynamic>>(maxEntries: 10, now: () => 1000);
+    final store =
+        MemoryCacheStore<Map<String, dynamic>>(maxEntries: 10, now: () => 1000);
     final persistent = _ThrowingPersistentStore<Map<String, dynamic>>();
     var calls = 0;
 
@@ -224,7 +232,7 @@ void main() {
           specChecksum: 'spec',
           userScope: 'u1',
         ),
-        hashFn: (bytes) => base64Url.encode(bytes),
+        hashFn: h57HashFn,
         fetchFromApi: () async {
           calls++;
           return const ApiFetchResult<Map<String, dynamic>>(
@@ -266,7 +274,9 @@ class _ThrowingPersistentStore<T> implements PersistentCacheStore<T> {
   Future<CacheEntry<T>?> get(String cacheKey) async => null;
 
   @override
-  Future<List<CacheEntry<T>>> hydrateAllValid({required int now, int? limit}) async => [];
+  Future<List<CacheEntry<T>>> hydrateAllValid(
+          {required int now, int? limit}) async =>
+      [];
 
   @override
   Future<int> pruneExpired({required int now}) async => 0;

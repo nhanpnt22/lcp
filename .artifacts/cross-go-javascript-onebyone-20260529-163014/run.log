@@ -1,0 +1,113 @@
+[1/5] Preparing artifact dir: /Users/brian/dev/aco/aip/sdp/lcp/.artifacts/cross-go-javascript-onebyone-20260529-163014
+[2/5] Skipping JavaScript build (LCP_CROSS_GO_JS_SKIP_BUILD=1)
+[3/5] Running Go one-by-one cases (memory + sqlite in each case)
+- Go case: TestPersistentStoreContractSetGetValue
+=== RUN   TestPersistentStoreContractSetGetValue
+=== RUN   TestPersistentStoreContractSetGetValue/set_get_value/memory
+=== RUN   TestPersistentStoreContractSetGetValue/set_get_value/sqlite
+--- PASS: TestPersistentStoreContractSetGetValue (0.00s)
+    --- PASS: TestPersistentStoreContractSetGetValue/set_get_value/memory (0.00s)
+    --- PASS: TestPersistentStoreContractSetGetValue/set_get_value/sqlite (0.00s)
+PASS
+ok  	github.com/nhanpnt22/lcp/sdks/go	0.332s
+- Go case: TestPersistentStoreContractOverwrite
+=== RUN   TestPersistentStoreContractOverwrite
+=== RUN   TestPersistentStoreContractOverwrite/overwrite/memory
+=== RUN   TestPersistentStoreContractOverwrite/overwrite/sqlite
+--- PASS: TestPersistentStoreContractOverwrite (0.00s)
+    --- PASS: TestPersistentStoreContractOverwrite/overwrite/memory (0.00s)
+    --- PASS: TestPersistentStoreContractOverwrite/overwrite/sqlite (0.00s)
+PASS
+ok  	github.com/nhanpnt22/lcp/sdks/go	0.328s
+- Go case: TestPersistentStoreContractDelete
+=== RUN   TestPersistentStoreContractDelete
+=== RUN   TestPersistentStoreContractDelete/delete/memory
+=== RUN   TestPersistentStoreContractDelete/delete/sqlite
+--- PASS: TestPersistentStoreContractDelete (0.00s)
+    --- PASS: TestPersistentStoreContractDelete/delete/memory (0.00s)
+    --- PASS: TestPersistentStoreContractDelete/delete/sqlite (0.00s)
+PASS
+ok  	github.com/nhanpnt22/lcp/sdks/go	0.329s
+- Go case: TestPersistentStoreContractClear
+=== RUN   TestPersistentStoreContractClear
+=== RUN   TestPersistentStoreContractClear/clear/memory
+=== RUN   TestPersistentStoreContractClear/clear/sqlite
+--- PASS: TestPersistentStoreContractClear (0.00s)
+    --- PASS: TestPersistentStoreContractClear/clear/memory (0.00s)
+    --- PASS: TestPersistentStoreContractClear/clear/sqlite (0.00s)
+PASS
+ok  	github.com/nhanpnt22/lcp/sdks/go	0.332s
+- Go case: TestPersistentStoreContractPruneExpired
+=== RUN   TestPersistentStoreContractPruneExpired
+=== RUN   TestPersistentStoreContractPruneExpired/prune_expired/memory
+=== RUN   TestPersistentStoreContractPruneExpired/prune_expired/sqlite
+--- PASS: TestPersistentStoreContractPruneExpired (0.00s)
+    --- PASS: TestPersistentStoreContractPruneExpired/prune_expired/memory (0.00s)
+    --- PASS: TestPersistentStoreContractPruneExpired/prune_expired/sqlite (0.00s)
+PASS
+ok  	github.com/nhanpnt22/lcp/sdks/go	0.335s
+- Go case: TestPersistentStoreContractHydrateAllValidAndLimit
+=== RUN   TestPersistentStoreContractHydrateAllValidAndLimit
+=== RUN   TestPersistentStoreContractHydrateAllValidAndLimit/hydrate_valid_limit/memory
+=== RUN   TestPersistentStoreContractHydrateAllValidAndLimit/hydrate_valid_limit/sqlite
+--- PASS: TestPersistentStoreContractHydrateAllValidAndLimit (0.00s)
+    --- PASS: TestPersistentStoreContractHydrateAllValidAndLimit/hydrate_valid_limit/memory (0.00s)
+    --- PASS: TestPersistentStoreContractHydrateAllValidAndLimit/hydrate_valid_limit/sqlite (0.00s)
+PASS
+ok  	github.com/nhanpnt22/lcp/sdks/go	0.315s
+[4/5] Running JavaScript one-by-one IndexedDB cases
+- JS case: set/get value after set
+
+Running 1 test using 1 worker
+
+[2m[WebServer] [22m127.0.0.1 - - [29/May/2026 16:30:24] "GET / HTTP/1.1" 200 -
+[2m[WebServer] [22m127.0.0.1 - - [29/May/2026 16:30:24] "GET /dist/index.js HTTP/1.1" 200 -
+  ✓  1 [chromium] › tests/browser/sdk.idb.contract.onebyone.spec.ts:11:3 › LCP SDK IndexedDB contract one-by-one › set/get value after set (241ms)
+
+  1 passed (1.2s)
+- JS case: overwrite existing key
+
+Running 1 test using 1 worker
+
+[2m[WebServer] [22m127.0.0.1 - - [29/May/2026 16:30:25] "GET / HTTP/1.1" 200 -
+[2m[WebServer] [22m127.0.0.1 - - [29/May/2026 16:30:25] "GET /dist/index.js HTTP/1.1" 200 -
+  ✓  1 [chromium] › tests/browser/sdk.idb.contract.onebyone.spec.ts:58:3 › LCP SDK IndexedDB contract one-by-one › overwrite existing key (65ms)
+
+  1 passed (569ms)
+- JS case: delete removes entry
+
+Running 1 test using 1 worker
+
+[2m[WebServer] [22m127.0.0.1 - - [29/May/2026 16:30:26] "GET / HTTP/1.1" 200 -
+[2m[WebServer] [22m127.0.0.1 - - [29/May/2026 16:30:26] "GET /dist/index.js HTTP/1.1" 200 -
+  ✓  1 [chromium] › tests/browser/sdk.idb.contract.onebyone.spec.ts:102:3 › LCP SDK IndexedDB contract one-by-one › delete removes entry (82ms)
+
+  1 passed (581ms)
+- JS case: clear removes all entries
+
+Running 1 test using 1 worker
+
+[2m[WebServer] [22m127.0.0.1 - - [29/May/2026 16:30:27] "GET / HTTP/1.1" 200 -
+[2m[WebServer] [22m127.0.0.1 - - [29/May/2026 16:30:27] "GET /dist/index.js HTTP/1.1" 200 -
+  ✓  1 [chromium] › tests/browser/sdk.idb.contract.onebyone.spec.ts:142:3 › LCP SDK IndexedDB contract one-by-one › clear removes all entries (63ms)
+
+  1 passed (560ms)
+- JS case: pruneExpired removes expired only
+
+Running 1 test using 1 worker
+
+[2m[WebServer] [22m127.0.0.1 - - [29/May/2026 16:30:28] "GET / HTTP/1.1" 200 -
+[2m[WebServer] [22m127.0.0.1 - - [29/May/2026 16:30:28] "GET /dist/index.js HTTP/1.1" 200 -
+  ✓  1 [chromium] › tests/browser/sdk.idb.contract.onebyone.spec.ts:190:3 › LCP SDK IndexedDB contract one-by-one › pruneExpired removes expired only (73ms)
+
+  1 passed (581ms)
+- JS case: hydrateAllValid excludes expired and respects limit
+
+Running 1 test using 1 worker
+
+[2m[WebServer] [22m127.0.0.1 - - [29/May/2026 16:30:29] "GET / HTTP/1.1" 200 -
+[2m[WebServer] [22m127.0.0.1 - - [29/May/2026 16:30:29] "GET /dist/index.js HTTP/1.1" 200 -
+  ✓  1 [chromium] › tests/browser/sdk.idb.contract.onebyone.spec.ts:248:3 › LCP SDK IndexedDB contract one-by-one › hydrateAllValid excludes expired and respects limit (80ms)
+
+  1 passed (585ms)
+[5/5] Comparing per-case outcomes and writing report
