@@ -36,9 +36,11 @@ packages:
   b57:
     dependency: "direct main"
     description:
-      path: "../../../third_party/f57/implementations/dart"
-      relative: true
-    source: path
+      path: "implementations/dart"
+      ref: HEAD
+      resolved-ref: d11b93382e45c2ab89e6b8c0f386afa6922e8af9
+      url: "https://github.com/nhanpnt22/f57.git"
+    source: git
     version: "0.1.0"
   blake3_dart:
     dependency: transitive
