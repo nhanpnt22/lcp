@@ -80,6 +80,6 @@
     "vitest": "^3.2.4"
   },
   "dependencies": {
-    "@aco/b57-js": "git+https://github.com/nhanpnt22/f57.git#javascript"
+    "f57-js": "github:nhanpnt22/f57#javascript"
   }
 }

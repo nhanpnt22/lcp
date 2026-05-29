@@ -1,4 +1,4 @@
-import { h57IsCanonical, h57IsValid } from "@aco/b57-js/h57.js";
+import { h57IsCanonical, h57IsValid } from "f57-js/h57.js";
 
 export function isH57CacheKey(cacheKey: string): boolean {
   const value = cacheKey.trim();

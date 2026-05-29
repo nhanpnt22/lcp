@@ -20,7 +20,7 @@
     "release:check": "npm run typecheck && npm run test && npm pack --dry-run"
   },
   "dependencies": {
-    "@aco/b57-js": "git+https://github.com/nhanpnt22/f57.git#javascript",
+    "f57-js": "github:nhanpnt22/f57#javascript",
     "@google-cloud/storage": "^7.16.0",
     "@sdp/lcp-javascript-sdk": "file:../javascript",
     "better-sqlite3": "^11.8.1"

@@ -1,4 +1,4 @@
-declare module "@aco/b57-js/h57.js" {
+declare module "f57-js/h57.js" {
   export const H57Length: {
     readonly HASH_AUTO: number;
   };

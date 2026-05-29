@@ -1,6 +1,6 @@
 import { canonicalJSONStringify } from "./canonical-json";
 import { stripTraceFields } from "../trace";
-import { h57Hash, H57Length } from "@aco/b57-js/h57.js";
+import { h57Hash, H57Length } from "f57-js/h57.js";
 
 export interface CacheKeyInput {
   namespace: string;
@@ -47,7 +47,7 @@ export function computeCacheKey(input: CacheKeyInput, h57HashFn: H57HashFunction
 
 /**
  * H57 hash function: BLAKE3 → B57 encoding.
- * Uses the F57 reference implementation (@aco/b57-js).
+ * Uses the F57 reference implementation (f57-js).
  *
  * Use this as the hashFn argument to computeCacheKey.
  */
