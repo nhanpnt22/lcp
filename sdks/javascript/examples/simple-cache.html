@@ -253,7 +253,7 @@
 							specChecksum: "demo-spec-v1",
 							userScope
 						},
-						h57Hash: api.demoHash,
+						h57Hash: api.h57HashFn ?? api.demoHash,
 						allowStaleOnExpired: allowStale,
 						fetchFromApi: async function () {
 							apiCalls += 1;
