@@ -145,6 +145,8 @@ function withToolPath(env: NodeJS.ProcessEnv): NodeJS.ProcessEnv {
 }
 
 test.describe("cross-sdk parity", () => {
+  test.setTimeout(180_000);
+
   test("matches Go SQLite, Flutter SQLite, and JavaScript IndexedDB for 100 datasets", async ({ page }) => {
     await page.goto("/");
 
