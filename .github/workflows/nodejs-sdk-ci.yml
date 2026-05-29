@@ -33,7 +33,17 @@ jobs:
         with:
           node-version: 20
           cache: npm
-          cache-dependency-path: sdks/nodejs/package-lock.json
+          cache-dependency-path: |
+            sdks/nodejs/package-lock.json
+            sdks/javascript/package-lock.json
+
+      - name: Install JavaScript SDK dependencies
+        run: npm ci
+        working-directory: sdks/javascript
+
+      - name: Build JavaScript SDK
+        run: npm run build
+        working-directory: sdks/javascript
 
       - name: Install dependencies
         run: npm ci
