@@ -29,6 +29,84 @@ void main() {
       await harness.dispose();
     });
 
+    test('overwrites existing key', () async {
+      final harness = await _createHarness(nowMs: 2000);
+      final key = _h57Key('overwrite');
+
+      await harness.store.set(
+        _entry(
+          cacheKey: key,
+          data: {'name': 'Alice'},
+          createdAt: 1000,
+          ttlMs: 5000,
+        ),
+      );
+      await harness.store.set(
+        _entry(
+          cacheKey: key,
+          data: {'name': 'Bob'},
+          createdAt: 1000,
+          ttlMs: 5000,
+        ),
+      );
+
+      final loaded = await harness.store.get(key);
+      expect(loaded, isNotNull);
+      expect(loaded!.data['name'], equals('Bob'));
+
+      await harness.dispose();
+    });
+
+    test('delete removes entry', () async {
+      final harness = await _createHarness(nowMs: 2000);
+      final key = _h57Key('delete');
+
+      await harness.store.set(
+        _entry(
+          cacheKey: key,
+          data: {'v': 1},
+          createdAt: 1000,
+          ttlMs: 5000,
+        ),
+      );
+      await harness.store.delete(key);
+
+      final loaded = await harness.store.get(key);
+      expect(loaded, isNull);
+
+      await harness.dispose();
+    });
+
+    test('clear removes all entries', () async {
+      final harness = await _createHarness(nowMs: 2000);
+      final key1 = _h57Key('clear-1');
+      final key2 = _h57Key('clear-2');
+
+      await harness.store.set(
+        _entry(
+          cacheKey: key1,
+          data: {'v': 1},
+          createdAt: 1000,
+          ttlMs: 5000,
+        ),
+      );
+      await harness.store.set(
+        _entry(
+          cacheKey: key2,
+          data: {'v': 2},
+          createdAt: 1000,
+          ttlMs: 5000,
+        ),
+      );
+
+      await harness.store.clear();
+
+      expect(await harness.store.get(key1), isNull);
+      expect(await harness.store.get(key2), isNull);
+
+      await harness.dispose();
+    });
+
     test('returns null and removes entry when expired', () async {
       final harness = await _createHarness(nowMs: 7000);
       final expiredKey = _h57Key('expired');

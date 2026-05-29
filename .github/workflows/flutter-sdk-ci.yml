@@ -34,6 +34,9 @@ jobs:
       - name: Analyze
         run: dart analyze
 
+      - name: Run SQLite cache UAT (all cache functions)
+        run: dart test test/sqlite_persistent_cache_store_test.dart -r expanded
+
       - name: Test
         run: dart test
 

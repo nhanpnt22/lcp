@@ -48,6 +48,12 @@ jobs:
           echo "GCP_SA_KEY=$key_file" >> "$GITHUB_ENV"
           echo "GOOGLE_APPLICATION_CREDENTIALS=$key_file" >> "$GITHUB_ENV"
 
+      - name: Run Cloud Storage cache UAT (all cache functions)
+        run: >
+          go test -count=1 -v
+          -run 'TestPersistentStoreCloudContract(SetGetValue|Overwrite|Delete|Clear|PruneExpired|HydrateAllValidAndLimit|SetVisibleValueEvidence|RejectsNonH57ObjectFilename|RejectsCorruptObjectPayload)$'
+          ./
+
       - name: Run tests
         run: go test ./...
 

@@ -62,5 +62,8 @@ jobs:
           echo "GCP_SA_KEY=$key_file" >> "$GITHUB_ENV"
           echo "GOOGLE_APPLICATION_CREDENTIALS=$key_file" >> "$GITHUB_ENV"
 
+      - name: Run Cloud Storage cache UAT (all cache functions)
+        run: npx vitest run tests/persistent.store.cloud.contract.test.ts tests/cloud.storage.persistent.store.test.ts --reporter=verbose
+
       - name: Run release check
         run: npm run release:check

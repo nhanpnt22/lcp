@@ -41,6 +41,9 @@ jobs:
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
 
+      - name: Run IndexedDB cache UAT (all cache functions)
+        run: npx playwright test -c playwright.config.ts tests/browser/sdk.idb.contract.onebyone.spec.ts tests/browser/sdk.idb.operations.spec.ts --project=chromium
+
       - name: Run release gate script
         run: npm run test:release
 
