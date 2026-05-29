@@ -1,0 +1,28 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "declarationMap": false,
+    "outDir": "dist",
+    "rootDir": "."
+  },
+  "include": [
+    "index.ts",
+    "compression/**/*.ts",
+    "consistency/**/*.ts",
+    "entry/**/*.ts",
+    "execution/**/*.ts",
+    "failure/**/*.ts",
+    "key/**/*.ts",
+    "namespace/**/*.ts",
+    "resume/**/*.ts",
+    "singleflight/**/*.ts",
+    "storage/**/*.ts",
+    "swr/**/*.ts",
+    "trace/**/*.ts",
+    "ttl/**/*.ts",
+    "validation/**/*.ts"
+  ]
+}

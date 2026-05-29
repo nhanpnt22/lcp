@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "lib": ["ES2020", "DOM"]
+  },
+  "include": ["**/*.ts"],
+  "exclude": [
+    "node_modules",
+    "coverage",
+    "min",
+    "test",
+    "tests",
+    "examples",
+    "playwright.config.ts"
+  ]
+}

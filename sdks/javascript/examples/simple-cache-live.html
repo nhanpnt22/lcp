@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SDALP Simple Cache Live Client Example</title>
+    <style>
+      :root {
+        --bg: #eef6f8;
+        --panel: #ffffff;
+        --ink: #0f172a;
+        --muted: #4b5563;
+        --accent: #0f766e;
+        --accent-2: #115e59;
+        --ok: #047857;
+        --bad: #b91c1c;
+        --border: #d5e2e8;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Avenir Next", "Segoe UI", sans-serif;
+        color: var(--ink);
+        background: linear-gradient(180deg, #dff0f4 0%, var(--bg) 45%, #f3fafc 100%);
+      }
+
+      .wrap {
+        max-width: 980px;
+        margin: 24px auto;
+        padding: 0 14px 20px;
+      }
+
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 14px;
+        margin-bottom: 12px;
+        box-shadow: 0 8px 22px rgba(2, 44, 34, 0.06);
+      }
+
+      h1 {
+        margin: 0 0 8px;
+        font-size: 1.45rem;
+      }
+
+      p {
+        margin: 6px 0;
+        color: var(--muted);
+      }
+
+      .grid {
+        display: grid;
+        gap: 10px;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      }
+
+      label {
+        display: block;
+        margin-bottom: 4px;
+        font-size: 0.9rem;
+      }
+
+      input,
+      textarea,
+      button,
+      select {
+        width: 100%;
+        font: inherit;
+        border-radius: 9px;
+      }
+
+      input,
+      textarea,
+      select {
+        border: 1px solid var(--border);
+        padding: 9px 10px;
+        background: #fbfeff;
+      }
+
+      textarea {
+        min-height: 82px;
+        resize: vertical;
+      }
+
+      .btn-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      button {
+        border: none;
+        background: var(--accent);
+        color: #fff;
+        font-weight: 600;
+        padding: 10px 12px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background: var(--accent-2);
+      }
+
+      .pill {
+        display: inline-block;
+        margin-right: 8px;
+        margin-top: 6px;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        padding: 6px 9px;
+        background: #f7fcfd;
+        font-size: 0.88rem;
+      }
+
+      pre {
+        margin: 0;
+        background: #0b1220;
+        color: #d7e6ff;
+        border-radius: 10px;
+        padding: 12px;
+        overflow: auto;
+      }
+
+      .ok {
+        color: var(--ok);
+        font-weight: 700;
+      }
+
+      .bad {
+        color: var(--bad);
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="panel">
+        <h1>Simple Cache + Live Fetch (Client Integration)</h1>
+        <p>
+          This page demonstrates a real browser fetch wired through SDALP read-through caching. It is designed for
+          developers and AI coding assistants to align on one integration pattern.
+        </p>
+      </div>
+
+      <div class="panel">
+        <div class="grid">
+          <div>
+            <label for="endpoint">Endpoint URL</label>
+            <input id="endpoint" value="https://jsonplaceholder.typicode.com/todos/1" />
+          </div>
+          <div>
+            <label for="method">Method</label>
+            <select id="method">
+              <option value="GET" selected>GET</option>
+              <option value="POST">POST</option>
+            </select>
+          </div>
+          <div>
+            <label for="ttlMs">TTL (ms)</label>
+            <input id="ttlMs" type="number" min="0" value="3000" />
+          </div>
+          <div>
+            <label for="userScope">User scope</label>
+            <input id="userScope" value="client-user-001" />
+          </div>
+        </div>
+
+        <label for="requestBody" style="margin-top: 10px">Request body JSON (used for POST)</label>
+        <textarea id="requestBody">{"title":"cache-demo","completed":false,"userId":1}</textarea>
+
+        <div class="btn-row">
+          <button id="btnRun">Run live request</button>
+          <button id="btnRunTwice">Run twice (expect cache on second)</button>
+          <button id="btnReset">Reset</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <span class="pill" id="mSource">source: -</span>
+        <span class="pill" id="mApiCalls">apiCalls: 0</span>
+        <span class="pill" id="mKey">cacheKey: -</span>
+        <div id="summary" style="margin-top: 10px">Ready.</div>
+      </div>
+
+      <div class="panel">
+        <div>Response</div>
+        <pre id="response">{}</pre>
+      </div>
+
+      <div class="panel">
+        <div>Integration hint for AI assistant</div>
+        <pre id="assistantHint">Use ReadThroughCacheEngine with keyInput fields:
+- namespace, operationId, payload, schemaVersion, specChecksum, userScope
+Inject fetchFromApi that returns { data, ttlMs }.
+Use deterministic hash (demoHash) for cacheKey identity in browser examples.</pre>
+      </div>
+
+      <div class="panel">
+        <div>Log</div>
+        <pre id="log"></pre>
+      </div>
+    </div>
+
+    <script src="../min/local-cache.min.js"></script>
+    <script>
+      (function main() {
+        const api = globalThis.SdalpLocalCache;
+        const summary = document.getElementById("summary");
+        const out = document.getElementById("response");
+        const log = document.getElementById("log");
+        const mSource = document.getElementById("mSource");
+        const mApiCalls = document.getElementById("mApiCalls");
+        const mKey = document.getElementById("mKey");
+
+        if (!api) {
+          summary.innerHTML = '<span class="bad">Missing ../min/local-cache.min.js bundle.</span>';
+          return;
+        }
+
+        const memoryStore = new api.MemoryCacheStore({ maxEntries: 256 });
+        const singleFlight = new api.CacheSingleFlight();
+        const engine = new api.ReadThroughCacheEngine({
+          memoryStore,
+          singleFlight,
+          persistence: { mode: "dual", shortThresholdMs: 300000 },
+          parity: {
+            schemaVersion: "1.0.0",
+            specChecksum: "live-demo-v1",
+            cacheNamespace: "client-live",
+            dataVersion: "2026-05"
+          }
+        });
+
+        let apiCalls = 0;
+
+        function logLine(msg) {
+          const ts = new Date().toISOString().split("T")[1].slice(0, 8);
+          log.textContent += `[${ts}] ${msg}\n`;
+          log.scrollTop = log.scrollHeight;
+        }
+
+        function readBodyJson() {
+          return JSON.parse(document.getElementById("requestBody").value || "{}");
+        }
+
+        function getConfig() {
+          return {
+            endpoint: document.getElementById("endpoint").value.trim(),
+            method: document.getElementById("method").value,
+            ttlMs: Number(document.getElementById("ttlMs").value || 0),
+            userScope: document.getElementById("userScope").value.trim() || "client-user-001"
+          };
+        }
+
+        async function executeOnce() {
+          const cfg = getConfig();
+          const payload = cfg.method === "POST" ? readBodyJson() : { endpoint: cfg.endpoint };
+
+          const res = await engine.execute({
+            keyInput: {
+              namespace: "client-live",
+              operationId: cfg.method === "POST" ? "postJson" : "getJson",
+              payload,
+              schemaVersion: "1.0.0",
+              specChecksum: "live-demo-v1",
+              userScope: cfg.userScope
+            },
+            h57Hash: api.demoHash,
+            fetchFromApi: async function () {
+              apiCalls += 1;
+
+              const requestInit = {
+                method: cfg.method,
+                headers: { "content-type": "application/json" }
+              };
+              if (cfg.method === "POST") {
+                requestInit.body = JSON.stringify(payload);
+              }
+
+              const response = await fetch(cfg.endpoint, requestInit);
+              if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+              }
+
+              const data = await response.json();
+              return {
+                ttlMs: cfg.ttlMs,
+                data: {
+                  endpoint: cfg.endpoint,
+                  method: cfg.method,
+                  apiCall: apiCalls,
+                  received: data
+                }
+              };
+            }
+          });
+
+          mSource.textContent = `source: ${res.source}${res.stale ? " (stale)" : ""}`;
+          mApiCalls.textContent = `apiCalls: ${apiCalls}`;
+          mKey.textContent = `cacheKey: ${res.cacheKey}`;
+          out.textContent = JSON.stringify(res.data, null, 2);
+          logLine(`source=${res.source} apiCalls=${apiCalls} key=${res.cacheKey}`);
+          return res;
+        }
+
+        document.getElementById("btnRun").addEventListener("click", async function () {
+          try {
+            await executeOnce();
+            summary.innerHTML = '<span class="ok">Request complete.</span>';
+          } catch (err) {
+            summary.innerHTML = `<span class="bad">Request failed: ${err.message || err}</span>`;
+            logLine(`error ${err.message || err}`);
+          }
+        });
+
+        document.getElementById("btnRunTwice").addEventListener("click", async function () {
+          try {
+            memoryStore.clear();
+            apiCalls = 0;
+            const first = await executeOnce();
+            const second = await executeOnce();
+
+            if (first.source !== "API") {
+              throw new Error("first call expected API source");
+            }
+            if (second.source !== "CACHE") {
+              throw new Error("second call expected CACHE source");
+            }
+            if (apiCalls !== 1) {
+              throw new Error(`expected apiCalls=1, got ${apiCalls}`);
+            }
+
+            summary.innerHTML = '<span class="ok">PASS: second call served from cache.</span>';
+            logLine("run-twice pass");
+          } catch (err) {
+            summary.innerHTML = `<span class="bad">run-twice failed: ${err.message || err}</span>`;
+            logLine(`run-twice failed ${err.message || err}`);
+          }
+        });
+
+        document.getElementById("btnReset").addEventListener("click", function () {
+          memoryStore.clear();
+          apiCalls = 0;
+          mSource.textContent = "source: -";
+          mApiCalls.textContent = "apiCalls: 0";
+          mKey.textContent = "cacheKey: -";
+          out.textContent = "{}";
+          log.textContent = "";
+          summary.textContent = "Reset complete.";
+        });
+
+        logLine("ready");
+      })();
+    </script>
+  </body>
+</html>

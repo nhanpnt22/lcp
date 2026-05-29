@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>SDALP Simple Cache Client Example</title>
+		<style>
+			:root {
+				--bg: #f4f8fb;
+				--panel: #ffffff;
+				--ink: #0f172a;
+				--muted: #52627a;
+				--accent: #0e7490;
+				--accent-2: #155e75;
+				--ok: #0f766e;
+				--err: #b91c1c;
+				--border: #d7e3ee;
+			}
+
+			* {
+				box-sizing: border-box;
+			}
+
+			body {
+				margin: 0;
+				font-family: "Avenir Next", "Segoe UI", sans-serif;
+				background: radial-gradient(circle at 80% 0%, #d9eef6 0%, var(--bg) 48%);
+				color: var(--ink);
+			}
+
+			.wrap {
+				max-width: 980px;
+				margin: 28px auto;
+				padding: 0 16px 24px;
+			}
+
+			.panel {
+				background: var(--panel);
+				border: 1px solid var(--border);
+				border-radius: 14px;
+				padding: 16px;
+				margin-bottom: 14px;
+				box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+			}
+
+			h1 {
+				margin: 0 0 6px;
+				font-size: 1.5rem;
+			}
+
+			p {
+				margin: 6px 0;
+				color: var(--muted);
+			}
+
+			.grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+				gap: 12px;
+			}
+
+			label {
+				font-size: 0.92rem;
+				display: block;
+				margin-bottom: 4px;
+			}
+
+			input,
+			textarea,
+			button {
+				width: 100%;
+				font: inherit;
+				border-radius: 10px;
+			}
+
+			input,
+			textarea {
+				border: 1px solid var(--border);
+				padding: 9px 10px;
+				background: #fbfdff;
+			}
+
+			textarea {
+				min-height: 90px;
+				resize: vertical;
+			}
+
+			.btn-row {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+				gap: 10px;
+				margin-top: 10px;
+			}
+
+			button {
+				border: none;
+				padding: 10px 12px;
+				background: var(--accent);
+				color: #fff;
+				cursor: pointer;
+				font-weight: 600;
+			}
+
+			button:hover {
+				background: var(--accent-2);
+			}
+
+			.metric {
+				display: inline-block;
+				margin-right: 12px;
+				padding: 6px 10px;
+				border-radius: 999px;
+				border: 1px solid var(--border);
+				background: #f8fbff;
+				font-size: 0.9rem;
+			}
+
+			pre {
+				margin: 0;
+				border-radius: 10px;
+				padding: 12px;
+				overflow: auto;
+				background: #0d1627;
+				color: #dbeafe;
+			}
+
+			.ok {
+				color: var(--ok);
+				font-weight: 700;
+			}
+
+			.err {
+				color: var(--err);
+				font-weight: 700;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="wrap">
+			<div class="panel">
+				<h1>SDALP Local Cache: Simple Client Integration</h1>
+				<p>
+					Use this page to integrate client-side read-through caching and quickly validate behavior with
+					browser self-tests. Built for developers and AI coding assistants to share a clear integration contract.
+				</p>
+			</div>
+
+			<div class="panel">
+				<div class="grid">
+					<div>
+						<label for="userScope">User scope</label>
+						<input id="userScope" value="user-123" />
+					</div>
+					<div>
+						<label for="ttlMs">TTL (ms)</label>
+						<input id="ttlMs" type="number" value="2500" min="0" />
+					</div>
+					<div>
+						<label for="operationId">Operation ID</label>
+						<input id="operationId" value="searchProducts" />
+					</div>
+					<div>
+						<label for="allowStale">Allow stale on expired</label>
+						<input id="allowStale" type="checkbox" />
+					</div>
+				</div>
+
+				<label for="payload" style="margin-top: 10px">Request payload JSON</label>
+				<textarea id="payload">{"query":"laptop","page":1,"filters":{"brand":"x"}}</textarea>
+
+				<div class="btn-row">
+					<button id="runRequest">Run request</button>
+					<button id="runSelfTest">Run self-test</button>
+					<button id="resetMetrics">Reset metrics</button>
+				</div>
+			</div>
+
+			<div class="panel">
+				<span class="metric" id="metricSource">source: -</span>
+				<span class="metric" id="metricApiCalls">apiCalls: 0</span>
+				<span class="metric" id="metricCacheKey">cacheKey: -</span>
+				<div id="summary" style="margin-top: 10px">Ready.</div>
+			</div>
+
+			<div class="panel">
+				<div>Last response</div>
+				<pre id="responseOut">{}</pre>
+			</div>
+
+			<div class="panel">
+				<div>Execution log</div>
+				<pre id="logOut"></pre>
+			</div>
+		</div>
+
+		<script src="../min/local-cache.min.js"></script>
+		<script>
+			(function boot() {
+				const logOut = document.getElementById("logOut");
+				const responseOut = document.getElementById("responseOut");
+				const summary = document.getElementById("summary");
+				const sourceMetric = document.getElementById("metricSource");
+				const apiCallsMetric = document.getElementById("metricApiCalls");
+				const keyMetric = document.getElementById("metricCacheKey");
+
+				const api = globalThis.SdalpLocalCache;
+				if (!api) {
+					  summary.innerHTML = '<span class="err">SDK bundle missing. Build ../min/local-cache.min.js first.</span>';
+					return;
+				}
+
+				const memoryStore = new api.MemoryCacheStore({ maxEntries: 256 });
+				const singleFlight = new api.CacheSingleFlight();
+
+				const engine = new api.ReadThroughCacheEngine({
+					memoryStore,
+					singleFlight,
+					persistence: { mode: "dual", shortThresholdMs: 300000 },
+					parity: {
+						schemaVersion: "1.0.0",
+						specChecksum: "demo-spec-v1",
+						cacheNamespace: "client-demo",
+						dataVersion: "2026-05"
+					}
+				});
+
+				let apiCalls = 0;
+
+				function log(line) {
+					const stamp = new Date().toISOString().split("T")[1].slice(0, 8);
+					logOut.textContent += `[${stamp}] ${line}\n`;
+					logOut.scrollTop = logOut.scrollHeight;
+				}
+
+				function readPayload() {
+					const raw = document.getElementById("payload").value;
+					return JSON.parse(raw);
+				}
+
+				function makeRequest(overrides) {
+					const ttlMs = Number(document.getElementById("ttlMs").value || 0);
+					const operationId = document.getElementById("operationId").value || "searchProducts";
+					const userScope = document.getElementById("userScope").value || "user-123";
+					const allowStale = document.getElementById("allowStale").checked;
+					const payload = readPayload();
+
+					const baseRequest = {
+						keyInput: {
+							namespace: "client-demo",
+							operationId,
+							payload,
+							schemaVersion: "1.0.0",
+							specChecksum: "demo-spec-v1",
+							userScope
+						},
+						h57Hash: api.demoHash,
+						allowStaleOnExpired: allowStale,
+						fetchFromApi: async function () {
+							apiCalls += 1;
+							await new Promise((r) => setTimeout(r, 30));
+							return {
+								ttlMs,
+								data: {
+									via: "mock-api",
+									apiCall: apiCalls,
+									payload,
+									generatedAt: Date.now()
+								}
+							};
+						}
+					};
+
+					return overrides ? Object.assign(baseRequest, overrides) : baseRequest;
+				}
+
+				async function runOnce(custom) {
+					const out = await engine.execute(makeRequest(custom));
+					sourceMetric.textContent = `source: ${out.source}${out.stale ? " (stale)" : ""}`;
+					keyMetric.textContent = `cacheKey: ${out.cacheKey}`;
+					apiCallsMetric.textContent = `apiCalls: ${apiCalls}`;
+					responseOut.textContent = JSON.stringify(out.data, null, 2);
+					log(`result source=${out.source} stale=${out.stale} cacheKey=${out.cacheKey} apiCalls=${apiCalls}`);
+					return out;
+				}
+
+				document.getElementById("runRequest").addEventListener("click", async function () {
+					try {
+						await runOnce();
+						summary.innerHTML = '<span class="ok">Request completed.</span>';
+					} catch (err) {
+						summary.innerHTML = `<span class="err">Request failed: ${err.message || err}</span>`;
+						log(`error ${err.message || err}`);
+					}
+				});
+
+				document.getElementById("resetMetrics").addEventListener("click", function () {
+					apiCalls = 0;
+					apiCallsMetric.textContent = "apiCalls: 0";
+					sourceMetric.textContent = "source: -";
+					keyMetric.textContent = "cacheKey: -";
+					summary.textContent = "Metrics reset.";
+					responseOut.textContent = "{}";
+					logOut.textContent = "";
+				});
+
+				document.getElementById("runSelfTest").addEventListener("click", async function () {
+					try {
+						log("starting self-test");
+						apiCalls = 0;
+						memoryStore.clear();
+
+						const first = await runOnce();
+						if (first.source !== "API") {
+							throw new Error("Expected first source API");
+						}
+
+						const second = await runOnce();
+						if (second.source !== "CACHE") {
+							throw new Error("Expected second source CACHE");
+						}
+
+						const third = await runOnce({
+							keyInput: {
+								...makeRequest().keyInput,
+								payload: { query: "phone", page: 1 }
+							}
+						});
+						if (third.source !== "API") {
+							throw new Error("Expected changed payload source API");
+						}
+
+						const ttlField = document.getElementById("ttlMs");
+						const originalTtl = ttlField.value;
+						ttlField.value = "60";
+						memoryStore.clear();
+						apiCalls = 0;
+
+						await runOnce();
+						await new Promise((r) => setTimeout(r, 80));
+						const afterTtl = await runOnce();
+						ttlField.value = originalTtl;
+
+						if (afterTtl.source !== "API") {
+							throw new Error("Expected post-expiry source API");
+						}
+
+						summary.innerHTML = '<span class="ok">SELF-TEST PASSED</span>';
+						log("self-test passed");
+					} catch (err) {
+						summary.innerHTML = `<span class="err">SELF-TEST FAILED: ${err.message || err}</span>`;
+						log(`self-test failed ${err.message || err}`);
+					}
+				});
+
+				log("ready");
+			})();
+		</script>
+	</body>
+</html>

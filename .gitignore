@@ -1,0 +1,14 @@
+# Node
+**/node_modules/
+
+# Build artifacts
+**/dist/
+**/coverage/
+**/test-results/
+**/playwright-report/
+
+# Package archives
+*.tgz
+
+# OS/editor
+.DS_Store
