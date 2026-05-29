@@ -6,6 +6,18 @@ Local Cache Protocol workspace.
 
 - docs/LCP — Local Cache Protocol.txt
 
+## Onboarding
+
+Proposed onboarding document names:
+
+- `DEVELOPER_ONBOARDING.md`
+- `AI_ONBOARDING.md`
+
+Onboarding docs:
+
+- docs/DEVELOPER_ONBOARDING.md
+- docs/AI_ONBOARDING.md
+
 ## SDKs
 
 - sdks/javascript
@@ -26,6 +38,46 @@ Local Cache Protocol workspace.
 - profiles/flutter/LCP — Flutter SDK Profile(Mobile).txt
 - profiles/go/LCP — Go SDK Profile(Cloud Run).txt
 - profiles/nodejs/LCP — NodeJS SDK Profile(Firebase App Hosting).txt
+
+## CI UAT Gates
+
+Cross-SDK UAT is enforced in GitHub Actions workflows under `.github/workflows`.
+
+### Go SDK CI (`go-sdk-ci.yml`)
+
+- Backend scope: Cloud Storage (+ memory coverage inside the same contract suite)
+- UAT gate: `Run Cloud Storage cache UAT (all cache functions)`
+- Cache operations covered: set/get, overwrite, delete, clear, pruneExpired, hydrateAllValid(limit)
+- Edge validation covered: non-H57 object filename rejection, corrupt payload rejection
+
+### NodeJS SDK CI (`nodejs-sdk-ci.yml`)
+
+- Backend scope: Cloud Storage
+- UAT gate: `Run Cloud Storage cache UAT (all cache functions)`
+- Cache operations covered: set/get, overwrite, delete, clear, pruneExpired, hydrateAllValid(limit)
+- Additional setup: builds `sdks/javascript` first because NodeJS SDK depends on local JavaScript SDK package artifacts
+
+### Flutter SDK CI (`flutter-sdk-ci.yml`)
+
+- Backend scope: SQLite
+- UAT gate: `Run SQLite cache UAT (all cache functions)`
+- Cache operations covered: set/get, overwrite, delete, clear, pruneExpired, hydrateAllValid(limit)
+
+### JavaScript SDK CI (`javascript-sdk-ci.yml`)
+
+- Backend scope: IndexedDB (Playwright)
+- UAT gate: `Run IndexedDB cache UAT (all cache functions)`
+- Cache operations covered: set/get, overwrite, delete, clear, pruneExpired, hydrateAllValid(limit)
+- Browser gate note: intentionally scoped to JavaScript browser specs only (no Flutter runtime dependency in JS CI)
+
+## CI Testing Environment
+
+These workflows expect the `testing` environment in GitHub Actions to be configured.
+
+- Required secret: `GCP_SA_KEY` (service-account JSON content)
+- Required variables:
+	- `GOOGLE_CLOUD_PROJECT` (for cloud-storage tests)
+	- `LCP_STORAGE_GCS_URI` (for cloud-storage tests)
 
 ## Parity
 
