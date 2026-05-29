@@ -51,7 +51,7 @@ jobs:
         run: npm run test:release
 
       - name: Run browser gate
-        run: npm run test:browser
+        run: npx playwright test -c playwright.config.ts tests/browser/sdk.browser.spec.ts tests/browser/sdk.idb.contract.onebyone.spec.ts tests/browser/sdk.idb.operations.spec.ts --project=chromium
 
       - name: Run coverage gate
         run: npm run test:coverage
