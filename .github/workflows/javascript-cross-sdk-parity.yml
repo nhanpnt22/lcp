@@ -62,7 +62,6 @@ jobs:
 
       - name: Run cross-SDK parity orchestrator
         run: ../../scripts/run_cross_go_flutter_javascript_sqlite_parity.sh
-        working-directory: .
 
       - name: Upload parity evidence artifacts
         if: always()
