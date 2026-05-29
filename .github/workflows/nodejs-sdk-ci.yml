@@ -40,13 +40,15 @@ jobs:
 
       - name: Configure GCP credentials
         shell: bash
+        env:
+          GCP_SA_KEY_VALUE: ${{ secrets.GCP_SA_KEY }}
         run: |
-          if [[ -z "${{ secrets.GCP_SA_KEY }}" ]]; then
+          if [[ -z "${GCP_SA_KEY_VALUE:-}" ]]; then
             echo "GCP_SA_KEY secret is required in environment 'testing'."
             exit 1
           fi
           key_file="$RUNNER_TEMP/gcp-sa-key.json"
-          printf '%s' '${{ secrets.GCP_SA_KEY }}' > "$key_file"
+          printf '%s' "$GCP_SA_KEY_VALUE" > "$key_file"
           echo "GCP_SA_KEY=$key_file" >> "$GITHUB_ENV"
           echo "GOOGLE_APPLICATION_CREDENTIALS=$key_file" >> "$GITHUB_ENV"
 

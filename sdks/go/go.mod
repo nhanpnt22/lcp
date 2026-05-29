@@ -2,7 +2,11 @@ module github.com/nhanpnt22/lcp/sdks/go
 
 go 1.25.8
 
-require modernc.org/sqlite v1.51.0
+require (
+	cloud.google.com/go/storage v1.62.2
+	google.golang.org/api v0.282.0
+	modernc.org/sqlite v1.51.0
+)
 
 require (
 	cel.dev/expr v0.25.1 // indirect
@@ -12,7 +16,6 @@ require (
 	cloud.google.com/go/compute/metadata v0.9.0 // indirect
 	cloud.google.com/go/iam v1.7.0 // indirect
 	cloud.google.com/go/monitoring v1.24.3 // indirect
-	cloud.google.com/go/storage v1.62.2 // indirect
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/detectors/gcp v1.31.0 // indirect
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/metric v0.55.0 // indirect
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/internal/resourcemapping v0.55.0 // indirect
@@ -45,7 +48,6 @@ require (
 	golang.org/x/sync v0.20.0 // indirect
 	golang.org/x/text v0.37.0 // indirect
 	golang.org/x/time v0.15.0 // indirect
-	google.golang.org/api v0.282.0 // indirect
 	google.golang.org/genproto v0.0.0-20260319201613-d00831a3d3e7 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20260401024825-9d38bb4040a9 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260523011958-0a33c5d7ca68 // indirect
@@ -67,4 +69,4 @@ require (
 	modernc.org/memory v1.11.0 // indirect
 )
 
-replace github.com/aco/b57 => ../../../third_party/f57/implementations/go
+replace github.com/aco/b57 => github.com/nhanpnt22/f57/implementations/go v0.0.0-20260523153034-d11b93382e45
