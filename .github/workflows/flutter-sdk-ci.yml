@@ -17,6 +17,7 @@ jobs:
   release-gates:
     name: Release Gates
     runs-on: ubuntu-latest
+    environment: testing
     defaults:
       run:
         working-directory: sdks/flutter
@@ -36,5 +37,19 @@ jobs:
       - name: Test
         run: dart test
 
+      - name: Detect publish mode
+        id: publish_mode
+        run: |
+          if grep -Eq "^publish_to:\\s*('?none'?)" pubspec.yaml; then
+            echo "run_dry_run=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "run_dry_run=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Publish dry-run gate
+        if: steps.publish_mode.outputs.run_dry_run == 'true'
         run: dart pub publish --dry-run
+
+      - name: Skip publish dry-run for private package mode
+        if: steps.publish_mode.outputs.run_dry_run != 'true'
+        run: echo "Skipping publish dry-run because publish_to is none."

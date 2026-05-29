@@ -20,6 +20,7 @@ jobs:
   release-gates:
     name: Release Gates
     runs-on: ubuntu-latest
+    environment: testing
     defaults:
       run:
         working-directory: sdks/javascript

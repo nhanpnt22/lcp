@@ -1,0 +1,53 @@
+name: Go SDK CI
+
+on:
+  pull_request:
+    paths:
+      - "sdks/go/**"
+      - ".github/workflows/go-sdk-ci.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "sdks/go/**"
+      - ".github/workflows/go-sdk-ci.yml"
+  workflow_dispatch:
+
+jobs:
+  release-gates:
+    name: Release Gates
+    runs-on: ubuntu-latest
+    environment: testing
+    env:
+      GOOGLE_CLOUD_PROJECT: aiptesting
+      LCP_STORAGE_GCS_URI: gs://aiptesting.firebasestorage.app/lcp
+    defaults:
+      run:
+        working-directory: sdks/go
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: sdks/go/go.mod
+          cache-dependency-path: sdks/go/go.sum
+
+      - name: Configure GCP credentials
+        shell: bash
+        run: |
+          if [[ -z "${{ secrets.GCP_SA_KEY }}" ]]; then
+            echo "GCP_SA_KEY secret is required in environment 'testing'."
+            exit 1
+          fi
+          key_file="$RUNNER_TEMP/gcp-sa-key.json"
+          printf '%s' '${{ secrets.GCP_SA_KEY }}' > "$key_file"
+          echo "GCP_SA_KEY=$key_file" >> "$GITHUB_ENV"
+          echo "GOOGLE_APPLICATION_CREDENTIALS=$key_file" >> "$GITHUB_ENV"
+
+      - name: Run tests
+        run: go test ./...
+
+      - name: Run race tests
+        run: go test -race ./...
