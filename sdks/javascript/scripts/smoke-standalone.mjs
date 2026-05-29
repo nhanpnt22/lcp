@@ -34,6 +34,6 @@ assert(typeof cjs.ReadThroughCacheEngine === "function", "CJS export ReadThrough
 assert(typeof cjs.computeCacheKey === "function", "CJS export computeCacheKey missing");
 
 const browserBundle = readFileSync(browserCanonicalPath, "utf8");
-assert(browserBundle.includes("SdalpLocalCache"), "Browser bundle does not contain SdalpLocalCache global");
+assert(browserBundle.includes("LcpLocalCache"), "Browser bundle does not contain LcpLocalCache global");
 
 console.log("Standalone smoke check passed");

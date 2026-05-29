@@ -53,7 +53,7 @@ export function computeExpiresAt(createdAt: number, ttlMs: number): number {
 }
 
 /**
- * TTL evaluation follows SDALP rule: missing TTL => BYPASS cache.
+ * TTL evaluation follows LCP rule: missing TTL => BYPASS cache.
  */
 export function evaluateTtl(params: {
   createdAt: number;

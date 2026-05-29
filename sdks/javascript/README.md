@@ -22,7 +22,8 @@ This package produces:
 - `dist/lcp-javascript-sdk-<package-version>.min.js` (IIFE browser global, version-pinned)
 - `dist/browser.min.js` (IIFE browser global, compatibility alias)
 
-The browser bundle exposes `window.SdalpLocalCache`.
+The browser bundle exposes `window.LcpLocalCache` as the primary LCP browser global.
+`window.SdalpLocalCache` remains available as a legacy-compatible alias.
 
 ## Build
 
@@ -42,7 +43,7 @@ Browser global build:
 ```html
 <script src="dist/lcp-javascript-sdk.min.js"></script>
 <script>
-	const sdk = window.SdalpLocalCache;
+	const sdk = window.LcpLocalCache ?? window.SdalpLocalCache;
 </script>
 ```
 
@@ -63,6 +64,25 @@ npm run test:runtime
 npm run test:browser
 npm run test:coverage
 ```
+
+## HTML Browser UAT
+
+Run HTML-driven browser UAT checks in Chromium:
+
+```bash
+node scripts/browser-uat-check.mjs
+```
+
+Expected pass output:
+
+- `[browser-uat] PASS lcp-uat: UAT PASSED (AC 15/15)`
+- `[browser-uat] PASS lcp-simple-cache: SELF-TEST PASSED`
+- `[browser-uat] PASS all browser UAT checks`
+
+Pages covered by this check:
+
+- `examples/lcp-uat.html`
+- `examples/simple-cache.html`
 
 ## Smoke Test
 

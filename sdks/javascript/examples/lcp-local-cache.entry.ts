@@ -16,7 +16,7 @@ function demoHash(input: Uint8Array): string {
   return `h57-demo-${(h >>> 0).toString(16).padStart(8, "0")}`;
 }
 
-const SdalpLocalCacheGlobal = Object.freeze({
+const LcpLocalCacheGlobal = Object.freeze({
   ReadThroughCacheEngine,
   createCacheMetadata,
   isCacheMetadataParityValid,
@@ -36,6 +36,18 @@ const SdalpLocalCacheGlobal = Object.freeze({
   demoHash
 });
 
-(globalThis as typeof globalThis & { SdalpLocalCache?: unknown }).SdalpLocalCache = SdalpLocalCacheGlobal;
+(
+  globalThis as typeof globalThis & {
+    LcpLocalCache?: unknown;
+    SdalpLocalCache?: unknown;
+  }
+).LcpLocalCache = LcpLocalCacheGlobal;
 
-export { SdalpLocalCacheGlobal, demoHash };
+(
+  globalThis as typeof globalThis & {
+    LcpLocalCache?: unknown;
+    SdalpLocalCache?: unknown;
+  }
+).SdalpLocalCache = LcpLocalCacheGlobal;
+
+export { LcpLocalCacheGlobal, demoHash };

@@ -93,7 +93,8 @@ RUNTIME API SURFACE:
 
 BROWSER MIN BUNDLE:
 
-- window.SdalpLocalCache (min/local-cache.min.js)
+- window.LcpLocalCache (primary, min/lcp-local-cache.min.js)
+- window.SdalpLocalCache (legacy alias)
 
 ============================================================
 3. LCP SECTION MAPPING (JS PROFILE)

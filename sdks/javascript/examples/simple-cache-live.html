@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>SDALP Simple Cache Live Client Example</title>
+    <title>LCP Simple Cache Live Client Example</title>
     <style>
       :root {
         --bg: #eef6f8;
@@ -143,7 +143,7 @@
       <div class="panel">
         <h1>Simple Cache + Live Fetch (Client Integration)</h1>
         <p>
-          This page demonstrates a real browser fetch wired through SDALP read-through caching. It is designed for
+          This page demonstrates a real browser fetch wired through LCP read-through caching. It is designed for
           developers and AI coding assistants to align on one integration pattern.
         </p>
       </div>
@@ -207,10 +207,10 @@ Use deterministic hash (demoHash) for cacheKey identity in browser examples.</pr
       </div>
     </div>
 
-    <script src="../min/local-cache.min.js"></script>
+    <script src="../min/lcp-local-cache.min.js"></script>
     <script>
       (function main() {
-        const api = globalThis.SdalpLocalCache;
+        const api = globalThis.LcpLocalCache ?? globalThis.SdalpLocalCache;
         const summary = document.getElementById("summary");
         const out = document.getElementById("response");
         const log = document.getElementById("log");
@@ -219,7 +219,7 @@ Use deterministic hash (demoHash) for cacheKey identity in browser examples.</pr
         const mKey = document.getElementById("mKey");
 
         if (!api) {
-          summary.innerHTML = '<span class="bad">Missing ../min/local-cache.min.js bundle.</span>';
+          summary.innerHTML = '<span class="bad">Missing ../min/lcp-local-cache.min.js bundle.</span>';
           return;
         }
 

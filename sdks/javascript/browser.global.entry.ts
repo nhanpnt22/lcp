@@ -1,4 +1,18 @@
 import * as LcpJsSdk from "./index";
 
-(globalThis as typeof globalThis & { SdalpLocalCache?: unknown }).SdalpLocalCache =
-  Object.freeze(LcpJsSdk);
+const lcpBrowserGlobal = Object.freeze({ ...LcpJsSdk });
+
+(
+  globalThis as typeof globalThis & {
+    LcpLocalCache?: unknown;
+    SdalpLocalCache?: unknown;
+  }
+).LcpLocalCache = lcpBrowserGlobal;
+
+// Legacy alias kept for backward compatibility with older integrations.
+(
+  globalThis as typeof globalThis & {
+    LcpLocalCache?: unknown;
+    SdalpLocalCache?: unknown;
+  }
+).SdalpLocalCache = lcpBrowserGlobal;

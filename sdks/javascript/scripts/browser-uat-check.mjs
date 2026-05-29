@@ -6,14 +6,14 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const cacheRoot = path.resolve(__dirname, "..");
 
-const uatUrl = pathToFileURL(path.join(cacheRoot, "examples", "local-cache-uat.html")).href;
+const uatUrl = pathToFileURL(path.join(cacheRoot, "examples", "lcp-uat.html")).href;
 const simpleUrl = pathToFileURL(path.join(cacheRoot, "examples", "simple-cache.html")).href;
 
 function hasText(value, text) {
   return typeof value === "string" && value.includes(text);
 }
 
-async function runLocalCacheUat(page) {
+async function runLcpUat(page) {
   await page.goto(uatUrl, { waitUntil: "load" });
 
   await page.waitForFunction(
@@ -33,13 +33,13 @@ async function runLocalCacheUat(page) {
     );
 
     const details = failedItems.length > 0 ? ` | failures=${failedItems.join("; ")}` : "";
-    throw new Error(`local-cache-uat failed: ${summary}${details}`);
+    throw new Error(`lcp-uat failed: ${summary}${details}`);
   }
 
   const resultLines = await page.$$eval("#results li", (items) => items.map((item) => item.textContent ?? ""));
   const failedAcLines = resultLines.filter((line) => line.startsWith("FAIL - AC-"));
   if (failedAcLines.length > 0) {
-    throw new Error(`local-cache-uat AC failures: ${failedAcLines.join("; ")}`);
+    throw new Error(`lcp-uat AC failures: ${failedAcLines.join("; ")}`);
   }
 
   const passedAcIds = new Set(
@@ -54,10 +54,10 @@ async function runLocalCacheUat(page) {
   const expectedAcIds = Array.from({ length: 15 }, (_, index) => `AC-${String(index + 1).padStart(2, "0")}`);
   const missingAcIds = expectedAcIds.filter((acId) => !passedAcIds.has(acId));
   if (missingAcIds.length > 0) {
-    throw new Error(`local-cache-uat missing AC coverage: ${missingAcIds.join(", ")}`);
+    throw new Error(`lcp-uat missing AC coverage: ${missingAcIds.join(", ")}`);
   }
 
-  console.log(`[browser-uat] PASS local-cache-uat: ${summary}`);
+  console.log(`[browser-uat] PASS lcp-uat: ${summary}`);
 }
 
 async function runSimpleCacheSelfTest(page) {
@@ -77,7 +77,7 @@ async function runSimpleCacheSelfTest(page) {
     throw new Error(`simple-cache self-test failed: ${summary}`);
   }
 
-  console.log(`[browser-uat] PASS simple-cache: ${summary}`);
+  console.log(`[browser-uat] PASS lcp-simple-cache: ${summary}`);
 }
 
 async function main() {
@@ -90,7 +90,7 @@ async function main() {
   });
 
   try {
-    await runLocalCacheUat(page);
+    await runLcpUat(page);
     await runSimpleCacheSelfTest(page);
     console.log("[browser-uat] PASS all browser UAT checks");
   } finally {

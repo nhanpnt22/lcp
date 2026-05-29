@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<title>SDALP Simple Cache Client Example</title>
+		<title>LCP Simple Cache Client Example</title>
 		<style>
 			:root {
 				--bg: #f4f8fb;
@@ -138,7 +138,7 @@
 	<body>
 		<div class="wrap">
 			<div class="panel">
-				<h1>SDALP Local Cache: Simple Client Integration</h1>
+				<h1>LCP Local Cache: Simple Client Integration</h1>
 				<p>
 					Use this page to integrate client-side read-through caching and quickly validate behavior with
 					browser self-tests. Built for developers and AI coding assistants to share a clear integration contract.
@@ -193,7 +193,7 @@
 			</div>
 		</div>
 
-		<script src="../min/local-cache.min.js"></script>
+		<script src="../min/lcp-local-cache.min.js"></script>
 		<script>
 			(function boot() {
 				const logOut = document.getElementById("logOut");
@@ -203,9 +203,9 @@
 				const apiCallsMetric = document.getElementById("metricApiCalls");
 				const keyMetric = document.getElementById("metricCacheKey");
 
-				const api = globalThis.SdalpLocalCache;
+				const api = globalThis.LcpLocalCache ?? globalThis.SdalpLocalCache;
 				if (!api) {
-					  summary.innerHTML = '<span class="err">SDK bundle missing. Build ../min/local-cache.min.js first.</span>';
+					  summary.innerHTML = '<span class="err">LCP SDK bundle missing. Build ../min/lcp-local-cache.min.js first.</span>';
 					return;
 				}
 

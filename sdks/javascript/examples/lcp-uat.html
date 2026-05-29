@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>SDALP LocalCache UAT</title>
+  <title>LCP Local Cache UAT</title>
   <style>
     :root {
       --bg: #0b1320;
@@ -48,17 +48,17 @@
 </head>
 <body>
   <div class="card">
-    <h1>SDALP LocalCache Browser UAT</h1>
+    <h1>LCP Local Cache Browser UAT</h1>
     <p>This UAT validates deterministic keying, memory cache read path, and single-flight behavior.</p>
     <ul id="results"></ul>
     <div id="summary" class="summary"></div>
   </div>
 
-  <script src="../min/local-cache.min.js"></script>
+  <script src="../min/lcp-local-cache.min.js"></script>
   <script type="module">
     const resultsEl = document.getElementById("results");
     const summaryEl = document.getElementById("summary");
-    const api = globalThis.SdalpLocalCache;
+    const api = globalThis.LcpLocalCache ?? globalThis.SdalpLocalCache;
     const acResults = new Map();
 
     const AC_DEFS = [
@@ -113,14 +113,14 @@
       return {
         schemaVersion: "1.0.0",
         specChecksum: "spec-abc-001",
-        cacheNamespace: "sdalp.cache",
+        cacheNamespace: "lcp.cache",
         dataVersion: "1"
       };
     }
 
     function createKeyInput(operationId, payload, userScope = "tenant-a") {
       return {
-        namespace: "sdalp.cache",
+        namespace: "lcp.cache",
         operationId,
         payload,
         schemaVersion: "1.0.0",
@@ -179,7 +179,7 @@
     }
 
     try {
-      addResult("bundle loaded", Boolean(api), api ? "window.SdalpLocalCache available" : "missing API");
+      addResult("bundle loaded", Boolean(api), api ? "window.LcpLocalCache available" : "missing API");
 
       if (api) {
 
@@ -465,7 +465,7 @@
 
             let now = 5000;
             const idbStore = new api.IndexedDbCacheStore({
-              dbName: "sdalp_local_cache_uat_ac08",
+              dbName: "lcp_local_cache_uat_ac08",
               storeName: "cache_entries",
               dbVersion: 1,
               now: () => now
@@ -765,10 +765,10 @@
           "AC-14": async () => {
             const hasMinScript = Array.from(document.querySelectorAll("script")).some((script) => {
               const src = script.getAttribute("src") || "";
-              return src.includes("min/local-cache.min.js");
+              return src.includes("min/lcp-local-cache.min.js");
             });
 
-            assert(hasMinScript, "local-cache.min.js must be loaded as browser runtime asset");
+            assert(hasMinScript, "lcp-local-cache.min.js must be loaded as browser runtime asset");
 
             const expectedExports = [
               "ReadThroughCacheEngine",
@@ -787,11 +787,11 @@
           "AC-15": async () => {
             const simpleLoaded = await canLoadExample("simple-cache.html");
             const liveLoaded = await canLoadExample("simple-cache-live.html");
-            const uatPathOk = globalThis.location.pathname.endsWith("local-cache-uat.html");
+            const uatPathOk = globalThis.location.pathname.endsWith("lcp-uat.html");
 
             assert(simpleLoaded, "simple-cache.html must be present and loadable");
             assert(liveLoaded, "simple-cache-live.html must be present and loadable");
-            assert(uatPathOk, "local-cache-uat.html must be the active UAT artifact");
+            assert(uatPathOk, "lcp-uat.html must be the active UAT artifact");
 
             return `simpleLoaded=${simpleLoaded}, liveLoaded=${liveLoaded}`;
           }

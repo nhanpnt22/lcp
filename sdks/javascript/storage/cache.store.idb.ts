@@ -1,7 +1,7 @@
 import type { CacheEntry } from "../entry";
 import { deterministicSerialize } from "../consistency";
 
-const DEFAULT_DB_NAME = "sdalp_local_cache";
+const DEFAULT_DB_NAME = "lcp_local_cache";
 const DEFAULT_STORE_NAME = "cache_entries";
 const DEFAULT_DB_VERSION = 1;
 const EXPIRES_AT_INDEX = "by_expires_at";

@@ -1,6 +1,6 @@
-# SDALP Cache Browser Examples
+# LCP Cache Browser Examples
 
-This folder contains browser examples for integrating the SDALP Local Cache SDK with client applications.
+This folder contains browser examples for integrating the LCP Local Cache SDK with client applications.
 
 ## Which Example To Use
 
@@ -14,7 +14,7 @@ This folder contains browser examples for integrating the SDALP Local Cache SDK 
   - Best for validating API-first then cache-hit behavior in realistic browser conditions.
   - Includes a run-twice check (`PASS: second call served from cache.`).
 
-- `local-cache-uat.html`
+- `lcp-uat.html`
   - Use for broader UAT validation of cache behavior.
   - Covers keying, TTL behavior, memory/IndexedDB paths, payload sizes, and persistence mode policies.
 
@@ -24,12 +24,12 @@ Build the browser bundle before opening HTML examples:
 
 ```bash
 # from repo root
-npm --prefix cache run build:min
+npm --prefix sdks/javascript run build:min
 ```
 
 The examples load the SDK from:
 
-- `../min/local-cache.min.js`
+- `../min/lcp-local-cache.min.js`
 
 ## Quick Run
 
@@ -40,7 +40,8 @@ Open any example directly in browser with a `file://` URL, for example:
 
 ## Browser Global API
 
-The minified bundle exposes `window.SdalpLocalCache` (same as `globalThis.SdalpLocalCache`) with these members:
+The minified bundle exposes `window.LcpLocalCache` (same as `globalThis.LcpLocalCache`) as the primary browser global for LCP.
+`window.SdalpLocalCache` remains as a legacy-compatible alias. Available members:
 
 - `ReadThroughCacheEngine`
 - `createCacheMetadata`

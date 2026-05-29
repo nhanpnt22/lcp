@@ -68,7 +68,8 @@ Distribution correctness across runtimes.
 
 - ESM import path works
 - CJS require path works
-- browser global exists as `window.SdalpLocalCache`
+- browser global exists as primary `window.LcpLocalCache` for LCP
+- legacy alias `window.SdalpLocalCache` remains available
 - canonical browser bundle filename exists
 - version-pinned browser filename exists
 - compatibility alias filename exists

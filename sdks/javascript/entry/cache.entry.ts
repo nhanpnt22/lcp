@@ -25,7 +25,7 @@ export interface CacheMetadataParityExpectation {
 }
 
 /**
- * Deterministic parity validator for metadata fields required by SDALP.
+ * Deterministic parity validator for metadata fields required by LCP.
  * Returns false on any mismatch or malformed value.
  */
 export function isCacheMetadataParityValid(
