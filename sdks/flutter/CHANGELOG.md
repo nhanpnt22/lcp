@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.0
+
+- Added `FilePersistentCacheStore` for JSON-file-based local cache persistence, keyed directly by the canonical H57 `cache_key` (dart:io, non-web).
+- Added file store unit tests and a File vs SQLite benchmark script.
+
 ## 1.0.0
 
 - Added `SqlitePersistentCacheStore` for durable local cache persistence.

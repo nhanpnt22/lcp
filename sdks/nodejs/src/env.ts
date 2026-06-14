@@ -4,6 +4,7 @@ import {
 } from "./stores/cloud.storage.persistent.store.js";
 import { NodeMemoryPersistentStore } from "./stores/memory.persistent.store.js";
 import { SQLitePersistentStore } from "./stores/sqlite.persistent.store.js";
+import { FilePersistentStore } from "./stores/file.persistent.store.js";
 import type { NodePersistentConfig, NodePersistentStore } from "./types.js";
 
 function envOr(key: string, fallback: string): string {
@@ -38,17 +39,18 @@ export function loadNodePersistentConfigFromEnv(): NodePersistentConfig {
   const cachePath = normalizeCachePath(envOr("LCP_CACHE_PATH", "lcp"));
   const localCacheRoot = envOr("LCP_LOCAL_CACHE_ROOT", "./config");
   const defaultSqlitePath = join(localCacheRoot, cachePath, "lcp_cache.db");
+  const defaultFileCacheRoot = join(localCacheRoot, cachePath, "files");
 
   const bucketUri = envOr("LCP_STORAGE_BUCKET_URI", "");
   const gcsUri = envOr("LCP_STORAGE_GCS_URI", bucketUri ? deriveCloudStorageUri(bucketUri, cachePath) : "");
 
   const runtimeMode = envOr("LCP_RUNTIME_MODE", "local") as "local" | "cloud-run";
-  const localBackend = envOr("LCP_LOCAL_BACKEND", "in-memory") as "in-memory" | "sqlite" | "cloud-storage";
+  const localBackend = envOr("LCP_LOCAL_BACKEND", "in-memory") as "in-memory" | "sqlite" | "cloud-storage" | "file";
   const cloudRunInMemoryBackend = envOr("LCP_IN_MEMORY_BACKEND", "in-memory") as "in-memory";
   const cloudRunStorageBackend = envOr("LCP_STORAGE_BACKEND", "sqlite") as "sqlite" | "cloud-storage";
   const cloudRunBackendPreference = envOr("LCP_CLOUD_RUN_BACKEND_PREFERENCE", "in-memory") as "in-memory" | "storage";
 
-  let backend: "in-memory" | "sqlite" | "cloud-storage";
+  let backend: "in-memory" | "sqlite" | "cloud-storage" | "file";
   if (runtimeMode === "local") {
     backend = localBackend;
   } else {
@@ -71,6 +73,7 @@ export function loadNodePersistentConfigFromEnv(): NodePersistentConfig {
     cloudRunStorageBackend,
     cloudRunBackendPreference,
     sqlitePath: envOr("LCP_SQLITE_PATH", defaultSqlitePath),
+    fileCacheRoot: envOr("LCP_FILE_CACHE_ROOT", defaultFileCacheRoot),
     cloudStorageUri: gcsUri,
     googleCloudProject: envOr("GOOGLE_CLOUD_PROJECT", ""),
     cloudStorageUseUserProject: envBool("LCP_STORAGE_GCS_USE_USER_PROJECT", false),
@@ -94,6 +97,9 @@ export function createNodePersistentStoreFromEnv<T>(): {
   }
   if (config.backend === "sqlite") {
     return { store: new SQLitePersistentStore<T>(config.sqlitePath), config };
+  }
+  if (config.backend === "file") {
+    return { store: new FilePersistentStore<T>(config.fileCacheRoot), config };
   }
 
   return {

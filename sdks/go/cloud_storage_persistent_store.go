@@ -59,17 +59,27 @@ func NewCloudStoragePersistentStore[T any](bucket, prefix string, options CloudS
 	if strings.TrimSpace(options.CredentialsFile) != "" {
 		clientOptions = append(clientOptions, option.WithCredentialsFile(strings.TrimSpace(options.CredentialsFile)))
 	}
-	client, err := storage.NewGRPCClient(context.Background(), clientOptions...)
-	if err != nil && strings.Contains(err.Error(), "WithHTTPClient is incompatible with QuotaProject") {
-		if value, ok := os.LookupEnv("GOOGLE_CLOUD_QUOTA_PROJECT"); ok {
-			_ = os.Unsetenv("GOOGLE_CLOUD_QUOTA_PROJECT")
-			client, err = storage.NewGRPCClient(context.Background(), clientOptions...)
-			_ = os.Setenv("GOOGLE_CLOUD_QUOTA_PROJECT", value)
-		}
-	}
-	if err != nil {
-		// Fallback to HTTP transport when gRPC is unavailable in the runtime.
+	storageEmulatorHost := strings.TrimSpace(os.Getenv("STORAGE_EMULATOR_HOST"))
+
+	var client *storage.Client
+	var err error
+
+	// The emulator path requires HTTP transport; gRPC client initialization can bypass emulator routing.
+	if storageEmulatorHost != "" {
 		client, err = storage.NewClient(context.Background(), clientOptions...)
+	} else {
+		client, err = storage.NewGRPCClient(context.Background(), clientOptions...)
+		if err != nil && strings.Contains(err.Error(), "WithHTTPClient is incompatible with QuotaProject") {
+			if value, ok := os.LookupEnv("GOOGLE_CLOUD_QUOTA_PROJECT"); ok {
+				_ = os.Unsetenv("GOOGLE_CLOUD_QUOTA_PROJECT")
+				client, err = storage.NewGRPCClient(context.Background(), clientOptions...)
+				_ = os.Setenv("GOOGLE_CLOUD_QUOTA_PROJECT", value)
+			}
+		}
+		if err != nil {
+			// Fallback to HTTP transport when gRPC is unavailable in the runtime.
+			client, err = storage.NewClient(context.Background(), clientOptions...)
+		}
 	}
 	if err != nil {
 		return nil, fmt.Errorf("create cloud storage client: %w", err)

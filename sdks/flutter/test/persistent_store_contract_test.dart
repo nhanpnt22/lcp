@@ -147,13 +147,36 @@ Future<void> runPerStore(
         }
       },
     ),
+    _StoreFactory(
+      name: 'file',
+      create: () async {
+        final dir =
+            await Directory.systemTemp.createTemp('lcp_flutter_contract_file_');
+        final store = FilePersistentCacheStore<Map<String, Object?>>(
+          toJson: (value) => value,
+          fromJson: (json) => Map<String, Object?>.from(json as Map),
+          now: () => DateTime.fromMillisecondsSinceEpoch(1000),
+          rootDirResolver: () async => dir.path,
+        );
+        return _FileHarness(store: store, dir: dir);
+      },
+      dispose: (harness) async {
+        if (harness is _FileHarness) {
+          if (await harness.dir.exists()) {
+            await harness.dir.delete(recursive: true);
+          }
+        }
+      },
+    ),
   ];
 
   for (final factory in factories) {
     final created = await factory.create();
-    final store = created is _SqliteHarness
-        ? created.store
-        : created as PersistentCacheStore<Map<String, Object?>>;
+    final store = switch (created) {
+      _SqliteHarness h => h.store,
+      _FileHarness h => h.store,
+      _ => created as PersistentCacheStore<Map<String, Object?>>,
+    };
     try {
       await run(store);
     } finally {
@@ -216,6 +239,16 @@ class _SqliteHarness {
   });
 
   final SqlitePersistentCacheStore<Map<String, Object?>> store;
+  final Directory dir;
+}
+
+class _FileHarness {
+  const _FileHarness({
+    required this.store,
+    required this.dir,
+  });
+
+  final FilePersistentCacheStore<Map<String, Object?>> store;
   final Directory dir;
 }
 

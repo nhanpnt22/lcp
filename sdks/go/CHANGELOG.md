@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.0
+
+- `FilePersistentStore` now writes JSON entries keyed directly by the canonical H57 `cache_key` (no SHA-256 filename hashing), matching the Node.js and Flutter SDKs.
+- Added `file` as a selectable `LCP_LOCAL_BACKEND` value, with `LCP_FILE_CACHE_ROOT` controlling the on-disk root.
+- Added File vs SQLite vs Cloud Storage benchmarks (`*_bench_test.go`).
+
 ## 1.0.0
 
 - Finalized persistent backend matrix to:

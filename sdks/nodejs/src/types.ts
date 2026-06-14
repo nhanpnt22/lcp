@@ -1,7 +1,7 @@
 import type { CacheEntry } from "@sdp/lcp-javascript-sdk";
 
 export type NodeRuntimeMode = "local" | "cloud-run";
-export type NodePersistentBackend = "in-memory" | "sqlite" | "cloud-storage";
+export type NodePersistentBackend = "in-memory" | "sqlite" | "cloud-storage" | "file";
 export type NodeCloudRunBackendPreference = "in-memory" | "storage";
 
 export interface NodePersistentStore<T = unknown> {
@@ -21,6 +21,7 @@ export interface NodePersistentConfig {
   cloudRunStorageBackend: "sqlite" | "cloud-storage";
   cloudRunBackendPreference: NodeCloudRunBackendPreference;
   sqlitePath: string;
+  fileCacheRoot: string;
   cloudStorageUri: string;
   googleCloudProject: string;
   cloudStorageUseUserProject: boolean;

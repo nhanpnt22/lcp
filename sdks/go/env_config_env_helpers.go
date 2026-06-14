@@ -12,7 +12,7 @@ func resolveLocalBackend(localBackendOverride, localStorageBackendRaw string) LC
 	}
 
 	storageBackend := LCPPersistentBackend(localStorageBackendRaw)
-	if storageBackend == LCPPersistentBackendSQLite || storageBackend == LCPPersistentBackendCloudStorage {
+	if storageBackend == LCPPersistentBackendSQLite || storageBackend == LCPPersistentBackendCloudStorage || storageBackend == LCPPersistentBackendFile {
 		return storageBackend
 	}
 

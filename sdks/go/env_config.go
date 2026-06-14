@@ -20,6 +20,7 @@ const (
 	LCPPersistentBackendInMemory     LCPPersistentBackend = "in-memory"
 	LCPPersistentBackendSQLite       LCPPersistentBackend = "sqlite"
 	LCPPersistentBackendCloudStorage LCPPersistentBackend = "cloud-storage"
+	LCPPersistentBackendFile         LCPPersistentBackend = "file"
 )
 
 type LCPCloudRunBackendPreference string
@@ -39,6 +40,7 @@ type EnvironmentPersistentStoreConfig struct {
 	CloudRunStorageBackend     LCPPersistentBackend
 	CloudRunBackendPreference  LCPCloudRunBackendPreference
 	SQLitePath                 string
+	FileCacheRoot              string
 	CloudStorageURI            string
 	GoogleCloudProject         string
 	CloudStorageUseUserProject bool
@@ -49,6 +51,7 @@ func LoadEnvironmentPersistentStoreConfig() (EnvironmentPersistentStoreConfig, e
 	cachePath := normalizeCachePath(envOr("LCP_CACHE_PATH", "lcp"))
 	localCacheRoot := strings.TrimSpace(envOr("LCP_LOCAL_CACHE_ROOT", "./config"))
 	defaultSQLitePath := filepath.Join(localCacheRoot, cachePath, "lcp_cache.db")
+	defaultFileCacheRoot := filepath.Join(localCacheRoot, cachePath, "files")
 
 	bucketURI := strings.TrimSpace(envOr("LCP_STORAGE_BUCKET_URI", ""))
 	storageURI := strings.TrimSpace(envOr("LCP_STORAGE_GCS_URI", ""))
@@ -67,6 +70,7 @@ func LoadEnvironmentPersistentStoreConfig() (EnvironmentPersistentStoreConfig, e
 			envOr("GCP_SA_KEY", envOr("GOOGLE_APPLICATION_CREDENTIALS", "")),
 		),
 		SQLitePath:      strings.TrimSpace(envOr("LCP_SQLITE_PATH", defaultSQLitePath)),
+		FileCacheRoot:   strings.TrimSpace(envOr("LCP_FILE_CACHE_ROOT", defaultFileCacheRoot)),
 		CloudStorageURI: storageURI,
 		CloudRunInMemoryBackend: LCPPersistentBackend(strings.TrimSpace(
 			envOr("LCP_IN_MEMORY_BACKEND", envOr("LCP_CLOUD_RUN_IN_MEMORY_BACKEND", string(LCPPersistentBackendInMemory))),
@@ -117,6 +121,9 @@ func NewPersistentStoreFromEnv[T any]() (PersistentCacheStore[T], EnvironmentPer
 		return NewInMemoryPersistentStore[T](), cfg, nil
 	case LCPPersistentBackendSQLite:
 		store, err := NewSQLitePersistentStore[T](cfg.SQLitePath)
+		return store, cfg, err
+	case LCPPersistentBackendFile:
+		store, err := NewFilePersistentStore[T](cfg.FileCacheRoot)
 		return store, cfg, err
 	case LCPPersistentBackendCloudStorage:
 		store, err := NewCloudStoragePersistentStoreFromURI[T](cfg.CloudStorageURI, CloudStoragePersistentStoreOptions{

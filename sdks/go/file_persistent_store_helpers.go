@@ -1,17 +1,13 @@
 package lcp
 
 import (
-	"crypto/sha256"
-	"encoding/hex"
 	"encoding/json"
 	"os"
 	"path/filepath"
 )
 
 func (s *FilePersistentStore[T]) filePath(cacheKey string) string {
-	sum := sha256.Sum256([]byte(cacheKey))
-	name := hex.EncodeToString(sum[:]) + ".json"
-	return filepath.Join(s.rootDir, name)
+	return filepath.Join(s.rootDir, cacheKey+".json")
 }
 
 func (s *FilePersistentStore[T]) readEntryFile(filePath string) (CacheEntry[T], bool) {

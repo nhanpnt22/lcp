@@ -26,7 +26,7 @@ func (c EnvironmentPersistentStoreConfig) validate() error {
 
 func (c EnvironmentPersistentStoreConfig) validateLocalBackend() error {
 	switch c.Backend {
-	case LCPPersistentBackendInMemory, LCPPersistentBackendSQLite:
+	case LCPPersistentBackendInMemory, LCPPersistentBackendSQLite, LCPPersistentBackendFile:
 		return nil
 	case LCPPersistentBackendCloudStorage:
 		return c.validateCloudStorageTarget()

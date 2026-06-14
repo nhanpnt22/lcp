@@ -14,6 +14,18 @@ describe("nodejs env config", () => {
     expect(cfg.sqlitePath).toBe(sqlitePath);
   });
 
+  it("selects local file backend", () => {
+    const fileCacheRoot = "./config/testing/test-cache-files";
+    process.env.LCP_PERSISTENT_ENABLED = "true";
+    process.env.LCP_RUNTIME_MODE = "local";
+    process.env.LCP_LOCAL_BACKEND = "file";
+    process.env.LCP_FILE_CACHE_ROOT = fileCacheRoot;
+
+    const cfg = loadNodePersistentConfigFromEnv();
+    expect(cfg.backend).toBe("file");
+    expect(cfg.fileCacheRoot).toBe(fileCacheRoot);
+  });
+
   it("selects cloud-run storage cloud-storage backend", () => {
     process.env.LCP_PERSISTENT_ENABLED = "true";
     process.env.LCP_RUNTIME_MODE = "cloud-run";

@@ -7,6 +7,7 @@ import { computeCacheKey, h57HashFn, type CacheKeyInput } from "../../javascript
 import type { NodePersistentStore } from "../src/types.js";
 import { NodeMemoryPersistentStore } from "../src/stores/memory.persistent.store.js";
 import { SQLitePersistentStore } from "../src/stores/sqlite.persistent.store.js";
+import { FilePersistentStore } from "../src/stores/file.persistent.store.js";
 
 function h57Key(label: string): string {
   const input: CacheKeyInput = {
@@ -38,7 +39,7 @@ function makeEntry(cacheKey: string, value: string, createdAt: number, ttlMs: nu
 }
 
 function runStoreContractSuite(
-  backend: "memory" | "sqlite",
+  backend: "memory" | "sqlite" | "file",
   factory: () => { store: NodePersistentStore<{ value: string }>; cleanup: () => void }
 ): void {
   it(`${backend} set/get value after set`, async () => {
@@ -160,6 +161,18 @@ describe("node persistent store contract", () => {
     const dbPath = join(dir, "lcp-cache.db");
     return {
       store: new SQLitePersistentStore<{ value: string }>(dbPath, () => now),
+      cleanup: () => {
+        now = 0;
+        rmSync(dir, { recursive: true, force: true });
+      }
+    };
+  });
+
+  runStoreContractSuite("file", () => {
+    let now = 1000;
+    const dir = mkdtempSync(join(tmpdir(), "lcp-nodejs-file-"));
+    return {
+      store: new FilePersistentStore<{ value: string }>(dir, () => now),
       cleanup: () => {
         now = 0;
         rmSync(dir, { recursive: true, force: true });

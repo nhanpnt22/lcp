@@ -9,6 +9,7 @@ export 'src/key/h57_key_validation.dart';
 export 'src/namespace/cache_namespace.dart';
 export 'src/resume/cache_resume.dart';
 export 'src/singleflight/cache_single_flight.dart';
+export 'src/storage/file_persistent_cache_store.dart';
 export 'src/storage/memory_cache_store.dart';
 export 'src/storage/persistent_cache_store.dart';
 export 'src/storage/sqlite_persistent_cache_store.dart';
