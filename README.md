@@ -32,9 +32,9 @@ Onboarding docs:
 ## SDK Directory Map
 
 - sdks/javascript: Web/Browser runtime (IndexedDB + browser bundle support)
-- sdks/flutter: Mobile runtime (Flutter + SQLite)
-- sdks/go: Cloud Run runtime (in-memory, sqlite, cloud-storage)
-- sdks/nodejs: Firebase App Hosting / NodeJS runtime (in-memory, sqlite, cloud-storage)
+- sdks/flutter: Mobile runtime (Flutter + SQLite + file)
+- sdks/go: Cloud Run runtime (in-memory, sqlite, cloud-storage, file)
+- sdks/nodejs: Firebase App Hosting / NodeJS runtime (in-memory, sqlite, cloud-storage, file)
 
 ## Profiles
 
@@ -93,9 +93,9 @@ These workflows expect the `testing` environment in GitHub Actions to be configu
 | SDK | Backends | Seven-case plan | H57 | Result |
 |---|---|---|---|---|
 | JavaScript | IndexedDB | Yes | Yes | 7/7 PASS |
-| Go | Memory + SQLite + Cloud Storage | Yes | Yes | 7/7 PASS |
-| NodeJS | Memory + SQLite + Cloud Storage | Yes | Yes | 7/7 PASS |
-| Flutter | Memory + SQLite | Yes | Yes | 7/7 PASS |
+| Go | Memory + SQLite + Cloud Storage + File | Yes | Yes | 7/7 PASS |
+| NodeJS | Memory + SQLite + Cloud Storage + File | Yes | Yes | 7/7 PASS |
+| Flutter | Memory + SQLite + File | Yes | Yes | 7/7 PASS |
 
 ## Cross-SDK Evidence Command
 
