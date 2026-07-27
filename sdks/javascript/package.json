@@ -1,6 +1,6 @@
 {
   "name": "@sdp/lcp-javascript-sdk",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "LCP Local Cache JavaScript SDK aligned to LCP v1.0.0.",
   "license": "MIT",
   "author": "SDP Team",
