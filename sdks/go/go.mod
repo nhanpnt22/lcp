@@ -57,7 +57,7 @@ require (
 )
 
 require (
-	github.com/aco/f57 v0.1.4-go
+	github.com/aco/f57 v0.3.0-go
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
@@ -69,4 +69,4 @@ require (
 	modernc.org/memory v1.11.0 // indirect
 )
 
-replace github.com/aco/f57 => github.com/nhanpnt22/f57/implementations/go v0.0.0-20260529181200-6202f5a48379
+replace github.com/aco/f57 => github.com/nhanpnt22/f57/implementations/go v0.0.0-20260705055316-95e97da0b2ea

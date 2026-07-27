@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.2.0
+
+- Upgraded the F57 dependency to `v0.3.0-dart` (from the deleted `v0.1.4-dart` tag). The old tag no longer exists upstream, so `dart pub get` could not resolve it on a clean checkout.
+- No cache-key or wire-format change: F57's B57/H57 sources are byte-identical between `v0.1.4` and `v0.3.0`. The v0.3.0 breaking changes were confined to ID57/I57, which this SDK does not use.
+
 ## 1.1.0
 
 - Added `FilePersistentCacheStore` for JSON-file-based local cache persistence, keyed directly by the canonical H57 `cache_key` (dart:io, non-web).

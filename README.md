@@ -28,6 +28,7 @@ Onboarding docs:
 - sdks/flutter
 - sdks/go
 - sdks/nodejs
+- sdks/php (partial — see below)
 
 ## SDK Directory Map
 
@@ -35,6 +36,7 @@ Onboarding docs:
 - sdks/flutter: Mobile runtime (Flutter + SQLite + file)
 - sdks/go: Cloud Run runtime (in-memory, sqlite, cloud-storage, file)
 - sdks/nodejs: Firebase App Hosting / NodeJS runtime (in-memory, sqlite, cloud-storage, file)
+- sdks/php: SQLite persistent store only (no engine/execution/compression/etc. modules) — see `sdks/php/README.md` for scope
 
 ## Profiles
 

@@ -74,3 +74,43 @@ The NodeJS SDK has been added under `sdks/nodejs`.
 
 - Status: `MATCHED` for core protocol runtime surface through NodeJS integration of key, entry, execution, failure, namespace, resume, singleflight, swr, trace, ttl, and validation modules.
 - Platform-specific note: NodeJS persistence backends include in-memory, sqlite, and cloud-storage (`gs://`) with Firebase App Hosting guidance in `profiles/nodejs/LCP — NodeJS SDK Profile(Firebase App Hosting).txt`.
+
+## F57 Dependency Versions
+
+All SDKs derive H57 cache keys from the same upstream F57 implementation
+(https://github.com/nhanpnt22/f57), so the pinned versions must stay
+behaviorally aligned.
+
+| SDK | Pin | Mechanism |
+|---|---|---|
+| Go | `v0.3.0-go` | `go.mod` require + `replace` to `implementations/go` |
+| NodeJS | `v0.3.1-javascript` | npm git dependency `f57-js` |
+| JavaScript | `v0.3.1-javascript` | npm git dependency `f57-js` |
+| Flutter | `v0.3.0-dart` | `pubspec.yaml` git dep with `path: implementations/dart` |
+| PHP | n/a (vendored port) | `src/Key/B57.php` — no PHP implementation exists upstream |
+
+Notes:
+
+- JavaScript/NodeJS pin `v0.3.1` rather than `v0.3.0` because npm cannot
+  install a subdirectory of a git repository, and v0.3.0 moved the JS package
+  to `implementations/javascript/` with no manifest at the git root. F57
+  v0.3.1 adds that root manifest. Go and Dart tooling both support
+  subdirectory paths, so they pin `v0.3.0` directly.
+- B57/H57 sources are byte-identical across `v0.1.4`, `v0.3.0`, and `v0.3.1`;
+  cache keys are unchanged by these upgrades. F57 v0.3.0's breaking changes
+  were confined to ID57/I57, which no LCP SDK uses.
+
+## PHP SDK Baseline (partial — SQLite persistent store only)
+
+The PHP SDK has been added under `sdks/php`, scoped intentionally to the
+SQLite persistent backend and its supporting primitives — not full protocol
+parity. See `sdks/php/README.md` for the exact scope boundary.
+
+| Capability | PHP SDK | Status | Notes |
+|---|---|---|---|
+| Cache entry + metadata | `src/Entry/CacheEntry.php` + `CacheMetadata.php` | MATCHED | Same snake_case wire shape as Go/NodeJS/Flutter (`cache_key`, `data`, `metadata.{source,created_at,expires_at,ttl_ms,schema_version,data_version,spec_checksum,cache_namespace,compressed}`). |
+| B57 codec | `src/Key/B57.php` | MATCHED | Ported from `github.com/nhanpnt22/f57` (implementations/go/b57.go); no PHP branch exists upstream in that project, so this is a from-source port rather than a Composer dependency, kept dependency-free (no ext-gmp/ext-bcmath). |
+| H57 cache-key validation | `src/Key/H57.php` | MATCHED | `isH57CacheKey`/`assertH57CacheKey` mirror `validateH57CacheKey` (Go) / `assertH57CacheKey` (NodeJS, Flutter): canonical-B57 format check only. H57 hash *generation* (BLAKE3-based) is out of scope. |
+| Persistent store abstraction | `src/Storage/PersistentStoreInterface.php` | MATCHED | Same six-method contract (`get`/`set`/`delete`/`clear`/`pruneExpired`/`hydrateAllValid`) as `PersistentCacheStore[T]` (Go) / `NodePersistentStore<T>` (NodeJS) / `PersistentCacheStore<T>` (Flutter). |
+| SQLite persistent store | `src/Storage/SQLitePersistentStore.php` | MATCHED | Schema/semantics follow the NodeJS/Flutter convention (`cache_entries` table with `cache_key`, `entry_json`, `expires_at`, `updated_at`, indexed on `expires_at`; `hydrateAllValid` ordered `updated_at DESC`; lazy expiry-on-read) rather than Go's simpler key→blob-only schema with app-side TTL filtering — the two backend SDKs (NodeJS, Flutter) were the stronger cross-SDK precedent. |
+| Everything else (compression, consistency, execution engine, failure, namespace, resume, singleflight, swr, trace, standalone TTL module, in-memory/file/cloud-storage stores, H57 hash generation) | — | NOT IMPLEMENTED | Out of scope for the initial PHP package; add here if/when implemented. |

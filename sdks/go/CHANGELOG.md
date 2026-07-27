@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.2.0
+
+- Upgraded the F57 dependency to `v0.3.0-go` (from `v0.1.4-go`), refreshing the `replace` directive to the current upstream commit. The previous `v0.1.4-*` tags were deleted upstream; the Go module still resolved because Go pins by commit hash, but the pin was stale.
+- No cache-key or wire-format change: F57's B57/H57 sources are byte-identical between `v0.1.4` and `v0.3.0`, so previously written cache entries remain readable. The v0.3.0 breaking changes were confined to ID57/I57, which this SDK does not use.
+
 ## 1.1.0
 
 - `FilePersistentStore` now writes JSON entries keyed directly by the canonical H57 `cache_key` (no SHA-256 filename hashing), matching the Node.js and Flutter SDKs.

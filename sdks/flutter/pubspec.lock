@@ -109,11 +109,11 @@ packages:
     dependency: "direct main"
     description:
       path: "implementations/dart"
-      ref: "v0.1.4-dart"
-      resolved-ref: "6202f5a48379ba866147af45e70943833d4bff84"
+      ref: "v0.3.0-dart"
+      resolved-ref: b38d9dc604257b6cf2f31a22dc4216d88d0ca46a
       url: "https://github.com/nhanpnt22/f57.git"
     source: git
-    version: "0.1.0"
+    version: "0.3.0"
   ffi:
     dependency: transitive
     description:
