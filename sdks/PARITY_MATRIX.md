@@ -6,6 +6,7 @@ This document tracks feature and module parity across SDKs:
 - Flutter SDK: `sdks/flutter`
 - Go SDK: `sdks/go`
 - NodeJS SDK: `sdks/nodejs`
+- PHP SDK: `sdks/php` (partial — persistent stores only)
 
 Status key:
 
@@ -100,11 +101,12 @@ Notes:
   cache keys are unchanged by these upgrades. F57 v0.3.0's breaking changes
   were confined to ID57/I57, which no LCP SDK uses.
 
-## PHP SDK Baseline (partial — SQLite persistent store only)
+## PHP SDK Baseline (partial — persistent stores only: sqlite + file)
 
 The PHP SDK has been added under `sdks/php`, scoped intentionally to the
-SQLite persistent backend and its supporting primitives — not full protocol
-parity. See `sdks/php/README.md` for the exact scope boundary.
+SQLite and local-file persistent backends and their supporting primitives —
+not full protocol parity. See `sdks/php/README.md` for the exact scope
+boundary.
 
 | Capability | PHP SDK | Status | Notes |
 |---|---|---|---|
@@ -113,4 +115,5 @@ parity. See `sdks/php/README.md` for the exact scope boundary.
 | H57 cache-key validation | `src/Key/H57.php` | MATCHED | `isH57CacheKey`/`assertH57CacheKey` mirror `validateH57CacheKey` (Go) / `assertH57CacheKey` (NodeJS, Flutter): canonical-B57 format check only. H57 hash *generation* (BLAKE3-based) is out of scope. |
 | Persistent store abstraction | `src/Storage/PersistentStoreInterface.php` | MATCHED | Same six-method contract (`get`/`set`/`delete`/`clear`/`pruneExpired`/`hydrateAllValid`) as `PersistentCacheStore[T]` (Go) / `NodePersistentStore<T>` (NodeJS) / `PersistentCacheStore<T>` (Flutter). |
 | SQLite persistent store | `src/Storage/SQLitePersistentStore.php` | MATCHED | Schema/semantics follow the NodeJS/Flutter convention (`cache_entries` table with `cache_key`, `entry_json`, `expires_at`, `updated_at`, indexed on `expires_at`; `hydrateAllValid` ordered `updated_at DESC`; lazy expiry-on-read) rather than Go's simpler key→blob-only schema with app-side TTL filtering — the two backend SDKs (NodeJS, Flutter) were the stronger cross-SDK precedent. |
-| Everything else (compression, consistency, execution engine, failure, namespace, resume, singleflight, swr, trace, standalone TTL module, in-memory/file/cloud-storage stores, H57 hash generation) | — | NOT IMPLEMENTED | Out of scope for the initial PHP package; add here if/when implemented. |
+| File persistent store | `src/Storage/FilePersistentStore.php` | MATCHED | One JSON entry per file at `<rootDir>/<H57 cache_key>.json`, keyed directly by the canonical cache key with no extra hashing, matching `FilePersistentStore` (Go, NodeJS) and `FilePersistentCacheStore` (Flutter): atomic temp-file-plus-rename writes, `hydrateAllValid` ordered by cache key ascending, corrupt/non-`.json` files skipped rather than fatal. |
+| Everything else (compression, consistency, execution engine, failure, namespace, resume, singleflight, swr, trace, standalone TTL module, in-memory/cloud-storage stores, env-based backend selection, H57 hash generation) | — | NOT IMPLEMENTED | Out of scope for the PHP package; add here if/when implemented. |
