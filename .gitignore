@@ -18,6 +18,13 @@
 # Package archives
 *.tgz
 
+# PHP
+**/vendor/
+composer.phar
+composer-setup.php
+.phpunit.result.cache
+**/.phpunit.cache/
+
 # OS/editor
 .DS_Store
 
