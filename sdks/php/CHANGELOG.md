@@ -1,22 +1,26 @@
 # Changelog
 
-## 1.3.0
+## 1.2.0
 
-- Added `FilePersistentStore`, a local-file cache backend storing one JSON
-  entry per file at `<rootDir>/<H57 cache_key>.json`, keyed directly by the
-  canonical cache key with no additional hashing. Matches the Go, NodeJS, and
-  Flutter file stores: atomic temp-file-plus-rename writes, `hydrateAllValid`
-  ordered by cache key ascending, and unreadable or non-`.json` files skipped
-  rather than fatal. Works on local disks and Cloud Storage FUSE mounts.
-- The PHP SDK now offers two interchangeable persistent backends, `sqlite` and
-  `file`, both implementing `PersistentStoreInterface`.
-- Reorganized the store tests into a shared contract suite
+- Initial PHP SDK package, scoped to the persistent-storage layer and its
+  supporting primitives: `CacheEntry`/`CacheMetadata`/`CacheSource`, the B57
+  codec, and H57 canonical cache-key validation. See `README.md` for scope
+  details.
+- Two interchangeable persistent backends, both implementing
+  `PersistentStoreInterface`:
+  - `SQLitePersistentStore` (PDO SQLite) — `cache_entries` table with
+    `cache_key`, `entry_json`, `expires_at`, `updated_at`, indexed on
+    `expires_at`; `hydrateAllValid` ordered by `updated_at DESC`.
+  - `FilePersistentStore` — one JSON entry per file at
+    `<rootDir>/<H57 cache_key>.json`, keyed directly by the canonical cache
+    key with no additional hashing; atomic temp-file-plus-rename writes;
+    `hydrateAllValid` ordered by cache key ascending; unreadable or
+    non-`.json` files skipped rather than fatal. Works on local disks and
+    Cloud Storage FUSE mounts.
+- Both backends apply the same TTL semantics (expired once
+  `now >= metadata.expires_at`) and lazily delete an expired entry on read,
+  matching the Go, NodeJS, and Flutter stores.
+- Store behavior is verified by a shared contract suite
   (`PersistentStoreContractTestCase`) executed against both backends,
   mirroring `runStoreContractSuite` in the NodeJS SDK, plus backend-specific
   cases for ordering and on-disk layout.
-
-## 1.2.0
-
-- Initial PHP SDK package, scoped to the SQLite persistent store and its
-  supporting primitives: `CacheEntry`/`CacheMetadata`, the B57 codec, and
-  H57 canonical cache-key validation. See `README.md` for scope details.
